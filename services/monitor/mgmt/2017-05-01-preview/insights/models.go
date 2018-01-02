@@ -244,9 +244,33 @@ type ActionGroupResource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// ActionGroup - The action groups properties of the resource.
 	*ActionGroup `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ActionGroupResource.
+func (agr ActionGroupResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if agr.ActionGroup != nil {
+		objectMap["properties"] = agr.ActionGroup
+	}
+	if agr.ID != nil {
+		objectMap["id"] = agr.ID
+	}
+	if agr.Name != nil {
+		objectMap["name"] = agr.Name
+	}
+	if agr.Type != nil {
+		objectMap["type"] = agr.Type
+	}
+	if agr.Location != nil {
+		objectMap["location"] = agr.Location
+	}
+	if agr.Tags != nil {
+		objectMap["tags"] = agr.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for ActionGroupResource struct.
@@ -256,66 +280,63 @@ func (agr *ActionGroupResource) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ActionGroup
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var actionGroup ActionGroup
+				err = json.Unmarshal(*v, &actionGroup)
+				if err != nil {
+					return err
+				}
+				agr.ActionGroup = &actionGroup
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				agr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				agr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				agr.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				agr.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				agr.Tags = tags
+			}
 		}
-		agr.ActionGroup = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		agr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		agr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		agr.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		agr.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		agr.Tags = &tags
 	}
 
 	return nil
@@ -340,7 +361,19 @@ type ActivityLogAlertActionGroup struct {
 	// ActionGroupID - The resourceId of the action group. This cannot be null or empty.
 	ActionGroupID *string `json:"actionGroupId,omitempty"`
 	// WebhookProperties - the dictionary of custom properties to include with the post operation. These data are appended to the webhook payload.
-	WebhookProperties *map[string]*string `json:"webhookProperties,omitempty"`
+	WebhookProperties map[string]*string `json:"webhookProperties"`
+}
+
+// MarshalJSON is the custom marshaler for ActivityLogAlertActionGroup.
+func (alaag ActivityLogAlertActionGroup) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if alaag.ActionGroupID != nil {
+		objectMap["actionGroupId"] = alaag.ActionGroupID
+	}
+	if alaag.WebhookProperties != nil {
+		objectMap["webhookProperties"] = alaag.WebhookProperties
+	}
+	return json.Marshal(objectMap)
 }
 
 // ActivityLogAlertActionList a list of activity log alert actions.
@@ -349,7 +382,8 @@ type ActivityLogAlertActionList struct {
 	ActionGroups *[]ActivityLogAlertActionGroup `json:"actionGroups,omitempty"`
 }
 
-// ActivityLogAlertAllOfCondition an Activity Log alert condition that is met when all its member conditions are met.
+// ActivityLogAlertAllOfCondition an Activity Log alert condition that is met when all its member conditions are
+// met.
 type ActivityLogAlertAllOfCondition struct {
 	// AllOf - The list of activity log alert conditions.
 	AllOf *[]ActivityLogAlertLeafCondition `json:"allOf,omitempty"`
@@ -382,9 +416,21 @@ type ActivityLogAlertPatch struct {
 // ActivityLogAlertPatchBody an activity log alert object for the body of patch operations.
 type ActivityLogAlertPatchBody struct {
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// ActivityLogAlertPatch - The activity log alert settings for an update operation.
 	*ActivityLogAlertPatch `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ActivityLogAlertPatchBody.
+func (alapb ActivityLogAlertPatchBody) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if alapb.Tags != nil {
+		objectMap["tags"] = alapb.Tags
+	}
+	if alapb.ActivityLogAlertPatch != nil {
+		objectMap["properties"] = alapb.ActivityLogAlertPatch
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for ActivityLogAlertPatchBody struct.
@@ -394,26 +440,27 @@ func (alapb *ActivityLogAlertPatchBody) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				alapb.Tags = tags
+			}
+		case "properties":
+			if v != nil {
+				var activityLogAlertPatch ActivityLogAlertPatch
+				err = json.Unmarshal(*v, &activityLogAlertPatch)
+				if err != nil {
+					return err
+				}
+				alapb.ActivityLogAlertPatch = &activityLogAlertPatch
+			}
 		}
-		alapb.Tags = &tags
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties ActivityLogAlertPatch
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		alapb.ActivityLogAlertPatch = &properties
 	}
 
 	return nil
@@ -431,9 +478,33 @@ type ActivityLogAlertResource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// ActivityLogAlert - The activity log alert properties of the resource.
 	*ActivityLogAlert `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ActivityLogAlertResource.
+func (alar ActivityLogAlertResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if alar.ActivityLogAlert != nil {
+		objectMap["properties"] = alar.ActivityLogAlert
+	}
+	if alar.ID != nil {
+		objectMap["id"] = alar.ID
+	}
+	if alar.Name != nil {
+		objectMap["name"] = alar.Name
+	}
+	if alar.Type != nil {
+		objectMap["type"] = alar.Type
+	}
+	if alar.Location != nil {
+		objectMap["location"] = alar.Location
+	}
+	if alar.Tags != nil {
+		objectMap["tags"] = alar.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for ActivityLogAlertResource struct.
@@ -443,66 +514,63 @@ func (alar *ActivityLogAlertResource) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ActivityLogAlert
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var activityLogAlert ActivityLogAlert
+				err = json.Unmarshal(*v, &activityLogAlert)
+				if err != nil {
+					return err
+				}
+				alar.ActivityLogAlert = &activityLogAlert
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				alar.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				alar.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				alar.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				alar.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				alar.Tags = tags
+			}
 		}
-		alar.ActivityLogAlert = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		alar.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		alar.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		alar.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		alar.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		alar.Tags = &tags
 	}
 
 	return nil
@@ -531,64 +599,61 @@ func (ar *AlertRule) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				ar.Name = &name
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				ar.Description = &description
+			}
+		case "isEnabled":
+			if v != nil {
+				var isEnabled bool
+				err = json.Unmarshal(*v, &isEnabled)
+				if err != nil {
+					return err
+				}
+				ar.IsEnabled = &isEnabled
+			}
+		case "condition":
+			if v != nil {
+				condition, err := unmarshalBasicRuleCondition(*v)
+				if err != nil {
+					return err
+				}
+				ar.Condition = condition
+			}
+		case "actions":
+			if v != nil {
+				actions, err := unmarshalBasicRuleActionArray(*v)
+				if err != nil {
+					return err
+				}
+				ar.Actions = &actions
+			}
+		case "lastUpdatedTime":
+			if v != nil {
+				var lastUpdatedTime date.Time
+				err = json.Unmarshal(*v, &lastUpdatedTime)
+				if err != nil {
+					return err
+				}
+				ar.LastUpdatedTime = &lastUpdatedTime
+			}
 		}
-		ar.Name = &name
-	}
-
-	v = m["description"]
-	if v != nil {
-		var description string
-		err = json.Unmarshal(*m["description"], &description)
-		if err != nil {
-			return err
-		}
-		ar.Description = &description
-	}
-
-	v = m["isEnabled"]
-	if v != nil {
-		var isEnabled bool
-		err = json.Unmarshal(*m["isEnabled"], &isEnabled)
-		if err != nil {
-			return err
-		}
-		ar.IsEnabled = &isEnabled
-	}
-
-	v = m["condition"]
-	if v != nil {
-		condition, err := unmarshalBasicRuleCondition(*m["condition"])
-		if err != nil {
-			return err
-		}
-		ar.Condition = condition
-	}
-
-	v = m["actions"]
-	if v != nil {
-		actions, err := unmarshalBasicRuleActionArray(*m["actions"])
-		if err != nil {
-			return err
-		}
-		ar.Actions = &actions
-	}
-
-	v = m["lastUpdatedTime"]
-	if v != nil {
-		var lastUpdatedTime date.Time
-		err = json.Unmarshal(*m["lastUpdatedTime"], &lastUpdatedTime)
-		if err != nil {
-			return err
-		}
-		ar.LastUpdatedTime = &lastUpdatedTime
 	}
 
 	return nil
@@ -606,9 +671,33 @@ type AlertRuleResource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// AlertRule - The alert rule properties of the resource.
 	*AlertRule `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for AlertRuleResource.
+func (arr AlertRuleResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if arr.AlertRule != nil {
+		objectMap["properties"] = arr.AlertRule
+	}
+	if arr.ID != nil {
+		objectMap["id"] = arr.ID
+	}
+	if arr.Name != nil {
+		objectMap["name"] = arr.Name
+	}
+	if arr.Type != nil {
+		objectMap["type"] = arr.Type
+	}
+	if arr.Location != nil {
+		objectMap["location"] = arr.Location
+	}
+	if arr.Tags != nil {
+		objectMap["tags"] = arr.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for AlertRuleResource struct.
@@ -618,66 +707,63 @@ func (arr *AlertRuleResource) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties AlertRule
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var alertRule AlertRule
+				err = json.Unmarshal(*v, &alertRule)
+				if err != nil {
+					return err
+				}
+				arr.AlertRule = &alertRule
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				arr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				arr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				arr.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				arr.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				arr.Tags = tags
+			}
 		}
-		arr.AlertRule = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		arr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		arr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		arr.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		arr.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		arr.Tags = &tags
 	}
 
 	return nil
@@ -693,9 +779,21 @@ type AlertRuleResourceCollection struct {
 // AlertRuleResourcePatch the alert rule object for patch operations.
 type AlertRuleResourcePatch struct {
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// AlertRule - The properties of an alert rule.
 	*AlertRule `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for AlertRuleResourcePatch.
+func (arrp AlertRuleResourcePatch) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if arrp.Tags != nil {
+		objectMap["tags"] = arrp.Tags
+	}
+	if arrp.AlertRule != nil {
+		objectMap["properties"] = arrp.AlertRule
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for AlertRuleResourcePatch struct.
@@ -705,26 +803,27 @@ func (arrp *AlertRuleResourcePatch) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				arrp.Tags = tags
+			}
+		case "properties":
+			if v != nil {
+				var alertRule AlertRule
+				err = json.Unmarshal(*v, &alertRule)
+				if err != nil {
+					return err
+				}
+				arrp.AlertRule = &alertRule
+			}
 		}
-		arrp.Tags = &tags
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties AlertRule
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		arrp.AlertRule = &properties
 	}
 
 	return nil
@@ -780,9 +879,33 @@ type AutoscaleSettingResource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// AutoscaleSetting - The autoscale setting of the resource.
 	*AutoscaleSetting `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for AutoscaleSettingResource.
+func (asr AutoscaleSettingResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if asr.AutoscaleSetting != nil {
+		objectMap["properties"] = asr.AutoscaleSetting
+	}
+	if asr.ID != nil {
+		objectMap["id"] = asr.ID
+	}
+	if asr.Name != nil {
+		objectMap["name"] = asr.Name
+	}
+	if asr.Type != nil {
+		objectMap["type"] = asr.Type
+	}
+	if asr.Location != nil {
+		objectMap["location"] = asr.Location
+	}
+	if asr.Tags != nil {
+		objectMap["tags"] = asr.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for AutoscaleSettingResource struct.
@@ -792,66 +915,63 @@ func (asr *AutoscaleSettingResource) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties AutoscaleSetting
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var autoscaleSetting AutoscaleSetting
+				err = json.Unmarshal(*v, &autoscaleSetting)
+				if err != nil {
+					return err
+				}
+				asr.AutoscaleSetting = &autoscaleSetting
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				asr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				asr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				asr.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				asr.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				asr.Tags = tags
+			}
 		}
-		asr.AutoscaleSetting = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		asr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		asr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		asr.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		asr.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		asr.Tags = &tags
 	}
 
 	return nil
@@ -866,7 +986,8 @@ type AutoscaleSettingResourceCollection struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// AutoscaleSettingResourceCollectionIterator provides access to a complete listing of AutoscaleSettingResource values.
+// AutoscaleSettingResourceCollectionIterator provides access to a complete listing of AutoscaleSettingResource
+// values.
 type AutoscaleSettingResourceCollectionIterator struct {
 	i    int
 	page AutoscaleSettingResourceCollectionPage
@@ -962,9 +1083,21 @@ func (page AutoscaleSettingResourceCollectionPage) Values() []AutoscaleSettingRe
 // AutoscaleSettingResourcePatch the autoscale setting object for patch operations.
 type AutoscaleSettingResourcePatch struct {
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// AutoscaleSetting - The autoscale setting properties of the update operation.
 	*AutoscaleSetting `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for AutoscaleSettingResourcePatch.
+func (asrp AutoscaleSettingResourcePatch) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if asrp.Tags != nil {
+		objectMap["tags"] = asrp.Tags
+	}
+	if asrp.AutoscaleSetting != nil {
+		objectMap["properties"] = asrp.AutoscaleSetting
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for AutoscaleSettingResourcePatch struct.
@@ -974,26 +1107,27 @@ func (asrp *AutoscaleSettingResourcePatch) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				asrp.Tags = tags
+			}
+		case "properties":
+			if v != nil {
+				var autoscaleSetting AutoscaleSetting
+				err = json.Unmarshal(*v, &autoscaleSetting)
+				if err != nil {
+					return err
+				}
+				asrp.AutoscaleSetting = &autoscaleSetting
+			}
 		}
-		asrp.Tags = &tags
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties AutoscaleSetting
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		asrp.AutoscaleSetting = &properties
 	}
 
 	return nil
@@ -1040,46 +1174,45 @@ func (dscr *DiagnosticSettingsCategoryResource) UnmarshalJSON(body []byte) error
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties DiagnosticSettingsCategory
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var diagnosticSettingsCategory DiagnosticSettingsCategory
+				err = json.Unmarshal(*v, &diagnosticSettingsCategory)
+				if err != nil {
+					return err
+				}
+				dscr.DiagnosticSettingsCategory = &diagnosticSettingsCategory
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				dscr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				dscr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dscr.Type = &typeVar
+			}
 		}
-		dscr.DiagnosticSettingsCategory = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		dscr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		dscr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		dscr.Type = &typeVar
 	}
 
 	return nil
@@ -1111,46 +1244,45 @@ func (dsr *DiagnosticSettingsResource) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties DiagnosticSettings
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var diagnosticSettings DiagnosticSettings
+				err = json.Unmarshal(*v, &diagnosticSettings)
+				if err != nil {
+					return err
+				}
+				dsr.DiagnosticSettings = &diagnosticSettings
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				dsr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				dsr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dsr.Type = &typeVar
+			}
 		}
-		dsr.DiagnosticSettings = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		dsr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		dsr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		dsr.Type = &typeVar
 	}
 
 	return nil
@@ -1234,12 +1366,16 @@ type LocationThresholdRuleCondition struct {
 // MarshalJSON is the custom marshaler for LocationThresholdRuleCondition.
 func (ltrc LocationThresholdRuleCondition) MarshalJSON() ([]byte, error) {
 	ltrc.OdataType = OdataTypeMicrosoftAzureManagementInsightsModelsLocationThresholdRuleCondition
-	type Alias LocationThresholdRuleCondition
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(ltrc),
-	})
+	objectMap := make(map[string]interface{})
+	if ltrc.WindowSize != nil {
+		objectMap["windowSize"] = ltrc.WindowSize
+	}
+	if ltrc.FailedLocationCount != nil {
+		objectMap["failedLocationCount"] = ltrc.FailedLocationCount
+	}
+	objectMap["dataSource"] = ltrc.DataSource
+	objectMap["odata.type"] = ltrc.OdataType
+	return json.Marshal(objectMap)
 }
 
 // AsThresholdRuleCondition is the BasicRuleCondition implementation for LocationThresholdRuleCondition.
@@ -1274,45 +1410,44 @@ func (ltrc *LocationThresholdRuleCondition) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["windowSize"]
-	if v != nil {
-		var windowSize string
-		err = json.Unmarshal(*m["windowSize"], &windowSize)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "windowSize":
+			if v != nil {
+				var windowSize string
+				err = json.Unmarshal(*v, &windowSize)
+				if err != nil {
+					return err
+				}
+				ltrc.WindowSize = &windowSize
+			}
+		case "failedLocationCount":
+			if v != nil {
+				var failedLocationCount int32
+				err = json.Unmarshal(*v, &failedLocationCount)
+				if err != nil {
+					return err
+				}
+				ltrc.FailedLocationCount = &failedLocationCount
+			}
+		case "dataSource":
+			if v != nil {
+				dataSource, err := unmarshalBasicRuleDataSource(*v)
+				if err != nil {
+					return err
+				}
+				ltrc.DataSource = dataSource
+			}
+		case "odata.type":
+			if v != nil {
+				var odataType OdataTypeBasicRuleCondition
+				err = json.Unmarshal(*v, &odataType)
+				if err != nil {
+					return err
+				}
+				ltrc.OdataType = odataType
+			}
 		}
-		ltrc.WindowSize = &windowSize
-	}
-
-	v = m["failedLocationCount"]
-	if v != nil {
-		var failedLocationCount int32
-		err = json.Unmarshal(*m["failedLocationCount"], &failedLocationCount)
-		if err != nil {
-			return err
-		}
-		ltrc.FailedLocationCount = &failedLocationCount
-	}
-
-	v = m["dataSource"]
-	if v != nil {
-		dataSource, err := unmarshalBasicRuleDataSource(*m["dataSource"])
-		if err != nil {
-			return err
-		}
-		ltrc.DataSource = dataSource
-	}
-
-	v = m["odata.type"]
-	if v != nil {
-		var odatatype OdataTypeBasicRuleCondition
-		err = json.Unmarshal(*m["odata.type"], &odatatype)
-		if err != nil {
-			return err
-		}
-		ltrc.OdataType = odatatype
 	}
 
 	return nil
@@ -1351,9 +1486,33 @@ type LogProfileResource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// LogProfileProperties - The log profile properties of the resource.
 	*LogProfileProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for LogProfileResource.
+func (lpr LogProfileResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if lpr.LogProfileProperties != nil {
+		objectMap["properties"] = lpr.LogProfileProperties
+	}
+	if lpr.ID != nil {
+		objectMap["id"] = lpr.ID
+	}
+	if lpr.Name != nil {
+		objectMap["name"] = lpr.Name
+	}
+	if lpr.Type != nil {
+		objectMap["type"] = lpr.Type
+	}
+	if lpr.Location != nil {
+		objectMap["location"] = lpr.Location
+	}
+	if lpr.Tags != nil {
+		objectMap["tags"] = lpr.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for LogProfileResource struct.
@@ -1363,66 +1522,63 @@ func (lpr *LogProfileResource) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties LogProfileProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var logProfileProperties LogProfileProperties
+				err = json.Unmarshal(*v, &logProfileProperties)
+				if err != nil {
+					return err
+				}
+				lpr.LogProfileProperties = &logProfileProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				lpr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				lpr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				lpr.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				lpr.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				lpr.Tags = tags
+			}
 		}
-		lpr.LogProfileProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		lpr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		lpr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		lpr.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		lpr.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		lpr.Tags = &tags
 	}
 
 	return nil
@@ -1431,9 +1587,21 @@ func (lpr *LogProfileResource) UnmarshalJSON(body []byte) error {
 // LogProfileResourcePatch the log profile resource for patch operations.
 type LogProfileResourcePatch struct {
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// LogProfileProperties - The log profile properties for an update operation.
 	*LogProfileProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for LogProfileResourcePatch.
+func (lprp LogProfileResourcePatch) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if lprp.Tags != nil {
+		objectMap["tags"] = lprp.Tags
+	}
+	if lprp.LogProfileProperties != nil {
+		objectMap["properties"] = lprp.LogProfileProperties
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for LogProfileResourcePatch struct.
@@ -1443,26 +1611,27 @@ func (lprp *LogProfileResourcePatch) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				lprp.Tags = tags
+			}
+		case "properties":
+			if v != nil {
+				var logProfileProperties LogProfileProperties
+				err = json.Unmarshal(*v, &logProfileProperties)
+				if err != nil {
+					return err
+				}
+				lprp.LogProfileProperties = &logProfileProperties
+			}
 		}
-		lprp.Tags = &tags
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties LogProfileProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		lprp.LogProfileProperties = &properties
 	}
 
 	return nil
@@ -1501,12 +1670,13 @@ type ManagementEventRuleCondition struct {
 // MarshalJSON is the custom marshaler for ManagementEventRuleCondition.
 func (merc ManagementEventRuleCondition) MarshalJSON() ([]byte, error) {
 	merc.OdataType = OdataTypeMicrosoftAzureManagementInsightsModelsManagementEventRuleCondition
-	type Alias ManagementEventRuleCondition
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(merc),
-	})
+	objectMap := make(map[string]interface{})
+	if merc.Aggregation != nil {
+		objectMap["aggregation"] = merc.Aggregation
+	}
+	objectMap["dataSource"] = merc.DataSource
+	objectMap["odata.type"] = merc.OdataType
+	return json.Marshal(objectMap)
 }
 
 // AsThresholdRuleCondition is the BasicRuleCondition implementation for ManagementEventRuleCondition.
@@ -1541,35 +1711,35 @@ func (merc *ManagementEventRuleCondition) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["aggregation"]
-	if v != nil {
-		var aggregation ManagementEventAggregationCondition
-		err = json.Unmarshal(*m["aggregation"], &aggregation)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "aggregation":
+			if v != nil {
+				var aggregation ManagementEventAggregationCondition
+				err = json.Unmarshal(*v, &aggregation)
+				if err != nil {
+					return err
+				}
+				merc.Aggregation = &aggregation
+			}
+		case "dataSource":
+			if v != nil {
+				dataSource, err := unmarshalBasicRuleDataSource(*v)
+				if err != nil {
+					return err
+				}
+				merc.DataSource = dataSource
+			}
+		case "odata.type":
+			if v != nil {
+				var odataType OdataTypeBasicRuleCondition
+				err = json.Unmarshal(*v, &odataType)
+				if err != nil {
+					return err
+				}
+				merc.OdataType = odataType
+			}
 		}
-		merc.Aggregation = &aggregation
-	}
-
-	v = m["dataSource"]
-	if v != nil {
-		dataSource, err := unmarshalBasicRuleDataSource(*m["dataSource"])
-		if err != nil {
-			return err
-		}
-		merc.DataSource = dataSource
-	}
-
-	v = m["odata.type"]
-	if v != nil {
-		var odatatype OdataTypeBasicRuleCondition
-		err = json.Unmarshal(*m["odata.type"], &odatatype)
-		if err != nil {
-			return err
-		}
-		merc.OdataType = odatatype
 	}
 
 	return nil
@@ -1625,8 +1795,8 @@ type OperationDisplay struct {
 	Operation *string `json:"operation,omitempty"`
 }
 
-// OperationListResult result of the request to list Microsoft.Insights operations. It contains a list of operations
-// and a URL link to get the next set of results.
+// OperationListResult result of the request to list Microsoft.Insights operations. It contains a list of
+// operations and a URL link to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of operations supported by the Microsoft.Insights provider.
@@ -1645,8 +1815,8 @@ type ProxyOnlyResource struct {
 	Type *string `json:"type,omitempty"`
 }
 
-// Recurrence the repeating times at which this profile begins. This element is not used if the FixedDate element is
-// used.
+// Recurrence the repeating times at which this profile begins. This element is not used if the FixedDate element
+// is used.
 type Recurrence struct {
 	// Frequency - the recurrence frequency. How often the schedule profile should take effect. This value must be Week, meaning each week will have the same set of profiles. Possible values include: 'None', 'Second', 'Minute', 'Hour', 'Day', 'Week', 'Month', 'Year'
 	Frequency RecurrenceFrequency `json:"frequency,omitempty"`
@@ -1677,7 +1847,28 @@ type Resource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // RetentionPolicy specifies the retention policy for the log.
@@ -1696,7 +1887,8 @@ type BasicRuleAction interface {
 	AsRuleAction() (*RuleAction, bool)
 }
 
-// RuleAction the action that is performed when the alert rule becomes active, and when an alert condition is resolved.
+// RuleAction the action that is performed when the alert rule becomes active, and when an alert condition is
+// resolved.
 type RuleAction struct {
 	// OdataType - Possible values include: 'OdataTypeRuleAction', 'OdataTypeMicrosoftAzureManagementInsightsModelsRuleEmailAction', 'OdataTypeMicrosoftAzureManagementInsightsModelsRuleWebhookAction'
 	OdataType OdataTypeBasicRuleAction `json:"odata.type,omitempty"`
@@ -1746,12 +1938,9 @@ func unmarshalBasicRuleActionArray(body []byte) ([]BasicRuleAction, error) {
 // MarshalJSON is the custom marshaler for RuleAction.
 func (ra RuleAction) MarshalJSON() ([]byte, error) {
 	ra.OdataType = OdataTypeRuleAction
-	type Alias RuleAction
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(ra),
-	})
+	objectMap := make(map[string]interface{})
+	objectMap["odata.type"] = ra.OdataType
+	return json.Marshal(objectMap)
 }
 
 // AsRuleEmailAction is the BasicRuleAction implementation for RuleAction.
@@ -1838,12 +2027,10 @@ func unmarshalBasicRuleConditionArray(body []byte) ([]BasicRuleCondition, error)
 // MarshalJSON is the custom marshaler for RuleCondition.
 func (rc RuleCondition) MarshalJSON() ([]byte, error) {
 	rc.OdataType = OdataTypeRuleCondition
-	type Alias RuleCondition
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(rc),
-	})
+	objectMap := make(map[string]interface{})
+	objectMap["dataSource"] = rc.DataSource
+	objectMap["odata.type"] = rc.OdataType
+	return json.Marshal(objectMap)
 }
 
 // AsThresholdRuleCondition is the BasicRuleCondition implementation for RuleCondition.
@@ -1878,25 +2065,26 @@ func (rc *RuleCondition) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["dataSource"]
-	if v != nil {
-		dataSource, err := unmarshalBasicRuleDataSource(*m["dataSource"])
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "dataSource":
+			if v != nil {
+				dataSource, err := unmarshalBasicRuleDataSource(*v)
+				if err != nil {
+					return err
+				}
+				rc.DataSource = dataSource
+			}
+		case "odata.type":
+			if v != nil {
+				var odataType OdataTypeBasicRuleCondition
+				err = json.Unmarshal(*v, &odataType)
+				if err != nil {
+					return err
+				}
+				rc.OdataType = odataType
+			}
 		}
-		rc.DataSource = dataSource
-	}
-
-	v = m["odata.type"]
-	if v != nil {
-		var odatatype OdataTypeBasicRuleCondition
-		err = json.Unmarshal(*m["odata.type"], &odatatype)
-		if err != nil {
-			return err
-		}
-		rc.OdataType = odatatype
 	}
 
 	return nil
@@ -1961,12 +2149,12 @@ func unmarshalBasicRuleDataSourceArray(body []byte) ([]BasicRuleDataSource, erro
 // MarshalJSON is the custom marshaler for RuleDataSource.
 func (rds RuleDataSource) MarshalJSON() ([]byte, error) {
 	rds.OdataType = OdataTypeRuleDataSource
-	type Alias RuleDataSource
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(rds),
-	})
+	objectMap := make(map[string]interface{})
+	if rds.ResourceURI != nil {
+		objectMap["resourceUri"] = rds.ResourceURI
+	}
+	objectMap["odata.type"] = rds.OdataType
+	return json.Marshal(objectMap)
 }
 
 // AsRuleMetricDataSource is the BasicRuleDataSource implementation for RuleDataSource.
@@ -1989,8 +2177,8 @@ func (rds RuleDataSource) AsBasicRuleDataSource() (BasicRuleDataSource, bool) {
 	return &rds, true
 }
 
-// RuleEmailAction specifies the action to send email when the rule condition is evaluated. The discriminator is always
-// RuleEmailAction in this case.
+// RuleEmailAction specifies the action to send email when the rule condition is evaluated. The discriminator is
+// always RuleEmailAction in this case.
 type RuleEmailAction struct {
 	// OdataType - Possible values include: 'OdataTypeRuleAction', 'OdataTypeMicrosoftAzureManagementInsightsModelsRuleEmailAction', 'OdataTypeMicrosoftAzureManagementInsightsModelsRuleWebhookAction'
 	OdataType OdataTypeBasicRuleAction `json:"odata.type,omitempty"`
@@ -2003,12 +2191,15 @@ type RuleEmailAction struct {
 // MarshalJSON is the custom marshaler for RuleEmailAction.
 func (rea RuleEmailAction) MarshalJSON() ([]byte, error) {
 	rea.OdataType = OdataTypeMicrosoftAzureManagementInsightsModelsRuleEmailAction
-	type Alias RuleEmailAction
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(rea),
-	})
+	objectMap := make(map[string]interface{})
+	if rea.SendToServiceOwners != nil {
+		objectMap["sendToServiceOwners"] = rea.SendToServiceOwners
+	}
+	if rea.CustomEmails != nil {
+		objectMap["customEmails"] = rea.CustomEmails
+	}
+	objectMap["odata.type"] = rea.OdataType
+	return json.Marshal(objectMap)
 }
 
 // AsRuleEmailAction is the BasicRuleAction implementation for RuleEmailAction.
@@ -2067,12 +2258,39 @@ type RuleManagementEventDataSource struct {
 // MarshalJSON is the custom marshaler for RuleManagementEventDataSource.
 func (rmeds RuleManagementEventDataSource) MarshalJSON() ([]byte, error) {
 	rmeds.OdataType = OdataTypeMicrosoftAzureManagementInsightsModelsRuleManagementEventDataSource
-	type Alias RuleManagementEventDataSource
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(rmeds),
-	})
+	objectMap := make(map[string]interface{})
+	if rmeds.EventName != nil {
+		objectMap["eventName"] = rmeds.EventName
+	}
+	if rmeds.EventSource != nil {
+		objectMap["eventSource"] = rmeds.EventSource
+	}
+	if rmeds.Level != nil {
+		objectMap["level"] = rmeds.Level
+	}
+	if rmeds.OperationName != nil {
+		objectMap["operationName"] = rmeds.OperationName
+	}
+	if rmeds.ResourceGroupName != nil {
+		objectMap["resourceGroupName"] = rmeds.ResourceGroupName
+	}
+	if rmeds.ResourceProviderName != nil {
+		objectMap["resourceProviderName"] = rmeds.ResourceProviderName
+	}
+	if rmeds.Status != nil {
+		objectMap["status"] = rmeds.Status
+	}
+	if rmeds.SubStatus != nil {
+		objectMap["subStatus"] = rmeds.SubStatus
+	}
+	if rmeds.Claims != nil {
+		objectMap["claims"] = rmeds.Claims
+	}
+	if rmeds.ResourceURI != nil {
+		objectMap["resourceUri"] = rmeds.ResourceURI
+	}
+	objectMap["odata.type"] = rmeds.OdataType
+	return json.Marshal(objectMap)
 }
 
 // AsRuleMetricDataSource is the BasicRuleDataSource implementation for RuleManagementEventDataSource.
@@ -2095,7 +2313,8 @@ func (rmeds RuleManagementEventDataSource) AsBasicRuleDataSource() (BasicRuleDat
 	return &rmeds, true
 }
 
-// RuleMetricDataSource a rule metric data source. The discriminator value is always RuleMetricDataSource in this case.
+// RuleMetricDataSource a rule metric data source. The discriminator value is always RuleMetricDataSource in this
+// case.
 type RuleMetricDataSource struct {
 	// ResourceURI - the resource identifier of the resource the rule monitors. **NOTE**: this property cannot be updated for an existing rule.
 	ResourceURI *string `json:"resourceUri,omitempty"`
@@ -2108,12 +2327,15 @@ type RuleMetricDataSource struct {
 // MarshalJSON is the custom marshaler for RuleMetricDataSource.
 func (rmds RuleMetricDataSource) MarshalJSON() ([]byte, error) {
 	rmds.OdataType = OdataTypeMicrosoftAzureManagementInsightsModelsRuleMetricDataSource
-	type Alias RuleMetricDataSource
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(rmds),
-	})
+	objectMap := make(map[string]interface{})
+	if rmds.MetricName != nil {
+		objectMap["metricName"] = rmds.MetricName
+	}
+	if rmds.ResourceURI != nil {
+		objectMap["resourceUri"] = rmds.ResourceURI
+	}
+	objectMap["odata.type"] = rmds.OdataType
+	return json.Marshal(objectMap)
 }
 
 // AsRuleMetricDataSource is the BasicRuleDataSource implementation for RuleMetricDataSource.
@@ -2136,26 +2358,29 @@ func (rmds RuleMetricDataSource) AsBasicRuleDataSource() (BasicRuleDataSource, b
 	return &rmds, true
 }
 
-// RuleWebhookAction specifies the action to post to service when the rule condition is evaluated. The discriminator is
-// always RuleWebhookAction in this case.
+// RuleWebhookAction specifies the action to post to service when the rule condition is evaluated. The
+// discriminator is always RuleWebhookAction in this case.
 type RuleWebhookAction struct {
 	// OdataType - Possible values include: 'OdataTypeRuleAction', 'OdataTypeMicrosoftAzureManagementInsightsModelsRuleEmailAction', 'OdataTypeMicrosoftAzureManagementInsightsModelsRuleWebhookAction'
 	OdataType OdataTypeBasicRuleAction `json:"odata.type,omitempty"`
 	// ServiceURI - the service uri to Post the notification when the alert activates or resolves.
 	ServiceURI *string `json:"serviceUri,omitempty"`
 	// Properties - the dictionary of custom properties to include with the post operation. These data are appended to the webhook payload.
-	Properties *map[string]*string `json:"properties,omitempty"`
+	Properties map[string]*string `json:"properties"`
 }
 
 // MarshalJSON is the custom marshaler for RuleWebhookAction.
 func (rwa RuleWebhookAction) MarshalJSON() ([]byte, error) {
 	rwa.OdataType = OdataTypeMicrosoftAzureManagementInsightsModelsRuleWebhookAction
-	type Alias RuleWebhookAction
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(rwa),
-	})
+	objectMap := make(map[string]interface{})
+	if rwa.ServiceURI != nil {
+		objectMap["serviceUri"] = rwa.ServiceURI
+	}
+	if rwa.Properties != nil {
+		objectMap["properties"] = rwa.Properties
+	}
+	objectMap["odata.type"] = rwa.OdataType
+	return json.Marshal(objectMap)
 }
 
 // AsRuleEmailAction is the BasicRuleAction implementation for RuleWebhookAction.
@@ -2239,12 +2464,18 @@ type ThresholdRuleCondition struct {
 // MarshalJSON is the custom marshaler for ThresholdRuleCondition.
 func (trc ThresholdRuleCondition) MarshalJSON() ([]byte, error) {
 	trc.OdataType = OdataTypeMicrosoftAzureManagementInsightsModelsThresholdRuleCondition
-	type Alias ThresholdRuleCondition
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(trc),
-	})
+	objectMap := make(map[string]interface{})
+	objectMap["operator"] = trc.Operator
+	if trc.Threshold != nil {
+		objectMap["threshold"] = trc.Threshold
+	}
+	if trc.WindowSize != nil {
+		objectMap["windowSize"] = trc.WindowSize
+	}
+	objectMap["timeAggregation"] = trc.TimeAggregation
+	objectMap["dataSource"] = trc.DataSource
+	objectMap["odata.type"] = trc.OdataType
+	return json.Marshal(objectMap)
 }
 
 // AsThresholdRuleCondition is the BasicRuleCondition implementation for ThresholdRuleCondition.
@@ -2279,65 +2510,62 @@ func (trc *ThresholdRuleCondition) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["operator"]
-	if v != nil {
-		var operator ConditionOperator
-		err = json.Unmarshal(*m["operator"], &operator)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "operator":
+			if v != nil {
+				var operator ConditionOperator
+				err = json.Unmarshal(*v, &operator)
+				if err != nil {
+					return err
+				}
+				trc.Operator = operator
+			}
+		case "threshold":
+			if v != nil {
+				var threshold float64
+				err = json.Unmarshal(*v, &threshold)
+				if err != nil {
+					return err
+				}
+				trc.Threshold = &threshold
+			}
+		case "windowSize":
+			if v != nil {
+				var windowSize string
+				err = json.Unmarshal(*v, &windowSize)
+				if err != nil {
+					return err
+				}
+				trc.WindowSize = &windowSize
+			}
+		case "timeAggregation":
+			if v != nil {
+				var timeAggregation TimeAggregationOperator
+				err = json.Unmarshal(*v, &timeAggregation)
+				if err != nil {
+					return err
+				}
+				trc.TimeAggregation = timeAggregation
+			}
+		case "dataSource":
+			if v != nil {
+				dataSource, err := unmarshalBasicRuleDataSource(*v)
+				if err != nil {
+					return err
+				}
+				trc.DataSource = dataSource
+			}
+		case "odata.type":
+			if v != nil {
+				var odataType OdataTypeBasicRuleCondition
+				err = json.Unmarshal(*v, &odataType)
+				if err != nil {
+					return err
+				}
+				trc.OdataType = odataType
+			}
 		}
-		trc.Operator = operator
-	}
-
-	v = m["threshold"]
-	if v != nil {
-		var threshold float64
-		err = json.Unmarshal(*m["threshold"], &threshold)
-		if err != nil {
-			return err
-		}
-		trc.Threshold = &threshold
-	}
-
-	v = m["windowSize"]
-	if v != nil {
-		var windowSize string
-		err = json.Unmarshal(*m["windowSize"], &windowSize)
-		if err != nil {
-			return err
-		}
-		trc.WindowSize = &windowSize
-	}
-
-	v = m["timeAggregation"]
-	if v != nil {
-		var timeAggregation TimeAggregationOperator
-		err = json.Unmarshal(*m["timeAggregation"], &timeAggregation)
-		if err != nil {
-			return err
-		}
-		trc.TimeAggregation = timeAggregation
-	}
-
-	v = m["dataSource"]
-	if v != nil {
-		dataSource, err := unmarshalBasicRuleDataSource(*m["dataSource"])
-		if err != nil {
-			return err
-		}
-		trc.DataSource = dataSource
-	}
-
-	v = m["odata.type"]
-	if v != nil {
-		var odatatype OdataTypeBasicRuleCondition
-		err = json.Unmarshal(*m["odata.type"], &odatatype)
-		if err != nil {
-			return err
-		}
-		trc.OdataType = odatatype
 	}
 
 	return nil
@@ -2358,7 +2586,19 @@ type WebhookNotification struct {
 	// ServiceURI - the service address to receive the notification.
 	ServiceURI *string `json:"serviceUri,omitempty"`
 	// Properties - a property bag of settings. This value can be empty.
-	Properties *map[string]*string `json:"properties,omitempty"`
+	Properties map[string]*string `json:"properties"`
+}
+
+// MarshalJSON is the custom marshaler for WebhookNotification.
+func (wn WebhookNotification) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if wn.ServiceURI != nil {
+		objectMap["serviceUri"] = wn.ServiceURI
+	}
+	if wn.Properties != nil {
+		objectMap["properties"] = wn.Properties
+	}
+	return json.Marshal(objectMap)
 }
 
 // WebhookReceiver a webhook receiver.

@@ -18,6 +18,7 @@ package account
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
@@ -203,11 +204,12 @@ func (future AccountUpdateFuture) Result(client Client) (dlsa DataLakeStoreAccou
 	return
 }
 
-// AzureAsyncOperationResult the response body contains the status of the specified asynchronous operation, indicating
-// whether it has succeeded, is in progress, or has failed. Note that this status is distinct from the HTTP status code
-// returned for the Get Operation Status operation itself. If the asynchronous operation succeeded, the response body
-// includes the HTTP status code for the successful request. If the asynchronous operation failed, the response body
-// includes the HTTP status code for the failed request and error information regarding the failure.
+// AzureAsyncOperationResult the response body contains the status of the specified asynchronous operation,
+// indicating whether it has succeeded, is in progress, or has failed. Note that this status is distinct from the
+// HTTP status code returned for the Get Operation Status operation itself. If the asynchronous operation
+// succeeded, the response body includes the HTTP status code for the successful request. If the asynchronous
+// operation failed, the response body includes the HTTP status code for the failed request and error information
+// regarding the failure.
 type AzureAsyncOperationResult struct {
 	// Status - the status of the AzureAsuncOperation. Possible values include: 'OperationStatusInProgress', 'OperationStatusSucceeded', 'OperationStatusFailed'
 	Status OperationStatus `json:"status,omitempty"`
@@ -228,9 +230,36 @@ type DataLakeStoreAccount struct {
 	// Identity - The Key vault encryption identity, if any.
 	Identity *EncryptionIdentity `json:"identity,omitempty"`
 	// Tags - the value of custom properties.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Properties - the Data Lake Store account properties.
 	Properties *DataLakeStoreAccountProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for DataLakeStoreAccount.
+func (dlsa DataLakeStoreAccount) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if dlsa.Location != nil {
+		objectMap["location"] = dlsa.Location
+	}
+	if dlsa.Name != nil {
+		objectMap["name"] = dlsa.Name
+	}
+	if dlsa.Type != nil {
+		objectMap["type"] = dlsa.Type
+	}
+	if dlsa.ID != nil {
+		objectMap["id"] = dlsa.ID
+	}
+	if dlsa.Identity != nil {
+		objectMap["identity"] = dlsa.Identity
+	}
+	if dlsa.Tags != nil {
+		objectMap["tags"] = dlsa.Tags
+	}
+	if dlsa.Properties != nil {
+		objectMap["properties"] = dlsa.Properties
+	}
+	return json.Marshal(objectMap)
 }
 
 // DataLakeStoreAccountListResult data Lake Store account list information response.

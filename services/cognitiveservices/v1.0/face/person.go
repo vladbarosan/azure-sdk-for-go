@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/satori/go.uuid"
 	"io"
 	"net/http"
 )
@@ -45,7 +46,7 @@ func NewPersonClient(azureRegion AzureRegions) PersonClient {
 // rectangle to specify the target face to be added to a person in the format of "targetFace=left,top,width,height".
 // E.g. "targetFace=10,10,100,100". If there is more than one face in the image, targetFace is required to specify
 // which face to add. No targetFace means there is only one face detected in the entire image.
-func (client PersonClient) AddPersonFace(ctx context.Context, personGroupID string, personID string, imageURL ImageURL, userData string, targetFace []int32) (result PersistedFaceResult, err error) {
+func (client PersonClient) AddPersonFace(ctx context.Context, personGroupID string, personID uuid.UUID, imageURL ImageURL, userData string, targetFace []int32) (result PersistedFaceResult, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -79,7 +80,7 @@ func (client PersonClient) AddPersonFace(ctx context.Context, personGroupID stri
 }
 
 // AddPersonFacePreparer prepares the AddPersonFace request.
-func (client PersonClient) AddPersonFacePreparer(ctx context.Context, personGroupID string, personID string, imageURL ImageURL, userData string, targetFace []int32) (*http.Request, error) {
+func (client PersonClient) AddPersonFacePreparer(ctx context.Context, personGroupID string, personID uuid.UUID, imageURL ImageURL, userData string, targetFace []int32) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
 		"AzureRegion": client.AzureRegion,
 	}
@@ -137,7 +138,7 @@ func (client PersonClient) AddPersonFaceResponder(resp *http.Response) (result P
 // format of "targetFace=left,top,width,height". E.g. "targetFace=10,10,100,100". If there is more than one face in the
 // image, targetFace is required to specify which face to add. No targetFace means there is only one face detected in
 // the entire image.
-func (client PersonClient) AddPersonFaceFromStream(ctx context.Context, personGroupID string, personID string, imageParameter io.ReadCloser, userData string, targetFace []int32) (result PersistedFaceResult, err error) {
+func (client PersonClient) AddPersonFaceFromStream(ctx context.Context, personGroupID string, personID uuid.UUID, imageParameter io.ReadCloser, userData string, targetFace []int32) (result PersistedFaceResult, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -169,7 +170,7 @@ func (client PersonClient) AddPersonFaceFromStream(ctx context.Context, personGr
 }
 
 // AddPersonFaceFromStreamPreparer prepares the AddPersonFaceFromStream request.
-func (client PersonClient) AddPersonFaceFromStreamPreparer(ctx context.Context, personGroupID string, personID string, imageParameter io.ReadCloser, userData string, targetFace []int32) (*http.Request, error) {
+func (client PersonClient) AddPersonFaceFromStreamPreparer(ctx context.Context, personGroupID string, personID uuid.UUID, imageParameter io.ReadCloser, userData string, targetFace []int32) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
 		"AzureRegion": client.AzureRegion,
 	}
@@ -296,7 +297,7 @@ func (client PersonClient) CreateResponder(resp *http.Response) (result CreatePe
 // Delete delete an existing person from a person group. Persisted face images of the person will also be deleted.
 //
 // personGroupID is specifying the person group containing the person. personID is the target personId to delete.
-func (client PersonClient) Delete(ctx context.Context, personGroupID string, personID string) (result autorest.Response, err error) {
+func (client PersonClient) Delete(ctx context.Context, personGroupID string, personID uuid.UUID) (result autorest.Response, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -326,7 +327,7 @@ func (client PersonClient) Delete(ctx context.Context, personGroupID string, per
 }
 
 // DeletePreparer prepares the Delete request.
-func (client PersonClient) DeletePreparer(ctx context.Context, personGroupID string, personID string) (*http.Request, error) {
+func (client PersonClient) DeletePreparer(ctx context.Context, personGroupID string, personID uuid.UUID) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
 		"AzureRegion": client.AzureRegion,
 	}
@@ -366,7 +367,7 @@ func (client PersonClient) DeleteResponder(resp *http.Response) (result autorest
 //
 // personGroupID is specifying the person group containing the target person. personID is specifying the person that
 // the target persisted face belong to. persistedFaceID is the persisted face to remove.
-func (client PersonClient) DeleteFace(ctx context.Context, personGroupID string, personID string, persistedFaceID string) (result autorest.Response, err error) {
+func (client PersonClient) DeleteFace(ctx context.Context, personGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID) (result autorest.Response, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -396,7 +397,7 @@ func (client PersonClient) DeleteFace(ctx context.Context, personGroupID string,
 }
 
 // DeleteFacePreparer prepares the DeleteFace request.
-func (client PersonClient) DeleteFacePreparer(ctx context.Context, personGroupID string, personID string, persistedFaceID string) (*http.Request, error) {
+func (client PersonClient) DeleteFacePreparer(ctx context.Context, personGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
 		"AzureRegion": client.AzureRegion,
 	}
@@ -436,7 +437,7 @@ func (client PersonClient) DeleteFaceResponder(resp *http.Response) (result auto
 // Get retrieve a person's information, including registered persisted faces, name and userData.
 //
 // personGroupID is specifying the person group containing the target person. personID is specifying the target person.
-func (client PersonClient) Get(ctx context.Context, personGroupID string, personID string) (result PersonResult, err error) {
+func (client PersonClient) Get(ctx context.Context, personGroupID string, personID uuid.UUID) (result PersonResult, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -466,7 +467,7 @@ func (client PersonClient) Get(ctx context.Context, personGroupID string, person
 }
 
 // GetPreparer prepares the Get request.
-func (client PersonClient) GetPreparer(ctx context.Context, personGroupID string, personID string) (*http.Request, error) {
+func (client PersonClient) GetPreparer(ctx context.Context, personGroupID string, personID uuid.UUID) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
 		"AzureRegion": client.AzureRegion,
 	}
@@ -508,7 +509,7 @@ func (client PersonClient) GetResponder(resp *http.Response) (result PersonResul
 //
 // personGroupID is specifying the person group containing the target person. personID is specifying the target person
 // that the face belongs to. persistedFaceID is the persistedFaceId of the target persisted face of the person.
-func (client PersonClient) GetFace(ctx context.Context, personGroupID string, personID string, persistedFaceID string) (result PersonFaceResult, err error) {
+func (client PersonClient) GetFace(ctx context.Context, personGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID) (result PersonFaceResult, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -538,7 +539,7 @@ func (client PersonClient) GetFace(ctx context.Context, personGroupID string, pe
 }
 
 // GetFacePreparer prepares the GetFace request.
-func (client PersonClient) GetFacePreparer(ctx context.Context, personGroupID string, personID string, persistedFaceID string) (*http.Request, error) {
+func (client PersonClient) GetFacePreparer(ctx context.Context, personGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
 		"AzureRegion": client.AzureRegion,
 	}
@@ -666,7 +667,7 @@ func (client PersonClient) ListResponder(resp *http.Response) (result ListPerson
 //
 // personGroupID is specifying the person group containing the target person. personID is personId of the target
 // person. body is request body  for person update operation.
-func (client PersonClient) Update(ctx context.Context, personGroupID string, personID string, body CreatePersonRequest) (result autorest.Response, err error) {
+func (client PersonClient) Update(ctx context.Context, personGroupID string, personID uuid.UUID, body CreatePersonRequest) (result autorest.Response, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -696,7 +697,7 @@ func (client PersonClient) Update(ctx context.Context, personGroupID string, per
 }
 
 // UpdatePreparer prepares the Update request.
-func (client PersonClient) UpdatePreparer(ctx context.Context, personGroupID string, personID string, body CreatePersonRequest) (*http.Request, error) {
+func (client PersonClient) UpdatePreparer(ctx context.Context, personGroupID string, personID uuid.UUID, body CreatePersonRequest) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
 		"AzureRegion": client.AzureRegion,
 	}
@@ -739,7 +740,7 @@ func (client PersonClient) UpdateResponder(resp *http.Response) (result autorest
 // personGroupID is specifying the person group containing the target person. personID is personId of the target
 // person. persistedFaceID is persistedFaceId of target face, which is persisted and will not expire. body is request
 // body for updating persisted face.
-func (client PersonClient) UpdateFace(ctx context.Context, personGroupID string, personID string, persistedFaceID string, body UpdatePersonFaceDataRequest) (result autorest.Response, err error) {
+func (client PersonClient) UpdateFace(ctx context.Context, personGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID, body UpdatePersonFaceDataRequest) (result autorest.Response, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: personGroupID,
 			Constraints: []validation.Constraint{{Target: "personGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -769,7 +770,7 @@ func (client PersonClient) UpdateFace(ctx context.Context, personGroupID string,
 }
 
 // UpdateFacePreparer prepares the UpdateFace request.
-func (client PersonClient) UpdateFacePreparer(ctx context.Context, personGroupID string, personID string, persistedFaceID string, body UpdatePersonFaceDataRequest) (*http.Request, error) {
+func (client PersonClient) UpdateFacePreparer(ctx context.Context, personGroupID string, personID uuid.UUID, persistedFaceID uuid.UUID, body UpdatePersonFaceDataRequest) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
 		"AzureRegion": client.AzureRegion,
 	}

@@ -141,7 +141,7 @@ func (client PipelinesClient) CreateOrUpdateResponder(resp *http.Response) (resu
 //
 // resourceGroupName is the resource group name. factoryName is the factory name. pipelineName is the pipeline name.
 // parameters is parameters of the pipeline run.
-func (client PipelinesClient) CreateRun(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string, parameters map[string]*map[string]interface{}) (result CreateRunResponse, err error) {
+func (client PipelinesClient) CreateRun(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string, parameters map[string]interface{}) (result CreateRunResponse, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: resourceGroupName,
 			Constraints: []validation.Constraint{{Target: "resourceGroupName", Name: validation.MaxLength, Rule: 90, Chain: nil},
@@ -180,7 +180,7 @@ func (client PipelinesClient) CreateRun(ctx context.Context, resourceGroupName s
 }
 
 // CreateRunPreparer prepares the CreateRun request.
-func (client PipelinesClient) CreateRunPreparer(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string, parameters map[string]*map[string]interface{}) (*http.Request, error) {
+func (client PipelinesClient) CreateRunPreparer(ctx context.Context, resourceGroupName string, factoryName string, pipelineName string, parameters map[string]interface{}) (*http.Request, error) {
 	pathParameters := map[string]interface{}{
 		"factoryName":       autorest.Encode("path", factoryName),
 		"pipelineName":      autorest.Encode("path", pipelineName),

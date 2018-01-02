@@ -81,7 +81,25 @@ type ProxyResource struct {
 	// Type - Resource type.
 	Type *string `json:"type,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for ProxyResource.
+func (pr ProxyResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if pr.ID != nil {
+		objectMap["id"] = pr.ID
+	}
+	if pr.Name != nil {
+		objectMap["name"] = pr.Name
+	}
+	if pr.Type != nil {
+		objectMap["type"] = pr.Type
+	}
+	if pr.Tags != nil {
+		objectMap["tags"] = pr.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // Resource the resource definition.
@@ -95,7 +113,28 @@ type Resource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // SavedSearch value object for saved search results.
@@ -116,36 +155,36 @@ func (ss *SavedSearch) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				ss.ID = &ID
+			}
+		case "etag":
+			if v != nil {
+				var etag string
+				err = json.Unmarshal(*v, &etag)
+				if err != nil {
+					return err
+				}
+				ss.Etag = &etag
+			}
+		case "properties":
+			if v != nil {
+				var savedSearchProperties SavedSearchProperties
+				err = json.Unmarshal(*v, &savedSearchProperties)
+				if err != nil {
+					return err
+				}
+				ss.SavedSearchProperties = &savedSearchProperties
+			}
 		}
-		ss.ID = &ID
-	}
-
-	v = m["etag"]
-	if v != nil {
-		var etag string
-		err = json.Unmarshal(*m["etag"], &etag)
-		if err != nil {
-			return err
-		}
-		ss.Etag = &etag
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties SavedSearchProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		ss.SavedSearchProperties = &properties
 	}
 
 	return nil
@@ -267,7 +306,7 @@ type SearchResultsResponse struct {
 	// Metadata - The metadata from search results.
 	Metadata *SearchMetadata `json:"__metadata,omitempty"`
 	// Value - The array of result values.
-	Value *[]map[string]interface{} `json:"value,omitempty"`
+	Value *[]interface{} `json:"value,omitempty"`
 	// Error - The error.
 	Error *SearchError `json:"error,omitempty"`
 }
@@ -316,11 +355,35 @@ type StorageInsight struct {
 	// Type - Resource type.
 	Type *string `json:"type,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// StorageInsightProperties - Storage insight properties.
 	*StorageInsightProperties `json:"properties,omitempty"`
 	// ETag - The ETag of the storage insight.
 	ETag *string `json:"eTag,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for StorageInsight.
+func (si StorageInsight) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if si.StorageInsightProperties != nil {
+		objectMap["properties"] = si.StorageInsightProperties
+	}
+	if si.ETag != nil {
+		objectMap["eTag"] = si.ETag
+	}
+	if si.ID != nil {
+		objectMap["id"] = si.ID
+	}
+	if si.Name != nil {
+		objectMap["name"] = si.Name
+	}
+	if si.Type != nil {
+		objectMap["type"] = si.Type
+	}
+	if si.Tags != nil {
+		objectMap["tags"] = si.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for StorageInsight struct.
@@ -330,66 +393,63 @@ func (si *StorageInsight) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties StorageInsightProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var storageInsightProperties StorageInsightProperties
+				err = json.Unmarshal(*v, &storageInsightProperties)
+				if err != nil {
+					return err
+				}
+				si.StorageInsightProperties = &storageInsightProperties
+			}
+		case "eTag":
+			if v != nil {
+				var eTag string
+				err = json.Unmarshal(*v, &eTag)
+				if err != nil {
+					return err
+				}
+				si.ETag = &eTag
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				si.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				si.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				si.Type = &typeVar
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				si.Tags = tags
+			}
 		}
-		si.StorageInsightProperties = &properties
-	}
-
-	v = m["eTag"]
-	if v != nil {
-		var eTag string
-		err = json.Unmarshal(*m["eTag"], &eTag)
-		if err != nil {
-			return err
-		}
-		si.ETag = &eTag
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		si.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		si.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		si.Type = &typeVar
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		si.Tags = &tags
 	}
 
 	return nil

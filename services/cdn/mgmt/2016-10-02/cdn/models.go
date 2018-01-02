@@ -200,8 +200,32 @@ type CustomDomain struct {
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
-	Tags                    *map[string]*string `json:"tags,omitempty"`
+	Tags                    map[string]*string `json:"tags"`
 	*CustomDomainProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for CustomDomain.
+func (cd CustomDomain) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if cd.CustomDomainProperties != nil {
+		objectMap["properties"] = cd.CustomDomainProperties
+	}
+	if cd.ID != nil {
+		objectMap["id"] = cd.ID
+	}
+	if cd.Name != nil {
+		objectMap["name"] = cd.Name
+	}
+	if cd.Type != nil {
+		objectMap["type"] = cd.Type
+	}
+	if cd.Location != nil {
+		objectMap["location"] = cd.Location
+	}
+	if cd.Tags != nil {
+		objectMap["tags"] = cd.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for CustomDomain struct.
@@ -211,73 +235,70 @@ func (cd *CustomDomain) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties CustomDomainProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var customDomainProperties CustomDomainProperties
+				err = json.Unmarshal(*v, &customDomainProperties)
+				if err != nil {
+					return err
+				}
+				cd.CustomDomainProperties = &customDomainProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				cd.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				cd.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				cd.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				cd.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				cd.Tags = tags
+			}
 		}
-		cd.CustomDomainProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		cd.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		cd.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		cd.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		cd.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		cd.Tags = &tags
 	}
 
 	return nil
 }
 
-// CustomDomainListResult result of the request to list custom domains. It contains a list of custom domain objects and
-// a URL link to get the next set of results.
+// CustomDomainListResult result of the request to list custom domains. It contains a list of custom domain objects
+// and a URL link to get the next set of results.
 type CustomDomainListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of CDN CustomDomains within an endpoint.
@@ -391,16 +412,18 @@ func (cdp *CustomDomainParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties CustomDomainPropertiesParameters
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var customDomainPropertiesParameters CustomDomainPropertiesParameters
+				err = json.Unmarshal(*v, &customDomainPropertiesParameters)
+				if err != nil {
+					return err
+				}
+				cdp.CustomDomainPropertiesParameters = &customDomainPropertiesParameters
+			}
 		}
-		cdp.CustomDomainPropertiesParameters = &properties
 	}
 
 	return nil
@@ -502,26 +525,27 @@ func (dco *DeepCreatedOrigin) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				dco.Name = &name
+			}
+		case "properties":
+			if v != nil {
+				var deepCreatedOriginProperties DeepCreatedOriginProperties
+				err = json.Unmarshal(*v, &deepCreatedOriginProperties)
+				if err != nil {
+					return err
+				}
+				dco.DeepCreatedOriginProperties = &deepCreatedOriginProperties
+			}
 		}
-		dco.Name = &name
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties DeepCreatedOriginProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		dco.DeepCreatedOriginProperties = &properties
 	}
 
 	return nil
@@ -548,8 +572,32 @@ type EdgeNode struct {
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
-	Tags                *map[string]*string `json:"tags,omitempty"`
+	Tags                map[string]*string `json:"tags"`
 	*EdgeNodeProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for EdgeNode.
+func (en EdgeNode) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if en.EdgeNodeProperties != nil {
+		objectMap["properties"] = en.EdgeNodeProperties
+	}
+	if en.ID != nil {
+		objectMap["id"] = en.ID
+	}
+	if en.Name != nil {
+		objectMap["name"] = en.Name
+	}
+	if en.Type != nil {
+		objectMap["type"] = en.Type
+	}
+	if en.Location != nil {
+		objectMap["location"] = en.Location
+	}
+	if en.Tags != nil {
+		objectMap["tags"] = en.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for EdgeNode struct.
@@ -559,66 +607,63 @@ func (en *EdgeNode) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties EdgeNodeProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var edgeNodeProperties EdgeNodeProperties
+				err = json.Unmarshal(*v, &edgeNodeProperties)
+				if err != nil {
+					return err
+				}
+				en.EdgeNodeProperties = &edgeNodeProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				en.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				en.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				en.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				en.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				en.Tags = tags
+			}
 		}
-		en.EdgeNodeProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		en.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		en.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		en.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		en.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		en.Tags = &tags
 	}
 
 	return nil
@@ -630,8 +675,8 @@ type EdgeNodeProperties struct {
 	IPAddressGroups *[]IPAddressGroup `json:"ipAddressGroups,omitempty"`
 }
 
-// EdgenodeResult result of the request to list CDN edgenodes. It contains a list of ip address group and a URL link to
-// get the next set of results.
+// EdgenodeResult result of the request to list CDN edgenodes. It contains a list of ip address group and a URL
+// link to get the next set of results.
 type EdgenodeResult struct {
 	autorest.Response `json:"-"`
 	// Value - Edge node of CDN service.
@@ -734,7 +779,8 @@ func (page EdgenodeResultPage) Values() []EdgeNode {
 }
 
 // Endpoint CDN endpoint is the entity within a CDN profile containing configuration information such as origin,
-// protocol, content caching and delivery behavior. The CDN endpoint uses the URL format <endpointname>.azureedge.net.
+// protocol, content caching and delivery behavior. The CDN endpoint uses the URL format
+// <endpointname>.azureedge.net.
 type Endpoint struct {
 	autorest.Response `json:"-"`
 	// ID - Resource ID.
@@ -746,8 +792,32 @@ type Endpoint struct {
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
-	Tags                *map[string]*string `json:"tags,omitempty"`
+	Tags                map[string]*string `json:"tags"`
 	*EndpointProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Endpoint.
+func (e Endpoint) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if e.EndpointProperties != nil {
+		objectMap["properties"] = e.EndpointProperties
+	}
+	if e.ID != nil {
+		objectMap["id"] = e.ID
+	}
+	if e.Name != nil {
+		objectMap["name"] = e.Name
+	}
+	if e.Type != nil {
+		objectMap["type"] = e.Type
+	}
+	if e.Location != nil {
+		objectMap["location"] = e.Location
+	}
+	if e.Tags != nil {
+		objectMap["tags"] = e.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for Endpoint struct.
@@ -757,73 +827,70 @@ func (e *Endpoint) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties EndpointProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var endpointProperties EndpointProperties
+				err = json.Unmarshal(*v, &endpointProperties)
+				if err != nil {
+					return err
+				}
+				e.EndpointProperties = &endpointProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				e.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				e.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				e.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				e.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				e.Tags = tags
+			}
 		}
-		e.EndpointProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		e.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		e.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		e.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		e.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		e.Tags = &tags
 	}
 
 	return nil
 }
 
-// EndpointListResult result of the request to list endpoints. It contains a list of endpoint objects and a URL link to
-// get the the next set of results.
+// EndpointListResult result of the request to list endpoints. It contains a list of endpoint objects and a URL
+// link to get the the next set of results.
 type EndpointListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of CDN endpoints within a profile
@@ -955,8 +1022,8 @@ type EndpointProperties struct {
 	ProvisioningState *string `json:"provisioningState,omitempty"`
 }
 
-// EndpointPropertiesUpdateParameters result of the request to list endpoints. It contains a list of endpoints and a
-// URL link to get the next set of results.
+// EndpointPropertiesUpdateParameters result of the request to list endpoints. It contains a list of endpoints and
+// a URL link to get the next set of results.
 type EndpointPropertiesUpdateParameters struct {
 	// OriginHostHeader - The host header CDN sends along with content requests to origin. The default value is the host name of the origin.
 	OriginHostHeader *string `json:"originHostHeader,omitempty"`
@@ -1071,7 +1138,8 @@ func (future EndpointsLoadContentFuture) Result(client EndpointsClient) (ar auto
 	return
 }
 
-// EndpointsPurgeContentFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// EndpointsPurgeContentFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type EndpointsPurgeContentFuture struct {
 	azure.Future
 	req *http.Request
@@ -1198,8 +1266,20 @@ func (future EndpointsUpdateFuture) Result(client EndpointsClient) (e Endpoint, 
 // EndpointUpdateParameters properties required to create a new endpoint.
 type EndpointUpdateParameters struct {
 	// Tags - Endpoint tags.
-	Tags                                *map[string]*string `json:"tags,omitempty"`
+	Tags                                map[string]*string `json:"tags"`
 	*EndpointPropertiesUpdateParameters `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for EndpointUpdateParameters.
+func (eup EndpointUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if eup.Tags != nil {
+		objectMap["tags"] = eup.Tags
+	}
+	if eup.EndpointPropertiesUpdateParameters != nil {
+		objectMap["properties"] = eup.EndpointPropertiesUpdateParameters
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for EndpointUpdateParameters struct.
@@ -1209,26 +1289,27 @@ func (eup *EndpointUpdateParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				eup.Tags = tags
+			}
+		case "properties":
+			if v != nil {
+				var endpointPropertiesUpdateParameters EndpointPropertiesUpdateParameters
+				err = json.Unmarshal(*v, &endpointPropertiesUpdateParameters)
+				if err != nil {
+					return err
+				}
+				eup.EndpointPropertiesUpdateParameters = &endpointPropertiesUpdateParameters
+			}
 		}
-		eup.Tags = &tags
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties EndpointPropertiesUpdateParameters
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		eup.EndpointPropertiesUpdateParameters = &properties
 	}
 
 	return nil
@@ -1287,8 +1368,8 @@ type OperationDisplay struct {
 	Operation *string `json:"operation,omitempty"`
 }
 
-// OperationListResult result of the request to list CDN operations. It contains a list of operations and a URL link to
-// get the next set of results.
+// OperationListResult result of the request to list CDN operations. It contains a list of operations and a URL
+// link to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of CDN operations supported by the CDN resource provider.
@@ -1404,8 +1485,32 @@ type Origin struct {
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
-	Tags              *map[string]*string `json:"tags,omitempty"`
+	Tags              map[string]*string `json:"tags"`
 	*OriginProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Origin.
+func (o Origin) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if o.OriginProperties != nil {
+		objectMap["properties"] = o.OriginProperties
+	}
+	if o.ID != nil {
+		objectMap["id"] = o.ID
+	}
+	if o.Name != nil {
+		objectMap["name"] = o.Name
+	}
+	if o.Type != nil {
+		objectMap["type"] = o.Type
+	}
+	if o.Location != nil {
+		objectMap["location"] = o.Location
+	}
+	if o.Tags != nil {
+		objectMap["tags"] = o.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for Origin struct.
@@ -1415,73 +1520,70 @@ func (o *Origin) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties OriginProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var originProperties OriginProperties
+				err = json.Unmarshal(*v, &originProperties)
+				if err != nil {
+					return err
+				}
+				o.OriginProperties = &originProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				o.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				o.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				o.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				o.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				o.Tags = tags
+			}
 		}
-		o.OriginProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		o.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		o.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		o.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		o.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		o.Tags = &tags
 	}
 
 	return nil
 }
 
-// OriginListResult result of the request to list origins. It contains a list of origin objects and a URL link to get
-// the next set of results.
+// OriginListResult result of the request to list origins. It contains a list of origin objects and a URL link to
+// get the next set of results.
 type OriginListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of CDN origins within an endpoint
@@ -1650,24 +1752,26 @@ func (oup *OriginUpdateParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties OriginPropertiesParameters
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var originPropertiesParameters OriginPropertiesParameters
+				err = json.Unmarshal(*v, &originPropertiesParameters)
+				if err != nil {
+					return err
+				}
+				oup.OriginPropertiesParameters = &originPropertiesParameters
+			}
 		}
-		oup.OriginPropertiesParameters = &properties
 	}
 
 	return nil
 }
 
-// Profile CDN profile represents the top level resource and the entry point into the CDN API. This allows users to set
-// up a logical grouping of endpoints in addition to creating shared configuration settings and selecting pricing tiers
-// and providers.
+// Profile CDN profile represents the top level resource and the entry point into the CDN API. This allows users to
+// set up a logical grouping of endpoints in addition to creating shared configuration settings and selecting
+// pricing tiers and providers.
 type Profile struct {
 	autorest.Response `json:"-"`
 	// ID - Resource ID.
@@ -1679,10 +1783,37 @@ type Profile struct {
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Sku - The pricing tier (defines a CDN provider, feature list and rate) of the CDN profile.
 	Sku                *Sku `json:"sku,omitempty"`
 	*ProfileProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Profile.
+func (p Profile) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if p.Sku != nil {
+		objectMap["sku"] = p.Sku
+	}
+	if p.ProfileProperties != nil {
+		objectMap["properties"] = p.ProfileProperties
+	}
+	if p.ID != nil {
+		objectMap["id"] = p.ID
+	}
+	if p.Name != nil {
+		objectMap["name"] = p.Name
+	}
+	if p.Type != nil {
+		objectMap["type"] = p.Type
+	}
+	if p.Location != nil {
+		objectMap["location"] = p.Location
+	}
+	if p.Tags != nil {
+		objectMap["tags"] = p.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for Profile struct.
@@ -1692,83 +1823,79 @@ func (p *Profile) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["sku"]
-	if v != nil {
-		var sku Sku
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "sku":
+			if v != nil {
+				var sku Sku
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				p.Sku = &sku
+			}
+		case "properties":
+			if v != nil {
+				var profileProperties ProfileProperties
+				err = json.Unmarshal(*v, &profileProperties)
+				if err != nil {
+					return err
+				}
+				p.ProfileProperties = &profileProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				p.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				p.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				p.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				p.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				p.Tags = tags
+			}
 		}
-		p.Sku = &sku
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties ProfileProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		p.ProfileProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		p.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		p.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		p.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		p.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		p.Tags = &tags
 	}
 
 	return nil
 }
 
-// ProfileListResult result of the request to list profiles. It contains a list of profile objects and a URL link to
-// get the the next set of results.
+// ProfileListResult result of the request to list profiles. It contains a list of profile objects and a URL link
+// to get the the next set of results.
 type ProfileListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of CDN profiles within a resource group.
@@ -1974,7 +2101,16 @@ func (future ProfilesUpdateFuture) Result(client ProfilesClient) (p Profile, err
 // ProfileUpdateParameters properties required to update a profile.
 type ProfileUpdateParameters struct {
 	// Tags - Profile tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for ProfileUpdateParameters.
+func (pup ProfileUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if pup.Tags != nil {
+		objectMap["tags"] = pup.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // PurgeParameters parameters required for content purge.
@@ -1994,7 +2130,28 @@ type Resource struct {
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // ResourceUsage output of check resource usage API.

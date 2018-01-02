@@ -18,6 +18,7 @@ package resources
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
@@ -97,7 +98,7 @@ type Deployment struct {
 type DeploymentExportResult struct {
 	autorest.Response `json:"-"`
 	// Template - The template content.
-	Template *map[string]interface{} `json:"template,omitempty"`
+	Template interface{} `json:"template,omitempty"`
 }
 
 // DeploymentExtended deployment information.
@@ -241,7 +242,7 @@ type DeploymentOperationProperties struct {
 	// StatusCode - Operation status code.
 	StatusCode *string `json:"statusCode,omitempty"`
 	// StatusMessage - Operation status message.
-	StatusMessage *map[string]interface{} `json:"statusMessage,omitempty"`
+	StatusMessage interface{} `json:"statusMessage,omitempty"`
 	// TargetResource - The target resource.
 	TargetResource *TargetResource `json:"targetResource,omitempty"`
 	// Request - The HTTP request message.
@@ -355,11 +356,11 @@ func (page DeploymentOperationsListResultPage) Values() []DeploymentOperation {
 // DeploymentProperties deployment properties.
 type DeploymentProperties struct {
 	// Template - The template content. You use this element when you want to pass the template syntax directly in the request rather than link to an existing template. It can be a JObject or well-formed JSON string. Use either the templateLink property or the template property, but not both.
-	Template *map[string]interface{} `json:"template,omitempty"`
+	Template interface{} `json:"template,omitempty"`
 	// TemplateLink - The URI of the template. Use either the templateLink property or the template property, but not both.
 	TemplateLink *TemplateLink `json:"templateLink,omitempty"`
 	// Parameters - Name and value pairs that define the deployment parameters for the template. You use this element when you want to provide the parameter values directly in the request rather than link to an existing parameter file. Use either the parametersLink property or the parameters property, but not both. It can be a JObject or a well formed JSON string.
-	Parameters *map[string]interface{} `json:"parameters,omitempty"`
+	Parameters interface{} `json:"parameters,omitempty"`
 	// ParametersLink - The URI of parameters file. You use this element to link to an existing parameters file. Use either the parametersLink property or the parameters property, but not both.
 	ParametersLink *ParametersLink `json:"parametersLink,omitempty"`
 	// Mode - The mode that is used to deploy resources. This value can be either Incremental or Complete. In Incremental mode, resources are deployed without deleting existing resources that are not included in the template. In Complete mode, resources are deployed and existing resources in the resource group that are not included in the template are deleted. Be careful when using Complete mode as you may unintentionally delete resources. Possible values include: 'Incremental', 'Complete'
@@ -377,17 +378,17 @@ type DeploymentPropertiesExtended struct {
 	// Timestamp - The timestamp of the template deployment.
 	Timestamp *date.Time `json:"timestamp,omitempty"`
 	// Outputs - Key/value pairs that represent deploymentoutput.
-	Outputs *map[string]interface{} `json:"outputs,omitempty"`
+	Outputs interface{} `json:"outputs,omitempty"`
 	// Providers - The list of resource providers needed for the deployment.
 	Providers *[]Provider `json:"providers,omitempty"`
 	// Dependencies - The list of deployment dependencies.
 	Dependencies *[]Dependency `json:"dependencies,omitempty"`
 	// Template - The template content. Use only one of Template or TemplateLink.
-	Template *map[string]interface{} `json:"template,omitempty"`
+	Template interface{} `json:"template,omitempty"`
 	// TemplateLink - The URI referencing the template. Use only one of Template or TemplateLink.
 	TemplateLink *TemplateLink `json:"templateLink,omitempty"`
 	// Parameters - Deployment parameters. Use only one of Parameters or ParametersLink.
-	Parameters *map[string]interface{} `json:"parameters,omitempty"`
+	Parameters interface{} `json:"parameters,omitempty"`
 	// ParametersLink - The URI referencing the parameters. Use only one of Parameters or ParametersLink.
 	ParametersLink *ParametersLink `json:"parametersLink,omitempty"`
 	// Mode - The deployment mode. Possible values are Incremental and Complete. Possible values include: 'Incremental', 'Complete'
@@ -488,11 +489,11 @@ type GenericResource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Plan - The plan of the resource.
 	Plan *Plan `json:"plan,omitempty"`
 	// Properties - The resource properties.
-	Properties *map[string]interface{} `json:"properties,omitempty"`
+	Properties interface{} `json:"properties,omitempty"`
 	// Kind - The kind of the resource.
 	Kind *string `json:"kind,omitempty"`
 	// ManagedBy - ID of the resource that manages this resource.
@@ -501,6 +502,43 @@ type GenericResource struct {
 	Sku *Sku `json:"sku,omitempty"`
 	// Identity - The identity of the resource.
 	Identity *Identity `json:"identity,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for GenericResource.
+func (gr GenericResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if gr.Plan != nil {
+		objectMap["plan"] = gr.Plan
+	}
+	objectMap["properties"] = gr.Properties
+	if gr.Kind != nil {
+		objectMap["kind"] = gr.Kind
+	}
+	if gr.ManagedBy != nil {
+		objectMap["managedBy"] = gr.ManagedBy
+	}
+	if gr.Sku != nil {
+		objectMap["sku"] = gr.Sku
+	}
+	if gr.Identity != nil {
+		objectMap["identity"] = gr.Identity
+	}
+	if gr.ID != nil {
+		objectMap["id"] = gr.ID
+	}
+	if gr.Name != nil {
+		objectMap["name"] = gr.Name
+	}
+	if gr.Type != nil {
+		objectMap["type"] = gr.Type
+	}
+	if gr.Location != nil {
+		objectMap["location"] = gr.Location
+	}
+	if gr.Tags != nil {
+		objectMap["tags"] = gr.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // GenericResourceFilter resource filter.
@@ -526,14 +564,38 @@ type Group struct {
 	// ManagedBy - The ID of the resource that manages this resource group.
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// Tags - The tags attached to the resource group.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Group.
+func (g Group) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if g.ID != nil {
+		objectMap["id"] = g.ID
+	}
+	if g.Name != nil {
+		objectMap["name"] = g.Name
+	}
+	if g.Properties != nil {
+		objectMap["properties"] = g.Properties
+	}
+	if g.Location != nil {
+		objectMap["location"] = g.Location
+	}
+	if g.ManagedBy != nil {
+		objectMap["managedBy"] = g.ManagedBy
+	}
+	if g.Tags != nil {
+		objectMap["tags"] = g.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // GroupExportResult ...
 type GroupExportResult struct {
 	autorest.Response `json:"-"`
 	// Template - The template content.
-	Template *map[string]interface{} `json:"template,omitempty"`
+	Template interface{} `json:"template,omitempty"`
 	// Error - The error.
 	Error *ManagementErrorWithDetails `json:"error,omitempty"`
 }
@@ -688,7 +750,7 @@ func (future GroupsDeleteFuture) Result(client GroupsClient) (ar autorest.Respon
 // HTTPMessage ...
 type HTTPMessage struct {
 	// Content - HTTP message content.
-	Content *map[string]interface{} `json:"content,omitempty"`
+	Content interface{} `json:"content,omitempty"`
 }
 
 // Identity identity for the resource.
@@ -983,7 +1045,28 @@ type ProviderResourceType struct {
 	// APIVersions - The API version.
 	APIVersions *[]string `json:"apiVersions,omitempty"`
 	// Properties - The properties.
-	Properties *map[string]*string `json:"properties,omitempty"`
+	Properties map[string]*string `json:"properties"`
+}
+
+// MarshalJSON is the custom marshaler for ProviderResourceType.
+func (prt ProviderResourceType) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if prt.ResourceType != nil {
+		objectMap["resourceType"] = prt.ResourceType
+	}
+	if prt.Locations != nil {
+		objectMap["locations"] = prt.Locations
+	}
+	if prt.Aliases != nil {
+		objectMap["aliases"] = prt.Aliases
+	}
+	if prt.APIVersions != nil {
+		objectMap["apiVersions"] = prt.APIVersions
+	}
+	if prt.Properties != nil {
+		objectMap["properties"] = prt.Properties
+	}
+	return json.Marshal(objectMap)
 }
 
 // Resource ...
@@ -997,7 +1080,28 @@ type Resource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // ResourcesCreateOrUpdateByIDFuture an abstraction for monitoring and retrieving the results of a long-running
@@ -1032,7 +1136,8 @@ func (future ResourcesCreateOrUpdateByIDFuture) Result(client Client) (gr Generi
 	return
 }
 
-// ResourcesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ResourcesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ResourcesCreateOrUpdateFuture struct {
 	azure.Future
 	req *http.Request
@@ -1125,7 +1230,8 @@ func (future ResourcesDeleteFuture) Result(client Client) (ar autorest.Response,
 	return
 }
 
-// ResourcesMoveResourcesFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ResourcesMoveResourcesFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ResourcesMoveResourcesFuture struct {
 	azure.Future
 	req *http.Request

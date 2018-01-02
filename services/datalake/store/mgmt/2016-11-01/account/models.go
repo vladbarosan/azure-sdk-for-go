@@ -301,11 +301,38 @@ type DataLakeStoreAccount struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Identity - The Key Vault encryption identity, if any.
 	Identity *EncryptionIdentity `json:"identity,omitempty"`
 	// DataLakeStoreAccountProperties - the Data Lake Store account properties.
 	*DataLakeStoreAccountProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for DataLakeStoreAccount.
+func (dlsa DataLakeStoreAccount) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if dlsa.Identity != nil {
+		objectMap["identity"] = dlsa.Identity
+	}
+	if dlsa.DataLakeStoreAccountProperties != nil {
+		objectMap["properties"] = dlsa.DataLakeStoreAccountProperties
+	}
+	if dlsa.ID != nil {
+		objectMap["id"] = dlsa.ID
+	}
+	if dlsa.Name != nil {
+		objectMap["name"] = dlsa.Name
+	}
+	if dlsa.Type != nil {
+		objectMap["type"] = dlsa.Type
+	}
+	if dlsa.Location != nil {
+		objectMap["location"] = dlsa.Location
+	}
+	if dlsa.Tags != nil {
+		objectMap["tags"] = dlsa.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for DataLakeStoreAccount struct.
@@ -315,76 +342,72 @@ func (dlsa *DataLakeStoreAccount) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["identity"]
-	if v != nil {
-		var identity EncryptionIdentity
-		err = json.Unmarshal(*m["identity"], &identity)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "identity":
+			if v != nil {
+				var identity EncryptionIdentity
+				err = json.Unmarshal(*v, &identity)
+				if err != nil {
+					return err
+				}
+				dlsa.Identity = &identity
+			}
+		case "properties":
+			if v != nil {
+				var dataLakeStoreAccountProperties DataLakeStoreAccountProperties
+				err = json.Unmarshal(*v, &dataLakeStoreAccountProperties)
+				if err != nil {
+					return err
+				}
+				dlsa.DataLakeStoreAccountProperties = &dataLakeStoreAccountProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				dlsa.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				dlsa.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dlsa.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				dlsa.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				dlsa.Tags = tags
+			}
 		}
-		dlsa.Identity = &identity
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties DataLakeStoreAccountProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		dlsa.DataLakeStoreAccountProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		dlsa.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		dlsa.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		dlsa.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		dlsa.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		dlsa.Tags = &tags
 	}
 
 	return nil
@@ -401,9 +424,33 @@ type DataLakeStoreAccountBasic struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// DataLakeStoreAccountPropertiesBasic - the basic Data Lake Store account properties.
 	*DataLakeStoreAccountPropertiesBasic `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for DataLakeStoreAccountBasic.
+func (dlsab DataLakeStoreAccountBasic) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if dlsab.DataLakeStoreAccountPropertiesBasic != nil {
+		objectMap["properties"] = dlsab.DataLakeStoreAccountPropertiesBasic
+	}
+	if dlsab.ID != nil {
+		objectMap["id"] = dlsab.ID
+	}
+	if dlsab.Name != nil {
+		objectMap["name"] = dlsab.Name
+	}
+	if dlsab.Type != nil {
+		objectMap["type"] = dlsab.Type
+	}
+	if dlsab.Location != nil {
+		objectMap["location"] = dlsab.Location
+	}
+	if dlsab.Tags != nil {
+		objectMap["tags"] = dlsab.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for DataLakeStoreAccountBasic struct.
@@ -413,66 +460,63 @@ func (dlsab *DataLakeStoreAccountBasic) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties DataLakeStoreAccountPropertiesBasic
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var dataLakeStoreAccountPropertiesBasic DataLakeStoreAccountPropertiesBasic
+				err = json.Unmarshal(*v, &dataLakeStoreAccountPropertiesBasic)
+				if err != nil {
+					return err
+				}
+				dlsab.DataLakeStoreAccountPropertiesBasic = &dataLakeStoreAccountPropertiesBasic
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				dlsab.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				dlsab.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dlsab.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				dlsab.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				dlsab.Tags = tags
+			}
 		}
-		dlsab.DataLakeStoreAccountPropertiesBasic = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		dlsab.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		dlsab.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		dlsab.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		dlsab.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		dlsab.Tags = &tags
 	}
 
 	return nil
@@ -487,7 +531,8 @@ type DataLakeStoreAccountListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// DataLakeStoreAccountListResultIterator provides access to a complete listing of DataLakeStoreAccountBasic values.
+// DataLakeStoreAccountListResultIterator provides access to a complete listing of DataLakeStoreAccountBasic
+// values.
 type DataLakeStoreAccountListResultIterator struct {
 	i    int
 	page DataLakeStoreAccountListResultPage
@@ -638,9 +683,21 @@ type DataLakeStoreAccountPropertiesBasic struct {
 // DataLakeStoreAccountUpdateParameters data Lake Store account information to update
 type DataLakeStoreAccountUpdateParameters struct {
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// UpdateDataLakeStoreAccountProperties - the Data Lake Store account properties to update.
 	*UpdateDataLakeStoreAccountProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for DataLakeStoreAccountUpdateParameters.
+func (dlsaup DataLakeStoreAccountUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if dlsaup.Tags != nil {
+		objectMap["tags"] = dlsaup.Tags
+	}
+	if dlsaup.UpdateDataLakeStoreAccountProperties != nil {
+		objectMap["properties"] = dlsaup.UpdateDataLakeStoreAccountProperties
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for DataLakeStoreAccountUpdateParameters struct.
@@ -650,26 +707,27 @@ func (dlsaup *DataLakeStoreAccountUpdateParameters) UnmarshalJSON(body []byte) e
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				dlsaup.Tags = tags
+			}
+		case "properties":
+			if v != nil {
+				var updateDataLakeStoreAccountProperties UpdateDataLakeStoreAccountProperties
+				err = json.Unmarshal(*v, &updateDataLakeStoreAccountProperties)
+				if err != nil {
+					return err
+				}
+				dlsaup.UpdateDataLakeStoreAccountProperties = &updateDataLakeStoreAccountProperties
+			}
 		}
-		dlsaup.Tags = &tags
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties UpdateDataLakeStoreAccountProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		dlsaup.UpdateDataLakeStoreAccountProperties = &properties
 	}
 
 	return nil
@@ -786,7 +844,8 @@ type DataLakeStoreTrustedIDProviderListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// DataLakeStoreTrustedIDProviderListResultIterator provides access to a complete listing of TrustedIDProvider values.
+// DataLakeStoreTrustedIDProviderListResultIterator provides access to a complete listing of TrustedIDProvider
+// values.
 type DataLakeStoreTrustedIDProviderListResultIterator struct {
 	i    int
 	page DataLakeStoreTrustedIDProviderListResultPage
@@ -927,46 +986,45 @@ func (fr *FirewallRule) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties FirewallRuleProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var firewallRuleProperties FirewallRuleProperties
+				err = json.Unmarshal(*v, &firewallRuleProperties)
+				if err != nil {
+					return err
+				}
+				fr.FirewallRuleProperties = &firewallRuleProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				fr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				fr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				fr.Type = &typeVar
+			}
 		}
-		fr.FirewallRuleProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		fr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		fr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		fr.Type = &typeVar
 	}
 
 	return nil
@@ -1043,7 +1101,28 @@ type Resource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // SubResource the Resource model definition for a nested resource.
@@ -1076,46 +1155,45 @@ func (tip *TrustedIDProvider) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties TrustedIDProviderProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var trustedIDProviderProperties TrustedIDProviderProperties
+				err = json.Unmarshal(*v, &trustedIDProviderProperties)
+				if err != nil {
+					return err
+				}
+				tip.TrustedIDProviderProperties = &trustedIDProviderProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				tip.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				tip.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				tip.Type = &typeVar
+			}
 		}
-		tip.TrustedIDProviderProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		tip.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		tip.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		tip.Type = &typeVar
 	}
 
 	return nil
@@ -1162,16 +1240,18 @@ func (ufrp *UpdateFirewallRuleParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties UpdateFirewallRuleProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var updateFirewallRuleProperties UpdateFirewallRuleProperties
+				err = json.Unmarshal(*v, &updateFirewallRuleProperties)
+				if err != nil {
+					return err
+				}
+				ufrp.UpdateFirewallRuleProperties = &updateFirewallRuleProperties
+			}
 		}
-		ufrp.UpdateFirewallRuleProperties = &properties
 	}
 
 	return nil
@@ -1204,16 +1284,18 @@ func (utipp *UpdateTrustedIDProviderParameters) UnmarshalJSON(body []byte) error
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties UpdateTrustedIDProviderProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var updateTrustedIDProviderProperties UpdateTrustedIDProviderProperties
+				err = json.Unmarshal(*v, &updateTrustedIDProviderProperties)
+				if err != nil {
+					return err
+				}
+				utipp.UpdateTrustedIDProviderProperties = &updateTrustedIDProviderProperties
+			}
 		}
-		utipp.UpdateTrustedIDProviderProperties = &properties
 	}
 
 	return nil

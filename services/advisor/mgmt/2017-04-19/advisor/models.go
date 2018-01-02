@@ -89,11 +89,26 @@ type ConfigData struct {
 // ConfigDataProperties the list of property name/value pairs.
 type ConfigDataProperties struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// Exclude - Exclude the resource from Advisor evaluations. Valid values: False (default) or True.
 	Exclude *bool `json:"exclude,omitempty"`
 	// LowCPUThreshold - Minimum percentage threshold for Advisor low CPU utilization evaluation. Valid only for subscriptions. Valid values: 5 (default), 10, 15 or 20.
 	LowCPUThreshold *string `json:"low_cpu_threshold,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ConfigDataProperties.
+func (cd ConfigDataProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if cd.Exclude != nil {
+		objectMap["exclude"] = cd.Exclude
+	}
+	if cd.LowCPUThreshold != nil {
+		objectMap["low_cpu_threshold"] = cd.LowCPUThreshold
+	}
+	for k, v := range cd.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // ConfigurationListResult the list of Advisor configurations.
@@ -240,7 +255,7 @@ type RecommendationProperties struct {
 	// LastUpdated - The most recent time that Advisor checked the validity of the recommendation.
 	LastUpdated *date.Time `json:"lastUpdated,omitempty"`
 	// Metadata - The recommendation metadata.
-	Metadata *map[string]*map[string]interface{} `json:"metadata,omitempty"`
+	Metadata map[string]interface{} `json:"metadata"`
 	// RecommendationTypeID - The recommendation-type GUID.
 	RecommendationTypeID *string `json:"recommendationTypeId,omitempty"`
 	// Risk - The potential risk of not implementing the recommendation. Possible values include: 'Error', 'Warning', 'None'
@@ -251,8 +266,38 @@ type RecommendationProperties struct {
 	SuppressionIds *[]uuid.UUID `json:"suppressionIds,omitempty"`
 }
 
-// RecommendationsGetGenerateStatusFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// MarshalJSON is the custom marshaler for RecommendationProperties.
+func (rp RecommendationProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	objectMap["category"] = rp.Category
+	objectMap["impact"] = rp.Impact
+	if rp.ImpactedField != nil {
+		objectMap["impactedField"] = rp.ImpactedField
+	}
+	if rp.ImpactedValue != nil {
+		objectMap["impactedValue"] = rp.ImpactedValue
+	}
+	if rp.LastUpdated != nil {
+		objectMap["lastUpdated"] = rp.LastUpdated
+	}
+	if rp.Metadata != nil {
+		objectMap["metadata"] = rp.Metadata
+	}
+	if rp.RecommendationTypeID != nil {
+		objectMap["recommendationTypeId"] = rp.RecommendationTypeID
+	}
+	objectMap["risk"] = rp.Risk
+	if rp.ShortDescription != nil {
+		objectMap["shortDescription"] = rp.ShortDescription
+	}
+	if rp.SuppressionIds != nil {
+		objectMap["suppressionIds"] = rp.SuppressionIds
+	}
+	return json.Marshal(objectMap)
+}
+
+// RecommendationsGetGenerateStatusFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type RecommendationsGetGenerateStatusFuture struct {
 	azure.Future
 	req *http.Request
@@ -313,46 +358,45 @@ func (rrb *ResourceRecommendationBase) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties RecommendationProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var recommendationProperties RecommendationProperties
+				err = json.Unmarshal(*v, &recommendationProperties)
+				if err != nil {
+					return err
+				}
+				rrb.RecommendationProperties = &recommendationProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				rrb.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				rrb.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				rrb.Type = &typeVar
+			}
 		}
-		rrb.RecommendationProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		rrb.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		rrb.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		rrb.Type = &typeVar
 	}
 
 	return nil
@@ -490,46 +534,45 @@ func (sc *SuppressionContract) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties SuppressionProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var suppressionProperties SuppressionProperties
+				err = json.Unmarshal(*v, &suppressionProperties)
+				if err != nil {
+					return err
+				}
+				sc.SuppressionProperties = &suppressionProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				sc.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				sc.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sc.Type = &typeVar
+			}
 		}
-		sc.SuppressionProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		sc.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		sc.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		sc.Type = &typeVar
 	}
 
 	return nil

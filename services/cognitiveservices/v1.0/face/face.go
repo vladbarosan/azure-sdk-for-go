@@ -204,8 +204,7 @@ func (client Client) DetectInStreamResponder(resp *http.Response) (result ListDe
 func (client Client) FindSimilar(ctx context.Context, body FindSimilarRequest) (result ListSimilarFaceResult, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: body,
-			Constraints: []validation.Constraint{{Target: "body.FaceID", Name: validation.Null, Rule: true,
-				Chain: []validation.Constraint{{Target: "body.FaceID", Name: validation.MaxLength, Rule: 64, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "body.FaceID", Name: validation.Null, Rule: true, Chain: nil},
 				{Target: "body.FaceListID", Name: validation.Null, Rule: false,
 					Chain: []validation.Constraint{{Target: "body.FaceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
 						{Target: "body.FaceListID", Name: validation.Pattern, Rule: `^[a-z0-9-_]+$`, Chain: nil},
@@ -423,10 +422,8 @@ func (client Client) IdentifyResponder(resp *http.Response) (result ListIdentify
 func (client Client) Verify(ctx context.Context, body VerifyRequest) (result VerifyResult, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: body,
-			Constraints: []validation.Constraint{{Target: "body.FaceID1", Name: validation.Null, Rule: true,
-				Chain: []validation.Constraint{{Target: "body.FaceID1", Name: validation.MaxLength, Rule: 64, Chain: nil}}},
-				{Target: "body.FaceID2", Name: validation.Null, Rule: true,
-					Chain: []validation.Constraint{{Target: "body.FaceID2", Name: validation.MaxLength, Rule: 64, Chain: nil}}}}}}); err != nil {
+			Constraints: []validation.Constraint{{Target: "body.FaceID1", Name: validation.Null, Rule: true, Chain: nil},
+				{Target: "body.FaceID2", Name: validation.Null, Rule: true, Chain: nil}}}}); err != nil {
 		return result, validation.NewErrorWithValidationError(err, "face.Client", "Verify")
 	}
 
@@ -492,8 +489,7 @@ func (client Client) VerifyResponder(resp *http.Response) (result VerifyResult, 
 func (client Client) VerifyWithPersonGroup(ctx context.Context, body VerifyPersonGroupRequest) (result VerifyResult, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: body,
-			Constraints: []validation.Constraint{{Target: "body.FaceID", Name: validation.Null, Rule: true,
-				Chain: []validation.Constraint{{Target: "body.FaceID", Name: validation.MaxLength, Rule: 64, Chain: nil}}},
+			Constraints: []validation.Constraint{{Target: "body.FaceID", Name: validation.Null, Rule: true, Chain: nil},
 				{Target: "body.PersonID", Name: validation.Null, Rule: true, Chain: nil},
 				{Target: "body.PersonGroupID", Name: validation.Null, Rule: true,
 					Chain: []validation.Constraint{{Target: "body.PersonGroupID", Name: validation.MaxLength, Rule: 64, Chain: nil},

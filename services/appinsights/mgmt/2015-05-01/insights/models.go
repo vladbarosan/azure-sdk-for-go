@@ -83,11 +83,38 @@ type ApplicationInsightsComponent struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Kind - The kind of application that this component refers to, used to customize UI. This value is a freeform string, values should typically be one of the following: web, ios, other, store, java, phone.
 	Kind *string `json:"kind,omitempty"`
 	// ApplicationInsightsComponentProperties - Properties that define an Application Insights component resource.
 	*ApplicationInsightsComponentProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ApplicationInsightsComponent.
+func (aic ApplicationInsightsComponent) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if aic.Kind != nil {
+		objectMap["kind"] = aic.Kind
+	}
+	if aic.ApplicationInsightsComponentProperties != nil {
+		objectMap["properties"] = aic.ApplicationInsightsComponentProperties
+	}
+	if aic.ID != nil {
+		objectMap["id"] = aic.ID
+	}
+	if aic.Name != nil {
+		objectMap["name"] = aic.Name
+	}
+	if aic.Type != nil {
+		objectMap["type"] = aic.Type
+	}
+	if aic.Location != nil {
+		objectMap["location"] = aic.Location
+	}
+	if aic.Tags != nil {
+		objectMap["tags"] = aic.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for ApplicationInsightsComponent struct.
@@ -97,76 +124,72 @@ func (aic *ApplicationInsightsComponent) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["kind"]
-	if v != nil {
-		var kind string
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "kind":
+			if v != nil {
+				var kind string
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				aic.Kind = &kind
+			}
+		case "properties":
+			if v != nil {
+				var applicationInsightsComponentProperties ApplicationInsightsComponentProperties
+				err = json.Unmarshal(*v, &applicationInsightsComponentProperties)
+				if err != nil {
+					return err
+				}
+				aic.ApplicationInsightsComponentProperties = &applicationInsightsComponentProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				aic.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				aic.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				aic.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				aic.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				aic.Tags = tags
+			}
 		}
-		aic.Kind = &kind
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties ApplicationInsightsComponentProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		aic.ApplicationInsightsComponentProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		aic.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		aic.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		aic.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		aic.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		aic.Tags = &tags
 	}
 
 	return nil
@@ -189,7 +212,8 @@ type ApplicationInsightsComponentAPIKey struct {
 	LinkedWriteProperties *[]string `json:"linkedWriteProperties,omitempty"`
 }
 
-// ApplicationInsightsComponentAPIKeyListResult describes the list of API Keys of an Application Insights Component.
+// ApplicationInsightsComponentAPIKeyListResult describes the list of API Keys of an Application Insights
+// Component.
 type ApplicationInsightsComponentAPIKeyListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of API Key definitions.
@@ -264,8 +288,8 @@ type ApplicationInsightsComponentExportConfiguration struct {
 	ContainerName *string `json:"ContainerName,omitempty"`
 }
 
-// ApplicationInsightsComponentExportRequest an Application Insights component Continuous Export configuration request
-// definition.
+// ApplicationInsightsComponentExportRequest an Application Insights component Continuous Export configuration
+// request definition.
 type ApplicationInsightsComponentExportRequest struct {
 	// RecordTypes - The document types to be exported, as comma separated values. Allowed values include 'Requests', 'Event', 'Exceptions', 'Metrics', 'PageViews', 'PageViewPerformance', 'Rdd', 'PerformanceCounters', 'Availability', 'Messages'.
 	RecordTypes *string `json:"RecordTypes,omitempty"`
@@ -296,8 +320,8 @@ type ApplicationInsightsComponentListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ApplicationInsightsComponentListResultIterator provides access to a complete listing of ApplicationInsightsComponent
-// values.
+// ApplicationInsightsComponentListResultIterator provides access to a complete listing of
+// ApplicationInsightsComponent values.
 type ApplicationInsightsComponentListResultIterator struct {
 	i    int
 	page ApplicationInsightsComponentListResultPage
@@ -429,8 +453,8 @@ type ApplicationInsightsComponentQuotaStatus struct {
 	ExpirationTime *string `json:"ExpirationTime,omitempty"`
 }
 
-// ErrorResponse error reponse indicates Insights service is not able to process the incoming request. The reason is
-// provided in the error message.
+// ErrorResponse error reponse indicates Insights service is not able to process the incoming request. The reason
+// is provided in the error message.
 type ErrorResponse struct {
 	// Code - Error code.
 	Code *string `json:"code,omitempty"`
@@ -462,8 +486,8 @@ type OperationDisplay struct {
 	Operation *string `json:"operation,omitempty"`
 }
 
-// OperationListResult result of the request to list CDN operations. It contains a list of operations and a URL link to
-// get the next set of results.
+// OperationListResult result of the request to list CDN operations. It contains a list of operations and a URL
+// link to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of CDN operations supported by the CDN resource provider.
@@ -576,14 +600,44 @@ type Resource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // TagsResource a container holding only the Tags for a resource, allowing the user to update the tags on a WebTest
 // instance.
 type TagsResource struct {
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for TagsResource.
+func (tr TagsResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if tr.Tags != nil {
+		objectMap["tags"] = tr.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // WebTest an Application Insights web test definition.
@@ -598,11 +652,36 @@ type WebTest struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Kind - The kind of web test that this web test watches. Choices are ping and multistep. Possible values include: 'Ping', 'Multistep'
 	Kind WebTestKind `json:"kind,omitempty"`
 	// WebTestProperties - Metadata describing a web test for an Azure resource.
 	*WebTestProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for WebTest.
+func (wt WebTest) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	objectMap["kind"] = wt.Kind
+	if wt.WebTestProperties != nil {
+		objectMap["properties"] = wt.WebTestProperties
+	}
+	if wt.ID != nil {
+		objectMap["id"] = wt.ID
+	}
+	if wt.Name != nil {
+		objectMap["name"] = wt.Name
+	}
+	if wt.Type != nil {
+		objectMap["type"] = wt.Type
+	}
+	if wt.Location != nil {
+		objectMap["location"] = wt.Location
+	}
+	if wt.Tags != nil {
+		objectMap["tags"] = wt.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for WebTest struct.
@@ -612,83 +691,79 @@ func (wt *WebTest) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["kind"]
-	if v != nil {
-		var kind WebTestKind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "kind":
+			if v != nil {
+				var kind WebTestKind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				wt.Kind = kind
+			}
+		case "properties":
+			if v != nil {
+				var webTestProperties WebTestProperties
+				err = json.Unmarshal(*v, &webTestProperties)
+				if err != nil {
+					return err
+				}
+				wt.WebTestProperties = &webTestProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				wt.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				wt.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				wt.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				wt.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				wt.Tags = tags
+			}
 		}
-		wt.Kind = kind
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties WebTestProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		wt.WebTestProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		wt.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		wt.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		wt.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		wt.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		wt.Tags = &tags
 	}
 
 	return nil
 }
 
-// WebTestGeolocation geo-physical location to run a web test from. You must specify one or more locations for the test
-// to run from.
+// WebTestGeolocation geo-physical location to run a web test from. You must specify one or more locations for the
+// test to run from.
 type WebTestGeolocation struct {
 	// Location - Location ID for the webtest to run from.
 	Location *string `json:"Id,omitempty"`

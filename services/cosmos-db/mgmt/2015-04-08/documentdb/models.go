@@ -134,11 +134,36 @@ type DatabaseAccount struct {
 	// Type - The type of Azure resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource group to which the resource belongs.
-	Location *string             `json:"location,omitempty"`
-	Tags     *map[string]*string `json:"tags,omitempty"`
+	Location *string            `json:"location,omitempty"`
+	Tags     map[string]*string `json:"tags"`
 	// Kind - Indicates the type of database account. This can only be set at database account creation. Possible values include: 'GlobalDocumentDB', 'MongoDB', 'Parse'
 	Kind                       DatabaseAccountKind `json:"kind,omitempty"`
 	*DatabaseAccountProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for DatabaseAccount.
+func (da DatabaseAccount) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	objectMap["kind"] = da.Kind
+	if da.DatabaseAccountProperties != nil {
+		objectMap["properties"] = da.DatabaseAccountProperties
+	}
+	if da.ID != nil {
+		objectMap["id"] = da.ID
+	}
+	if da.Name != nil {
+		objectMap["name"] = da.Name
+	}
+	if da.Type != nil {
+		objectMap["type"] = da.Type
+	}
+	if da.Location != nil {
+		objectMap["location"] = da.Location
+	}
+	if da.Tags != nil {
+		objectMap["tags"] = da.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for DatabaseAccount struct.
@@ -148,76 +173,72 @@ func (da *DatabaseAccount) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["kind"]
-	if v != nil {
-		var kind DatabaseAccountKind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "kind":
+			if v != nil {
+				var kind DatabaseAccountKind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				da.Kind = kind
+			}
+		case "properties":
+			if v != nil {
+				var databaseAccountProperties DatabaseAccountProperties
+				err = json.Unmarshal(*v, &databaseAccountProperties)
+				if err != nil {
+					return err
+				}
+				da.DatabaseAccountProperties = &databaseAccountProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				da.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				da.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				da.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				da.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				da.Tags = tags
+			}
 		}
-		da.Kind = kind
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties DatabaseAccountProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		da.DatabaseAccountProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		da.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		da.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		da.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		da.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		da.Tags = &tags
 	}
 
 	return nil
@@ -240,11 +261,36 @@ type DatabaseAccountCreateUpdateParameters struct {
 	// Type - The type of Azure resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource group to which the resource belongs.
-	Location *string             `json:"location,omitempty"`
-	Tags     *map[string]*string `json:"tags,omitempty"`
+	Location *string            `json:"location,omitempty"`
+	Tags     map[string]*string `json:"tags"`
 	// Kind - Indicates the type of database account. This can only be set at database account creation. Possible values include: 'GlobalDocumentDB', 'MongoDB', 'Parse'
 	Kind                                   DatabaseAccountKind `json:"kind,omitempty"`
 	*DatabaseAccountCreateUpdateProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for DatabaseAccountCreateUpdateParameters.
+func (dacup DatabaseAccountCreateUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	objectMap["kind"] = dacup.Kind
+	if dacup.DatabaseAccountCreateUpdateProperties != nil {
+		objectMap["properties"] = dacup.DatabaseAccountCreateUpdateProperties
+	}
+	if dacup.ID != nil {
+		objectMap["id"] = dacup.ID
+	}
+	if dacup.Name != nil {
+		objectMap["name"] = dacup.Name
+	}
+	if dacup.Type != nil {
+		objectMap["type"] = dacup.Type
+	}
+	if dacup.Location != nil {
+		objectMap["location"] = dacup.Location
+	}
+	if dacup.Tags != nil {
+		objectMap["tags"] = dacup.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for DatabaseAccountCreateUpdateParameters struct.
@@ -254,76 +300,72 @@ func (dacup *DatabaseAccountCreateUpdateParameters) UnmarshalJSON(body []byte) e
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["kind"]
-	if v != nil {
-		var kind DatabaseAccountKind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "kind":
+			if v != nil {
+				var kind DatabaseAccountKind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				dacup.Kind = kind
+			}
+		case "properties":
+			if v != nil {
+				var databaseAccountCreateUpdateProperties DatabaseAccountCreateUpdateProperties
+				err = json.Unmarshal(*v, &databaseAccountCreateUpdateProperties)
+				if err != nil {
+					return err
+				}
+				dacup.DatabaseAccountCreateUpdateProperties = &databaseAccountCreateUpdateProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				dacup.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				dacup.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dacup.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				dacup.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				dacup.Tags = tags
+			}
 		}
-		dacup.Kind = kind
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties DatabaseAccountCreateUpdateProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		dacup.DatabaseAccountCreateUpdateProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		dacup.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		dacup.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		dacup.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		dacup.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		dacup.Tags = &tags
 	}
 
 	return nil
@@ -366,36 +408,36 @@ func (dalkr *DatabaseAccountListKeysResult) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["primaryMasterKey"]
-	if v != nil {
-		var primaryMasterKey string
-		err = json.Unmarshal(*m["primaryMasterKey"], &primaryMasterKey)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "primaryMasterKey":
+			if v != nil {
+				var primaryMasterKey string
+				err = json.Unmarshal(*v, &primaryMasterKey)
+				if err != nil {
+					return err
+				}
+				dalkr.PrimaryMasterKey = &primaryMasterKey
+			}
+		case "secondaryMasterKey":
+			if v != nil {
+				var secondaryMasterKey string
+				err = json.Unmarshal(*v, &secondaryMasterKey)
+				if err != nil {
+					return err
+				}
+				dalkr.SecondaryMasterKey = &secondaryMasterKey
+			}
+		case "properties":
+			if v != nil {
+				var databaseAccountListReadOnlyKeysResult DatabaseAccountListReadOnlyKeysResult
+				err = json.Unmarshal(*v, &databaseAccountListReadOnlyKeysResult)
+				if err != nil {
+					return err
+				}
+				dalkr.DatabaseAccountListReadOnlyKeysResult = &databaseAccountListReadOnlyKeysResult
+			}
 		}
-		dalkr.PrimaryMasterKey = &primaryMasterKey
-	}
-
-	v = m["secondaryMasterKey"]
-	if v != nil {
-		var secondaryMasterKey string
-		err = json.Unmarshal(*m["secondaryMasterKey"], &secondaryMasterKey)
-		if err != nil {
-			return err
-		}
-		dalkr.SecondaryMasterKey = &secondaryMasterKey
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties DatabaseAccountListReadOnlyKeysResult
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		dalkr.DatabaseAccountListReadOnlyKeysResult = &properties
 	}
 
 	return nil
@@ -412,7 +454,16 @@ type DatabaseAccountListReadOnlyKeysResult struct {
 
 // DatabaseAccountPatchParameters parameters for patching Azure Cosmos DB database account properties.
 type DatabaseAccountPatchParameters struct {
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for DatabaseAccountPatchParameters.
+func (dapp DatabaseAccountPatchParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if dapp.Tags != nil {
+		objectMap["tags"] = dapp.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // DatabaseAccountProperties properties for the database account.
@@ -474,7 +525,8 @@ func (future DatabaseAccountsCreateOrUpdateFuture) Result(client DatabaseAccount
 	return
 }
 
-// DatabaseAccountsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DatabaseAccountsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DatabaseAccountsDeleteFuture struct {
 	azure.Future
 	req *http.Request
@@ -537,14 +589,16 @@ func (future DatabaseAccountsFailoverPriorityChangeFuture) Result(client Databas
 	return
 }
 
-// DatabaseAccountsListResult the List operation response, that contains the database accounts and their properties.
+// DatabaseAccountsListResult the List operation response, that contains the database accounts and their
+// properties.
 type DatabaseAccountsListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of database account and their properties.
 	Value *[]DatabaseAccount `json:"value,omitempty"`
 }
 
-// DatabaseAccountsPatchFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DatabaseAccountsPatchFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DatabaseAccountsPatchFuture struct {
 	azure.Future
 	req *http.Request
@@ -732,8 +786,8 @@ type OperationDisplay struct {
 	Description *string `json:"Description,omitempty"`
 }
 
-// OperationListResult result of the request to list Resource Provider operations. It contains a list of operations and
-// a URL link to get the next set of results.
+// OperationListResult result of the request to list Resource Provider operations. It contains a list of operations
+// and a URL link to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of operations supported by the Resource Provider.
@@ -844,8 +898,29 @@ type Resource struct {
 	// Type - The type of Azure resource.
 	Type *string `json:"type,omitempty"`
 	// Location - The location of the resource group to which the resource belongs.
-	Location *string             `json:"location,omitempty"`
-	Tags     *map[string]*string `json:"tags,omitempty"`
+	Location *string            `json:"location,omitempty"`
+	Tags     map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // Usage the usage data for a usage request.

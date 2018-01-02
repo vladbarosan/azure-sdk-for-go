@@ -255,23 +255,25 @@ func (adlsp *AddDataLakeStoreParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties DataLakeStoreAccountInfoProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var dataLakeStoreAccountInfoProperties DataLakeStoreAccountInfoProperties
+				err = json.Unmarshal(*v, &dataLakeStoreAccountInfoProperties)
+				if err != nil {
+					return err
+				}
+				adlsp.DataLakeStoreAccountInfoProperties = &dataLakeStoreAccountInfoProperties
+			}
 		}
-		adlsp.DataLakeStoreAccountInfoProperties = &properties
 	}
 
 	return nil
 }
 
-// AddStorageAccountParameters storage account parameters for a storage account being added to a Data Lake Analytics
-// account.
+// AddStorageAccountParameters storage account parameters for a storage account being added to a Data Lake
+// Analytics account.
 type AddStorageAccountParameters struct {
 	// StorageAccountProperties - the properties for the Azure Storage account being added.
 	*StorageAccountProperties `json:"properties,omitempty"`
@@ -284,16 +286,18 @@ func (asap *AddStorageAccountParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties StorageAccountProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var storageAccountProperties StorageAccountProperties
+				err = json.Unmarshal(*v, &storageAccountProperties)
+				if err != nil {
+					return err
+				}
+				asap.StorageAccountProperties = &storageAccountProperties
+			}
 		}
-		asap.StorageAccountProperties = &properties
 	}
 
 	return nil
@@ -338,26 +342,27 @@ func (cp *ComputePolicy) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				cp.Name = &name
+			}
+		case "properties":
+			if v != nil {
+				var computePolicyProperties ComputePolicyProperties
+				err = json.Unmarshal(*v, &computePolicyProperties)
+				if err != nil {
+					return err
+				}
+				cp.ComputePolicyProperties = &computePolicyProperties
+			}
 		}
-		cp.Name = &name
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties ComputePolicyProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		cp.ComputePolicyProperties = &properties
 	}
 
 	return nil
@@ -378,26 +383,27 @@ func (cpacp *ComputePolicyAccountCreateParameters) UnmarshalJSON(body []byte) er
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				cpacp.Name = &name
+			}
+		case "properties":
+			if v != nil {
+				var computePolicyPropertiesCreateParameters ComputePolicyPropertiesCreateParameters
+				err = json.Unmarshal(*v, &computePolicyPropertiesCreateParameters)
+				if err != nil {
+					return err
+				}
+				cpacp.ComputePolicyPropertiesCreateParameters = &computePolicyPropertiesCreateParameters
+			}
 		}
-		cpacp.Name = &name
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties ComputePolicyPropertiesCreateParameters
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		cpacp.ComputePolicyPropertiesCreateParameters = &properties
 	}
 
 	return nil
@@ -416,16 +422,18 @@ func (cpcoup *ComputePolicyCreateOrUpdateParameters) UnmarshalJSON(body []byte) 
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ComputePolicyPropertiesCreateParameters
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var computePolicyPropertiesCreateParameters ComputePolicyPropertiesCreateParameters
+				err = json.Unmarshal(*v, &computePolicyPropertiesCreateParameters)
+				if err != nil {
+					return err
+				}
+				cpcoup.ComputePolicyPropertiesCreateParameters = &computePolicyPropertiesCreateParameters
+			}
 		}
-		cpcoup.ComputePolicyPropertiesCreateParameters = &properties
 	}
 
 	return nil
@@ -557,8 +565,8 @@ type ComputePolicyPropertiesCreateParameters struct {
 	MinPriorityPerJob *int32 `json:"minPriorityPerJob,omitempty"`
 }
 
-// DataLakeAnalyticsAccount a Data Lake Analytics account object, containing all information associated with the named
-// Data Lake Analytics account.
+// DataLakeAnalyticsAccount a Data Lake Analytics account object, containing all information associated with the
+// named Data Lake Analytics account.
 type DataLakeAnalyticsAccount struct {
 	autorest.Response `json:"-"`
 	// ID - Resource Id
@@ -570,9 +578,33 @@ type DataLakeAnalyticsAccount struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// DataLakeAnalyticsAccountProperties - The properties defined by Data Lake Analytics all properties are specific to each resource provider.
 	*DataLakeAnalyticsAccountProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for DataLakeAnalyticsAccount.
+func (dlaa DataLakeAnalyticsAccount) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if dlaa.DataLakeAnalyticsAccountProperties != nil {
+		objectMap["properties"] = dlaa.DataLakeAnalyticsAccountProperties
+	}
+	if dlaa.ID != nil {
+		objectMap["id"] = dlaa.ID
+	}
+	if dlaa.Name != nil {
+		objectMap["name"] = dlaa.Name
+	}
+	if dlaa.Type != nil {
+		objectMap["type"] = dlaa.Type
+	}
+	if dlaa.Location != nil {
+		objectMap["location"] = dlaa.Location
+	}
+	if dlaa.Tags != nil {
+		objectMap["tags"] = dlaa.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for DataLakeAnalyticsAccount struct.
@@ -582,73 +614,70 @@ func (dlaa *DataLakeAnalyticsAccount) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties DataLakeAnalyticsAccountProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var dataLakeAnalyticsAccountProperties DataLakeAnalyticsAccountProperties
+				err = json.Unmarshal(*v, &dataLakeAnalyticsAccountProperties)
+				if err != nil {
+					return err
+				}
+				dlaa.DataLakeAnalyticsAccountProperties = &dataLakeAnalyticsAccountProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				dlaa.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				dlaa.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dlaa.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				dlaa.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				dlaa.Tags = tags
+			}
 		}
-		dlaa.DataLakeAnalyticsAccountProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		dlaa.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		dlaa.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		dlaa.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		dlaa.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		dlaa.Tags = &tags
 	}
 
 	return nil
 }
 
-// DataLakeAnalyticsAccountBasic a Data Lake Analytics account object, containing all information associated with the
-// named Data Lake Analytics account.
+// DataLakeAnalyticsAccountBasic a Data Lake Analytics account object, containing all information associated with
+// the named Data Lake Analytics account.
 type DataLakeAnalyticsAccountBasic struct {
 	// ID - Resource Id
 	ID *string `json:"id,omitempty"`
@@ -659,9 +688,33 @@ type DataLakeAnalyticsAccountBasic struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// DataLakeAnalyticsAccountPropertiesBasic - The properties defined by Data Lake Analytics all properties are specific to each resource provider.
 	*DataLakeAnalyticsAccountPropertiesBasic `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for DataLakeAnalyticsAccountBasic.
+func (dlaab DataLakeAnalyticsAccountBasic) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if dlaab.DataLakeAnalyticsAccountPropertiesBasic != nil {
+		objectMap["properties"] = dlaab.DataLakeAnalyticsAccountPropertiesBasic
+	}
+	if dlaab.ID != nil {
+		objectMap["id"] = dlaab.ID
+	}
+	if dlaab.Name != nil {
+		objectMap["name"] = dlaab.Name
+	}
+	if dlaab.Type != nil {
+		objectMap["type"] = dlaab.Type
+	}
+	if dlaab.Location != nil {
+		objectMap["location"] = dlaab.Location
+	}
+	if dlaab.Tags != nil {
+		objectMap["tags"] = dlaab.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for DataLakeAnalyticsAccountBasic struct.
@@ -671,66 +724,63 @@ func (dlaab *DataLakeAnalyticsAccountBasic) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties DataLakeAnalyticsAccountPropertiesBasic
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var dataLakeAnalyticsAccountPropertiesBasic DataLakeAnalyticsAccountPropertiesBasic
+				err = json.Unmarshal(*v, &dataLakeAnalyticsAccountPropertiesBasic)
+				if err != nil {
+					return err
+				}
+				dlaab.DataLakeAnalyticsAccountPropertiesBasic = &dataLakeAnalyticsAccountPropertiesBasic
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				dlaab.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				dlaab.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dlaab.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				dlaab.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				dlaab.Tags = tags
+			}
 		}
-		dlaab.DataLakeAnalyticsAccountPropertiesBasic = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		dlaab.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		dlaab.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		dlaab.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		dlaab.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		dlaab.Tags = &tags
 	}
 
 	return nil
@@ -848,8 +898,8 @@ type DataLakeAnalyticsAccountListResult struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// DataLakeAnalyticsAccountListResultIterator provides access to a complete listing of DataLakeAnalyticsAccountBasic
-// values.
+// DataLakeAnalyticsAccountListResultIterator provides access to a complete listing of
+// DataLakeAnalyticsAccountBasic values.
 type DataLakeAnalyticsAccountListResultIterator struct {
 	i    int
 	page DataLakeAnalyticsAccountListResultPage
@@ -1045,8 +1095,8 @@ func (page DataLakeAnalyticsAccountListStorageAccountsResultPage) Values() []Sto
 	return *page.dlaalsar.Value
 }
 
-// DataLakeAnalyticsAccountProperties the account specific properties that are associated with an underlying Data Lake
-// Analytics account. Returned only when retrieving a specific account.
+// DataLakeAnalyticsAccountProperties the account specific properties that are associated with an underlying Data
+// Lake Analytics account. Returned only when retrieving a specific account.
 type DataLakeAnalyticsAccountProperties struct {
 	// ProvisioningState - the provisioning status of the Data Lake Analytics account. Possible values include: 'Failed', 'Creating', 'Running', 'Succeeded', 'Patching', 'Suspending', 'Resuming', 'Deleting', 'Deleted', 'Undeleting', 'Canceled'
 	ProvisioningState DataLakeAnalyticsAccountStatus `json:"provisioningState,omitempty"`
@@ -1094,8 +1144,8 @@ type DataLakeAnalyticsAccountProperties struct {
 	ComputePolicies *[]ComputePolicyAccountCreateParameters `json:"computePolicies,omitempty"`
 }
 
-// DataLakeAnalyticsAccountPropertiesBasic the basic account specific properties that are associated with an underlying
-// Data Lake Analytics account.
+// DataLakeAnalyticsAccountPropertiesBasic the basic account specific properties that are associated with an
+// underlying Data Lake Analytics account.
 type DataLakeAnalyticsAccountPropertiesBasic struct {
 	// ProvisioningState - the provisioning status of the Data Lake Analytics account. Possible values include: 'Failed', 'Creating', 'Running', 'Succeeded', 'Patching', 'Suspending', 'Resuming', 'Deleting', 'Deleted', 'Undeleting', 'Canceled'
 	ProvisioningState DataLakeAnalyticsAccountStatus `json:"provisioningState,omitempty"`
@@ -1111,13 +1161,25 @@ type DataLakeAnalyticsAccountPropertiesBasic struct {
 	AccountID *uuid.UUID `json:"accountId,omitempty"`
 }
 
-// DataLakeAnalyticsAccountUpdateParameters the parameters that can be used to update an existing Data Lake Analytics
-// account.
+// DataLakeAnalyticsAccountUpdateParameters the parameters that can be used to update an existing Data Lake
+// Analytics account.
 type DataLakeAnalyticsAccountUpdateParameters struct {
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// UpdateDataLakeAnalyticsAccountProperties - The properties that can be updated in an existing Data Lake Analytics account.
 	*UpdateDataLakeAnalyticsAccountProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for DataLakeAnalyticsAccountUpdateParameters.
+func (dlaaup DataLakeAnalyticsAccountUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if dlaaup.Tags != nil {
+		objectMap["tags"] = dlaaup.Tags
+	}
+	if dlaaup.UpdateDataLakeAnalyticsAccountProperties != nil {
+		objectMap["properties"] = dlaaup.UpdateDataLakeAnalyticsAccountProperties
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for DataLakeAnalyticsAccountUpdateParameters struct.
@@ -1127,26 +1189,27 @@ func (dlaaup *DataLakeAnalyticsAccountUpdateParameters) UnmarshalJSON(body []byt
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				dlaaup.Tags = tags
+			}
+		case "properties":
+			if v != nil {
+				var updateDataLakeAnalyticsAccountProperties UpdateDataLakeAnalyticsAccountProperties
+				err = json.Unmarshal(*v, &updateDataLakeAnalyticsAccountProperties)
+				if err != nil {
+					return err
+				}
+				dlaaup.UpdateDataLakeAnalyticsAccountProperties = &updateDataLakeAnalyticsAccountProperties
+			}
 		}
-		dlaaup.Tags = &tags
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties UpdateDataLakeAnalyticsAccountProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		dlaaup.UpdateDataLakeAnalyticsAccountProperties = &properties
 	}
 
 	return nil
@@ -1274,46 +1337,45 @@ func (dlsai *DataLakeStoreAccountInfo) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties DataLakeStoreAccountInfoProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var dataLakeStoreAccountInfoProperties DataLakeStoreAccountInfoProperties
+				err = json.Unmarshal(*v, &dataLakeStoreAccountInfoProperties)
+				if err != nil {
+					return err
+				}
+				dlsai.DataLakeStoreAccountInfoProperties = &dataLakeStoreAccountInfoProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				dlsai.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				dlsai.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				dlsai.Type = &typeVar
+			}
 		}
-		dlsai.DataLakeStoreAccountInfoProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		dlsai.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		dlsai.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		dlsai.Type = &typeVar
 	}
 
 	return nil
@@ -1345,46 +1407,45 @@ func (fr *FirewallRule) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties FirewallRuleProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var firewallRuleProperties FirewallRuleProperties
+				err = json.Unmarshal(*v, &firewallRuleProperties)
+				if err != nil {
+					return err
+				}
+				fr.FirewallRuleProperties = &firewallRuleProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				fr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				fr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				fr.Type = &typeVar
+			}
 		}
-		fr.FirewallRuleProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		fr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		fr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		fr.Type = &typeVar
 	}
 
 	return nil
@@ -1666,7 +1727,28 @@ type Resource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // SasTokenInfo SAS token information.
@@ -1695,46 +1777,45 @@ func (sai *StorageAccountInfo) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties StorageAccountProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var storageAccountProperties StorageAccountProperties
+				err = json.Unmarshal(*v, &storageAccountProperties)
+				if err != nil {
+					return err
+				}
+				sai.StorageAccountProperties = &storageAccountProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				sai.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				sai.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sai.Type = &typeVar
+			}
 		}
-		sai.StorageAccountProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		sai.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		sai.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		sai.Type = &typeVar
 	}
 
 	return nil
@@ -1768,46 +1849,45 @@ func (sc *StorageContainer) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				sc.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				sc.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sc.Type = &typeVar
+			}
+		case "properties":
+			if v != nil {
+				var storageContainerProperties StorageContainerProperties
+				err = json.Unmarshal(*v, &storageContainerProperties)
+				if err != nil {
+					return err
+				}
+				sc.StorageContainerProperties = &storageContainerProperties
+			}
 		}
-		sc.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		sc.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		sc.Type = &typeVar
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties StorageContainerProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		sc.StorageContainerProperties = &properties
 	}
 
 	return nil
@@ -1829,8 +1909,8 @@ type SubResource struct {
 	Type *string `json:"type,omitempty"`
 }
 
-// UpdateDataLakeAnalyticsAccountProperties the properties to update that are associated with an underlying Data Lake
-// Analytics account to.
+// UpdateDataLakeAnalyticsAccountProperties the properties to update that are associated with an underlying Data
+// Lake Analytics account to.
 type UpdateDataLakeAnalyticsAccountProperties struct {
 	// MaxDegreeOfParallelism - the maximum supported degree of parallelism for this account.
 	MaxDegreeOfParallelism *int32 `json:"maxDegreeOfParallelism,omitempty"`
@@ -1867,16 +1947,18 @@ func (ufrp *UpdateFirewallRuleParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties UpdateFirewallRuleProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var updateFirewallRuleProperties UpdateFirewallRuleProperties
+				err = json.Unmarshal(*v, &updateFirewallRuleProperties)
+				if err != nil {
+					return err
+				}
+				ufrp.UpdateFirewallRuleProperties = &updateFirewallRuleProperties
+			}
 		}
-		ufrp.UpdateFirewallRuleProperties = &properties
 	}
 
 	return nil
@@ -1904,16 +1986,18 @@ func (usap *UpdateStorageAccountParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties UpdateStorageAccountProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var updateStorageAccountProperties UpdateStorageAccountProperties
+				err = json.Unmarshal(*v, &updateStorageAccountProperties)
+				if err != nil {
+					return err
+				}
+				usap.UpdateStorageAccountProperties = &updateStorageAccountProperties
+			}
 		}
-		usap.UpdateStorageAccountProperties = &properties
 	}
 
 	return nil

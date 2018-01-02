@@ -18,6 +18,7 @@ package runtime
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 )
 
@@ -80,7 +81,7 @@ type CompositeEntityModel struct {
 // EntityModel an entity extracted from the utterance.
 type EntityModel struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// Entity - Name of the entity, as defined in LUIS.
 	Entity *string `json:"entity,omitempty"`
 	// Type - Type of the entity, as defined in LUIS.
@@ -91,10 +92,31 @@ type EntityModel struct {
 	EndIndex *float64 `json:"endIndex,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for EntityModel.
+func (em EntityModel) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if em.Entity != nil {
+		objectMap["entity"] = em.Entity
+	}
+	if em.Type != nil {
+		objectMap["type"] = em.Type
+	}
+	if em.StartIndex != nil {
+		objectMap["startIndex"] = em.StartIndex
+	}
+	if em.EndIndex != nil {
+		objectMap["endIndex"] = em.EndIndex
+	}
+	for k, v := range em.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
+}
+
 // EntityWithResolution ...
 type EntityWithResolution struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// Entity - Name of the entity, as defined in LUIS.
 	Entity *string `json:"entity,omitempty"`
 	// Type - Type of the entity, as defined in LUIS.
@@ -104,13 +126,35 @@ type EntityWithResolution struct {
 	// EndIndex - The position of the last character of the matched entity within the utterance.
 	EndIndex *float64 `json:"endIndex,omitempty"`
 	// Resolution - Resolution values for pre-built LUIS entities.
-	Resolution *map[string]interface{} `json:"resolution,omitempty"`
+	Resolution interface{} `json:"resolution,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for EntityWithResolution.
+func (ewr EntityWithResolution) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	objectMap["resolution"] = ewr.Resolution
+	if ewr.Entity != nil {
+		objectMap["entity"] = ewr.Entity
+	}
+	if ewr.Type != nil {
+		objectMap["type"] = ewr.Type
+	}
+	if ewr.StartIndex != nil {
+		objectMap["startIndex"] = ewr.StartIndex
+	}
+	if ewr.EndIndex != nil {
+		objectMap["endIndex"] = ewr.EndIndex
+	}
+	for k, v := range ewr.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // EntityWithScore ...
 type EntityWithScore struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// Entity - Name of the entity, as defined in LUIS.
 	Entity *string `json:"entity,omitempty"`
 	// Type - Type of the entity, as defined in LUIS.
@@ -121,6 +165,30 @@ type EntityWithScore struct {
 	EndIndex *float64 `json:"endIndex,omitempty"`
 	// Score - Associated prediction score for the intent (float).
 	Score *float64 `json:"score,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for EntityWithScore.
+func (ews EntityWithScore) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ews.Score != nil {
+		objectMap["score"] = ews.Score
+	}
+	if ews.Entity != nil {
+		objectMap["entity"] = ews.Entity
+	}
+	if ews.Type != nil {
+		objectMap["type"] = ews.Type
+	}
+	if ews.StartIndex != nil {
+		objectMap["startIndex"] = ews.StartIndex
+	}
+	if ews.EndIndex != nil {
+		objectMap["endIndex"] = ews.EndIndex
+	}
+	for k, v := range ews.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // IntentModel an intent detected from the utterance.
