@@ -18,6 +18,7 @@ package commitmentplans
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 	"github.com/Azure/go-autorest/autorest/to"
@@ -37,11 +38,38 @@ type CommitmentAssociation struct {
 	// Type - Resource type.
 	Type *string `json:"type,omitempty"`
 	// Tags - User-defined tags for the resource.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Etag - An entity tag used to enforce optimistic concurrency.
 	Etag *string `json:"etag,omitempty"`
 	// Properties - The properties of the commitment association resource.
 	Properties *CommitmentAssociationProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for CommitmentAssociation.
+func (ca CommitmentAssociation) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ca.Etag != nil {
+		objectMap["etag"] = ca.Etag
+	}
+	if ca.Properties != nil {
+		objectMap["properties"] = ca.Properties
+	}
+	if ca.ID != nil {
+		objectMap["id"] = ca.ID
+	}
+	if ca.Name != nil {
+		objectMap["name"] = ca.Name
+	}
+	if ca.Location != nil {
+		objectMap["location"] = ca.Location
+	}
+	if ca.Type != nil {
+		objectMap["type"] = ca.Type
+	}
+	if ca.Tags != nil {
+		objectMap["tags"] = ca.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // CommitmentAssociationListResult a page of commitment association resources.
@@ -168,13 +196,43 @@ type CommitmentPlan struct {
 	// Type - Resource type.
 	Type *string `json:"type,omitempty"`
 	// Tags - User-defined tags for the resource.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Etag - An entity tag used to enforce optimistic concurrency.
 	Etag *string `json:"etag,omitempty"`
 	// Properties - The commitment plan properties.
 	Properties *Properties `json:"properties,omitempty"`
 	// Sku - The commitment plan SKU.
 	Sku *ResourceSku `json:"sku,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for CommitmentPlan.
+func (cp CommitmentPlan) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if cp.Etag != nil {
+		objectMap["etag"] = cp.Etag
+	}
+	if cp.Properties != nil {
+		objectMap["properties"] = cp.Properties
+	}
+	if cp.Sku != nil {
+		objectMap["sku"] = cp.Sku
+	}
+	if cp.ID != nil {
+		objectMap["id"] = cp.ID
+	}
+	if cp.Name != nil {
+		objectMap["name"] = cp.Name
+	}
+	if cp.Location != nil {
+		objectMap["location"] = cp.Location
+	}
+	if cp.Type != nil {
+		objectMap["type"] = cp.Type
+	}
+	if cp.Tags != nil {
+		objectMap["tags"] = cp.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // ListResult a page of commitment plan resources.
@@ -288,9 +346,21 @@ type MoveCommitmentAssociationRequest struct {
 // PatchPayload the properties of a commitment plan which may be updated via PATCH.
 type PatchPayload struct {
 	// Tags - User-defined tags for the commitment plan.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Sku - The commitment plan SKU.
 	Sku *ResourceSku `json:"sku,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for PatchPayload.
+func (pp PatchPayload) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if pp.Tags != nil {
+		objectMap["tags"] = pp.Tags
+	}
+	if pp.Sku != nil {
+		objectMap["sku"] = pp.Sku
+	}
+	return json.Marshal(objectMap)
 }
 
 // PlanQuantity represents the quantity a commitment plan provides of a metered resource.
@@ -305,23 +375,50 @@ type PlanQuantity struct {
 	OverageMeter *string `json:"overageMeter,omitempty"`
 }
 
-// PlanUsageHistory represents historical information about usage of the Azure resources associated with a commitment
-// plan.
+// PlanUsageHistory represents historical information about usage of the Azure resources associated with a
+// commitment plan.
 type PlanUsageHistory struct {
 	// PlanDeletionOverage - Overage incurred as a result of deleting a commitment plan.
-	PlanDeletionOverage *map[string]*float64 `json:"planDeletionOverage,omitempty"`
+	PlanDeletionOverage map[string]*float64 `json:"planDeletionOverage"`
 	// PlanMigrationOverage - Overage incurred as a result of migrating a commitment plan from one SKU to another.
-	PlanMigrationOverage *map[string]*float64 `json:"planMigrationOverage,omitempty"`
+	PlanMigrationOverage map[string]*float64 `json:"planMigrationOverage"`
 	// PlanQuantitiesAfterUsage - Included quantities remaining after usage against the commitment plan's associated resources was calculated.
-	PlanQuantitiesAfterUsage *map[string]*float64 `json:"planQuantitiesAfterUsage,omitempty"`
+	PlanQuantitiesAfterUsage map[string]*float64 `json:"planQuantitiesAfterUsage"`
 	// PlanQuantitiesBeforeUsage - Included quantities remaining before usage against the commitment plan's associated resources was calculated.
-	PlanQuantitiesBeforeUsage *map[string]*float64 `json:"planQuantitiesBeforeUsage,omitempty"`
+	PlanQuantitiesBeforeUsage map[string]*float64 `json:"planQuantitiesBeforeUsage"`
 	// PlanUsageOverage - Usage against the commitment plan's associated resources which was not covered by included quantities and is therefore overage.
-	PlanUsageOverage *map[string]*float64 `json:"planUsageOverage,omitempty"`
+	PlanUsageOverage map[string]*float64 `json:"planUsageOverage"`
 	// Usage - Usage against the commitment plan's associated resources.
-	Usage *map[string]*float64 `json:"usage,omitempty"`
+	Usage map[string]*float64 `json:"usage"`
 	// UsageDate - The date of usage, in ISO 8601 format.
 	UsageDate *date.Time `json:"usageDate,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for PlanUsageHistory.
+func (puh PlanUsageHistory) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if puh.PlanDeletionOverage != nil {
+		objectMap["planDeletionOverage"] = puh.PlanDeletionOverage
+	}
+	if puh.PlanMigrationOverage != nil {
+		objectMap["planMigrationOverage"] = puh.PlanMigrationOverage
+	}
+	if puh.PlanQuantitiesAfterUsage != nil {
+		objectMap["planQuantitiesAfterUsage"] = puh.PlanQuantitiesAfterUsage
+	}
+	if puh.PlanQuantitiesBeforeUsage != nil {
+		objectMap["planQuantitiesBeforeUsage"] = puh.PlanQuantitiesBeforeUsage
+	}
+	if puh.PlanUsageOverage != nil {
+		objectMap["planUsageOverage"] = puh.PlanUsageOverage
+	}
+	if puh.Usage != nil {
+		objectMap["usage"] = puh.Usage
+	}
+	if puh.UsageDate != nil {
+		objectMap["usageDate"] = puh.UsageDate
+	}
+	return json.Marshal(objectMap)
 }
 
 // PlanUsageHistoryListResult a page of usage history.
@@ -435,7 +532,7 @@ type Properties struct {
 	// CreationDate - The date at which this commitment plan was created, in ISO 8601 format.
 	CreationDate *date.Time `json:"creationDate,omitempty"`
 	// IncludedQuantities - The included resource quantities this plan gives you.
-	IncludedQuantities *map[string]*PlanQuantity `json:"includedQuantities,omitempty"`
+	IncludedQuantities map[string]*PlanQuantity `json:"includedQuantities"`
 	// MaxAssociationLimit - The maximum number of commitment associations that can be children of this commitment plan.
 	MaxAssociationLimit *int32 `json:"maxAssociationLimit,omitempty"`
 	// MaxCapacityLimit - The maximum scale-out capacity for this commitment plan.
@@ -450,6 +547,42 @@ type Properties struct {
 	SuspendPlanOnOverage *bool `json:"suspendPlanOnOverage,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for Properties.
+func (p Properties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if p.ChargeForOverage != nil {
+		objectMap["chargeForOverage"] = p.ChargeForOverage
+	}
+	if p.ChargeForPlan != nil {
+		objectMap["chargeForPlan"] = p.ChargeForPlan
+	}
+	if p.CreationDate != nil {
+		objectMap["creationDate"] = p.CreationDate
+	}
+	if p.IncludedQuantities != nil {
+		objectMap["includedQuantities"] = p.IncludedQuantities
+	}
+	if p.MaxAssociationLimit != nil {
+		objectMap["maxAssociationLimit"] = p.MaxAssociationLimit
+	}
+	if p.MaxCapacityLimit != nil {
+		objectMap["maxCapacityLimit"] = p.MaxCapacityLimit
+	}
+	if p.MinCapacityLimit != nil {
+		objectMap["minCapacityLimit"] = p.MinCapacityLimit
+	}
+	if p.PlanMeter != nil {
+		objectMap["planMeter"] = p.PlanMeter
+	}
+	if p.RefillFrequencyInDays != nil {
+		objectMap["refillFrequencyInDays"] = p.RefillFrequencyInDays
+	}
+	if p.SuspendPlanOnOverage != nil {
+		objectMap["suspendPlanOnOverage"] = p.SuspendPlanOnOverage
+	}
+	return json.Marshal(objectMap)
+}
+
 // Resource common properties of an ARM resource.
 type Resource struct {
 	// ID - Resource Id.
@@ -461,7 +594,28 @@ type Resource struct {
 	// Type - Resource type.
 	Type *string `json:"type,omitempty"`
 	// Tags - User-defined tags for the resource.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // ResourceSku the SKU of a resource.

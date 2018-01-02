@@ -19,7 +19,6 @@ package graphrbac
 
 import (
 	"encoding/json"
-
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
 )
@@ -54,7 +53,7 @@ const (
 type AADObject struct {
 	autorest.Response `json:"-"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// ObjectID - The ID of the object.
 	ObjectID *string `json:"objectId,omitempty"`
 	// ObjectType - The type of AAD object.
@@ -93,6 +92,69 @@ type AADObject struct {
 	Homepage *string `json:"homepage,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for AADObject.
+func (ao AADObject) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ao.ObjectID != nil {
+		objectMap["objectId"] = ao.ObjectID
+	}
+	if ao.ObjectType != nil {
+		objectMap["objectType"] = ao.ObjectType
+	}
+	if ao.DisplayName != nil {
+		objectMap["displayName"] = ao.DisplayName
+	}
+	if ao.UserPrincipalName != nil {
+		objectMap["userPrincipalName"] = ao.UserPrincipalName
+	}
+	if ao.Mail != nil {
+		objectMap["mail"] = ao.Mail
+	}
+	if ao.MailEnabled != nil {
+		objectMap["mailEnabled"] = ao.MailEnabled
+	}
+	if ao.MailNickname != nil {
+		objectMap["mailNickname"] = ao.MailNickname
+	}
+	if ao.SecurityEnabled != nil {
+		objectMap["securityEnabled"] = ao.SecurityEnabled
+	}
+	if ao.SignInName != nil {
+		objectMap["signInName"] = ao.SignInName
+	}
+	if ao.ServicePrincipalNames != nil {
+		objectMap["servicePrincipalNames"] = ao.ServicePrincipalNames
+	}
+	if ao.UserType != nil {
+		objectMap["userType"] = ao.UserType
+	}
+	if ao.UsageLocation != nil {
+		objectMap["usageLocation"] = ao.UsageLocation
+	}
+	if ao.AppID != nil {
+		objectMap["appId"] = ao.AppID
+	}
+	if ao.AppPermissions != nil {
+		objectMap["appPermissions"] = ao.AppPermissions
+	}
+	if ao.AvailableToOtherTenants != nil {
+		objectMap["availableToOtherTenants"] = ao.AvailableToOtherTenants
+	}
+	if ao.IdentifierUris != nil {
+		objectMap["identifierUris"] = ao.IdentifierUris
+	}
+	if ao.ReplyUrls != nil {
+		objectMap["replyUrls"] = ao.ReplyUrls
+	}
+	if ao.Homepage != nil {
+		objectMap["homepage"] = ao.Homepage
+	}
+	for k, v := range ao.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
+}
+
 // ADGroup active Directory group information.
 type ADGroup struct {
 	autorest.Response `json:"-"`
@@ -103,7 +165,7 @@ type ADGroup struct {
 	// ObjectType - Possible values include: 'ObjectTypeDirectoryObject', 'ObjectTypeApplication', 'ObjectTypeGroup', 'ObjectTypeServicePrincipal', 'ObjectTypeUser'
 	ObjectType ObjectType `json:"objectType,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// DisplayName - The display name of the group.
 	DisplayName *string `json:"displayName,omitempty"`
 	// SecurityEnabled - Whether the group is security-enable.
@@ -115,12 +177,27 @@ type ADGroup struct {
 // MarshalJSON is the custom marshaler for ADGroup.
 func (ag ADGroup) MarshalJSON() ([]byte, error) {
 	ag.ObjectType = ObjectTypeGroup
-	type Alias ADGroup
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(ag),
-	})
+	objectMap := make(map[string]interface{})
+	if ag.DisplayName != nil {
+		objectMap["displayName"] = ag.DisplayName
+	}
+	if ag.SecurityEnabled != nil {
+		objectMap["securityEnabled"] = ag.SecurityEnabled
+	}
+	if ag.Mail != nil {
+		objectMap["mail"] = ag.Mail
+	}
+	if ag.ObjectID != nil {
+		objectMap["objectId"] = ag.ObjectID
+	}
+	if ag.DeletionTimestamp != nil {
+		objectMap["deletionTimestamp"] = ag.DeletionTimestamp
+	}
+	objectMap["objectType"] = ag.ObjectType
+	for k, v := range ag.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // AsApplication is the BasicDirectoryObject implementation for ADGroup.
@@ -163,7 +240,7 @@ type Application struct {
 	// ObjectType - Possible values include: 'ObjectTypeDirectoryObject', 'ObjectTypeApplication', 'ObjectTypeGroup', 'ObjectTypeServicePrincipal', 'ObjectTypeUser'
 	ObjectType ObjectType `json:"objectType,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// AppID - The application ID.
 	AppID *string `json:"appId,omitempty"`
 	// AppPermissions - The application permissions.
@@ -185,12 +262,42 @@ type Application struct {
 // MarshalJSON is the custom marshaler for Application.
 func (a Application) MarshalJSON() ([]byte, error) {
 	a.ObjectType = ObjectTypeApplication
-	type Alias Application
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(a),
-	})
+	objectMap := make(map[string]interface{})
+	if a.AppID != nil {
+		objectMap["appId"] = a.AppID
+	}
+	if a.AppPermissions != nil {
+		objectMap["appPermissions"] = a.AppPermissions
+	}
+	if a.AvailableToOtherTenants != nil {
+		objectMap["availableToOtherTenants"] = a.AvailableToOtherTenants
+	}
+	if a.DisplayName != nil {
+		objectMap["displayName"] = a.DisplayName
+	}
+	if a.IdentifierUris != nil {
+		objectMap["identifierUris"] = a.IdentifierUris
+	}
+	if a.ReplyUrls != nil {
+		objectMap["replyUrls"] = a.ReplyUrls
+	}
+	if a.Homepage != nil {
+		objectMap["homepage"] = a.Homepage
+	}
+	if a.Oauth2AllowImplicitFlow != nil {
+		objectMap["oauth2AllowImplicitFlow"] = a.Oauth2AllowImplicitFlow
+	}
+	if a.ObjectID != nil {
+		objectMap["objectId"] = a.ObjectID
+	}
+	if a.DeletionTimestamp != nil {
+		objectMap["deletionTimestamp"] = a.DeletionTimestamp
+	}
+	objectMap["objectType"] = a.ObjectType
+	for k, v := range a.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // AsApplication is the BasicDirectoryObject implementation for Application.
@@ -226,15 +333,27 @@ func (a Application) AsBasicDirectoryObject() (BasicDirectoryObject, bool) {
 // ApplicationAddOwnerParameters request parameters for adding a owner to an application.
 type ApplicationAddOwnerParameters struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// URL - A owner object URL, such as "https://graph.windows.net/0b1f9851-1bf0-433f-aec3-cb9272f093dc/directoryObjects/f260bbc4-c254-447b-94cf-293b5ec434dd", where "0b1f9851-1bf0-433f-aec3-cb9272f093dc" is the tenantId and "f260bbc4-c254-447b-94cf-293b5ec434dd" is the objectId of the owner (user, application, servicePrincipal, group) to be added.
 	URL *string `json:"url,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ApplicationAddOwnerParameters.
+func (aaop ApplicationAddOwnerParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if aaop.URL != nil {
+		objectMap["url"] = aaop.URL
+	}
+	for k, v := range aaop.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // ApplicationCreateParameters request parameters for creating a new application.
 type ApplicationCreateParameters struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// AvailableToOtherTenants - Whether the application is available to other tenants.
 	AvailableToOtherTenants *bool `json:"availableToOtherTenants,omitempty"`
 	// DisplayName - The display name of the application.
@@ -253,6 +372,42 @@ type ApplicationCreateParameters struct {
 	Oauth2AllowImplicitFlow *bool `json:"oauth2AllowImplicitFlow,omitempty"`
 	// RequiredResourceAccess - Specifies resources that this application requires access to and the set of OAuth permission scopes and application roles that it needs under each of those resources. This pre-configuration of required resource access drives the consent experience.
 	RequiredResourceAccess *[]RequiredResourceAccess `json:"requiredResourceAccess,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ApplicationCreateParameters.
+func (acp ApplicationCreateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if acp.AvailableToOtherTenants != nil {
+		objectMap["availableToOtherTenants"] = acp.AvailableToOtherTenants
+	}
+	if acp.DisplayName != nil {
+		objectMap["displayName"] = acp.DisplayName
+	}
+	if acp.Homepage != nil {
+		objectMap["homepage"] = acp.Homepage
+	}
+	if acp.IdentifierUris != nil {
+		objectMap["identifierUris"] = acp.IdentifierUris
+	}
+	if acp.ReplyUrls != nil {
+		objectMap["replyUrls"] = acp.ReplyUrls
+	}
+	if acp.KeyCredentials != nil {
+		objectMap["keyCredentials"] = acp.KeyCredentials
+	}
+	if acp.PasswordCredentials != nil {
+		objectMap["passwordCredentials"] = acp.PasswordCredentials
+	}
+	if acp.Oauth2AllowImplicitFlow != nil {
+		objectMap["oauth2AllowImplicitFlow"] = acp.Oauth2AllowImplicitFlow
+	}
+	if acp.RequiredResourceAccess != nil {
+		objectMap["requiredResourceAccess"] = acp.RequiredResourceAccess
+	}
+	for k, v := range acp.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // ApplicationListResult application list operation result.
@@ -348,7 +503,7 @@ func (page ApplicationListResultPage) Values() []Application {
 // ApplicationUpdateParameters request parameters for updating an existing application.
 type ApplicationUpdateParameters struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// AvailableToOtherTenants - Whether the application is available to other tenants
 	AvailableToOtherTenants *bool `json:"availableToOtherTenants,omitempty"`
 	// DisplayName - The display name of the application.
@@ -369,23 +524,86 @@ type ApplicationUpdateParameters struct {
 	RequiredResourceAccess *[]RequiredResourceAccess `json:"requiredResourceAccess,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for ApplicationUpdateParameters.
+func (aup ApplicationUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if aup.AvailableToOtherTenants != nil {
+		objectMap["availableToOtherTenants"] = aup.AvailableToOtherTenants
+	}
+	if aup.DisplayName != nil {
+		objectMap["displayName"] = aup.DisplayName
+	}
+	if aup.Homepage != nil {
+		objectMap["homepage"] = aup.Homepage
+	}
+	if aup.IdentifierUris != nil {
+		objectMap["identifierUris"] = aup.IdentifierUris
+	}
+	if aup.ReplyUrls != nil {
+		objectMap["replyUrls"] = aup.ReplyUrls
+	}
+	if aup.KeyCredentials != nil {
+		objectMap["keyCredentials"] = aup.KeyCredentials
+	}
+	if aup.PasswordCredentials != nil {
+		objectMap["passwordCredentials"] = aup.PasswordCredentials
+	}
+	if aup.Oauth2AllowImplicitFlow != nil {
+		objectMap["oauth2AllowImplicitFlow"] = aup.Oauth2AllowImplicitFlow
+	}
+	if aup.RequiredResourceAccess != nil {
+		objectMap["requiredResourceAccess"] = aup.RequiredResourceAccess
+	}
+	for k, v := range aup.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
+}
+
 // CheckGroupMembershipParameters request parameters for IsMemberOf API call.
 type CheckGroupMembershipParameters struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// GroupID - The object ID of the group to check.
 	GroupID *string `json:"groupId,omitempty"`
 	// MemberID - The object ID of the contact, group, user, or service principal to check for membership in the specified group.
 	MemberID *string `json:"memberId,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for CheckGroupMembershipParameters.
+func (cgmp CheckGroupMembershipParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if cgmp.GroupID != nil {
+		objectMap["groupId"] = cgmp.GroupID
+	}
+	if cgmp.MemberID != nil {
+		objectMap["memberId"] = cgmp.MemberID
+	}
+	for k, v := range cgmp.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
+}
+
 // CheckGroupMembershipResult server response for IsMemberOf API call
 type CheckGroupMembershipResult struct {
 	autorest.Response `json:"-"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// Value - True if the specified user, group, contact, or service principal has either direct or transitive membership in the specified group; otherwise, false.
 	Value *bool `json:"value,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for CheckGroupMembershipResult.
+func (cgmr CheckGroupMembershipResult) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if cgmr.Value != nil {
+		objectMap["value"] = cgmr.Value
+	}
+	for k, v := range cgmr.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // BasicDirectoryObject represents an Azure Active Directory object.
@@ -459,12 +677,15 @@ func unmarshalBasicDirectoryObjectArray(body []byte) ([]BasicDirectoryObject, er
 // MarshalJSON is the custom marshaler for DirectoryObject.
 func (do DirectoryObject) MarshalJSON() ([]byte, error) {
 	do.ObjectType = ObjectTypeDirectoryObject
-	type Alias DirectoryObject
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(do),
-	})
+	objectMap := make(map[string]interface{})
+	if do.ObjectID != nil {
+		objectMap["objectId"] = do.ObjectID
+	}
+	if do.DeletionTimestamp != nil {
+		objectMap["deletionTimestamp"] = do.DeletionTimestamp
+	}
+	objectMap["objectType"] = do.ObjectType
+	return json.Marshal(objectMap)
 }
 
 // AsApplication is the BasicDirectoryObject implementation for DirectoryObject.
@@ -511,15 +732,17 @@ func (dolr *DirectoryObjectListResult) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["value"]
-	if v != nil {
-		value, err := unmarshalBasicDirectoryObjectArray(*m["value"])
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "value":
+			if v != nil {
+				value, err := unmarshalBasicDirectoryObjectArray(*v)
+				if err != nil {
+					return err
+				}
+				dolr.Value = &value
+			}
 		}
-		dolr.Value = &value
 	}
 
 	return nil
@@ -529,7 +752,7 @@ func (dolr *DirectoryObjectListResult) UnmarshalJSON(body []byte) error {
 type Domain struct {
 	autorest.Response `json:"-"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// AuthenticationType - the type of the authentication into the domain.
 	AuthenticationType *string `json:"authenticationType,omitempty"`
 	// IsDefault - if this is the default domain in the tenant.
@@ -538,6 +761,27 @@ type Domain struct {
 	IsVerified *bool `json:"isVerified,omitempty"`
 	// Name - the domain name.
 	Name *string `json:"name,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Domain.
+func (d Domain) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if d.AuthenticationType != nil {
+		objectMap["authenticationType"] = d.AuthenticationType
+	}
+	if d.IsDefault != nil {
+		objectMap["isDefault"] = d.IsDefault
+	}
+	if d.IsVerified != nil {
+		objectMap["isVerified"] = d.IsVerified
+	}
+	if d.Name != nil {
+		objectMap["name"] = d.Name
+	}
+	for k, v := range d.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // DomainListResult server response for Get tenant domains API call.
@@ -556,13 +800,31 @@ type ErrorMessage struct {
 // GetObjectsParameters request parameters for the GetObjectsByObjectIds API.
 type GetObjectsParameters struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// ObjectIds - The requested object IDs.
 	ObjectIds *[]string `json:"objectIds,omitempty"`
 	// Types - The requested object types.
 	Types *[]string `json:"types,omitempty"`
 	// IncludeDirectoryObjectReferences - If true, also searches for object IDs in the partner tenant.
 	IncludeDirectoryObjectReferences *bool `json:"includeDirectoryObjectReferences,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for GetObjectsParameters.
+func (gop GetObjectsParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if gop.ObjectIds != nil {
+		objectMap["objectIds"] = gop.ObjectIds
+	}
+	if gop.Types != nil {
+		objectMap["types"] = gop.Types
+	}
+	if gop.IncludeDirectoryObjectReferences != nil {
+		objectMap["includeDirectoryObjectReferences"] = gop.IncludeDirectoryObjectReferences
+	}
+	for k, v := range gop.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // GetObjectsResult the response to an Active Directory object inquiry API request.
@@ -668,16 +930,18 @@ func (ge *GraphError) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["odata.error"]
-	if v != nil {
-		var odataerror OdataError
-		err = json.Unmarshal(*m["odata.error"], &odataerror)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "odata.error":
+			if v != nil {
+				var odataError OdataError
+				err = json.Unmarshal(*v, &odataError)
+				if err != nil {
+					return err
+				}
+				ge.OdataError = &odataError
+			}
 		}
-		ge.OdataError = &odataerror
 	}
 
 	return nil
@@ -686,15 +950,27 @@ func (ge *GraphError) UnmarshalJSON(body []byte) error {
 // GroupAddMemberParameters request parameters for adding a member to a group.
 type GroupAddMemberParameters struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// URL - A member object URL, such as "https://graph.windows.net/0b1f9851-1bf0-433f-aec3-cb9272f093dc/directoryObjects/f260bbc4-c254-447b-94cf-293b5ec434dd", where "0b1f9851-1bf0-433f-aec3-cb9272f093dc" is the tenantId and "f260bbc4-c254-447b-94cf-293b5ec434dd" is the objectId of the member (user, application, servicePrincipal, group) to be added.
 	URL *string `json:"url,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for GroupAddMemberParameters.
+func (gamp GroupAddMemberParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if gamp.URL != nil {
+		objectMap["url"] = gamp.URL
+	}
+	for k, v := range gamp.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // GroupCreateParameters request parameters for creating a new group.
 type GroupCreateParameters struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// DisplayName - Group display name
 	DisplayName *string `json:"displayName,omitempty"`
 	// MailEnabled - Whether the group is mail-enabled. Must be false. This is because only pure security groups can be created using the Graph API.
@@ -705,12 +981,45 @@ type GroupCreateParameters struct {
 	SecurityEnabled *bool `json:"securityEnabled,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for GroupCreateParameters.
+func (gcp GroupCreateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if gcp.DisplayName != nil {
+		objectMap["displayName"] = gcp.DisplayName
+	}
+	if gcp.MailEnabled != nil {
+		objectMap["mailEnabled"] = gcp.MailEnabled
+	}
+	if gcp.MailNickname != nil {
+		objectMap["mailNickname"] = gcp.MailNickname
+	}
+	if gcp.SecurityEnabled != nil {
+		objectMap["securityEnabled"] = gcp.SecurityEnabled
+	}
+	for k, v := range gcp.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
+}
+
 // GroupGetMemberGroupsParameters request parameters for GetMemberGroups API call.
 type GroupGetMemberGroupsParameters struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// SecurityEnabledOnly - If true, only membership in security-enabled groups should be checked. Otherwise, membership in all groups should be checked.
 	SecurityEnabledOnly *bool `json:"securityEnabledOnly,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for GroupGetMemberGroupsParameters.
+func (ggmgp GroupGetMemberGroupsParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ggmgp.SecurityEnabledOnly != nil {
+		objectMap["securityEnabledOnly"] = ggmgp.SecurityEnabledOnly
+	}
+	for k, v := range ggmgp.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // GroupGetMemberGroupsResult server response for GetMemberGroups API call.
@@ -813,7 +1122,7 @@ func (page GroupListResultPage) Values() []ADGroup {
 // KeyCredential active Directory Key Credential information.
 type KeyCredential struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// StartDate - Start date.
 	StartDate *date.Time `json:"startDate,omitempty"`
 	// EndDate - End date.
@@ -826,6 +1135,33 @@ type KeyCredential struct {
 	Usage *string `json:"usage,omitempty"`
 	// Type - Type. Acceptable values are 'AsymmetricX509Cert' and 'Symmetric'.
 	Type *string `json:"type,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for KeyCredential.
+func (kc KeyCredential) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if kc.StartDate != nil {
+		objectMap["startDate"] = kc.StartDate
+	}
+	if kc.EndDate != nil {
+		objectMap["endDate"] = kc.EndDate
+	}
+	if kc.Value != nil {
+		objectMap["value"] = kc.Value
+	}
+	if kc.KeyID != nil {
+		objectMap["keyId"] = kc.KeyID
+	}
+	if kc.Usage != nil {
+		objectMap["usage"] = kc.Usage
+	}
+	if kc.Type != nil {
+		objectMap["type"] = kc.Type
+	}
+	for k, v := range kc.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // KeyCredentialListResult keyCredential list operation result.
@@ -856,26 +1192,27 @@ func (oe *OdataError) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["code"]
-	if v != nil {
-		var code string
-		err = json.Unmarshal(*m["code"], &code)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "code":
+			if v != nil {
+				var code string
+				err = json.Unmarshal(*v, &code)
+				if err != nil {
+					return err
+				}
+				oe.Code = &code
+			}
+		case "message":
+			if v != nil {
+				var errorMessage ErrorMessage
+				err = json.Unmarshal(*v, &errorMessage)
+				if err != nil {
+					return err
+				}
+				oe.ErrorMessage = &errorMessage
+			}
 		}
-		oe.Code = &code
-	}
-
-	v = m["message"]
-	if v != nil {
-		var message ErrorMessage
-		err = json.Unmarshal(*m["message"], &message)
-		if err != nil {
-			return err
-		}
-		oe.ErrorMessage = &message
 	}
 
 	return nil
@@ -884,7 +1221,7 @@ func (oe *OdataError) UnmarshalJSON(body []byte) error {
 // PasswordCredential active Directory Password Credential information.
 type PasswordCredential struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// StartDate - Start date.
 	StartDate *date.Time `json:"startDate,omitempty"`
 	// EndDate - End date.
@@ -893,6 +1230,27 @@ type PasswordCredential struct {
 	KeyID *string `json:"keyId,omitempty"`
 	// Value - Key value.
 	Value *string `json:"value,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for PasswordCredential.
+func (pc PasswordCredential) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if pc.StartDate != nil {
+		objectMap["startDate"] = pc.StartDate
+	}
+	if pc.EndDate != nil {
+		objectMap["endDate"] = pc.EndDate
+	}
+	if pc.KeyID != nil {
+		objectMap["keyId"] = pc.KeyID
+	}
+	if pc.Value != nil {
+		objectMap["value"] = pc.Value
+	}
+	for k, v := range pc.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // PasswordCredentialListResult passwordCredential list operation result.
@@ -911,35 +1269,80 @@ type PasswordCredentialsUpdateParameters struct {
 // PasswordProfile the password profile associated with a user.
 type PasswordProfile struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// Password - Password
 	Password *string `json:"password,omitempty"`
 	// ForceChangePasswordNextLogin - Whether to force a password change on next login.
 	ForceChangePasswordNextLogin *bool `json:"forceChangePasswordNextLogin,omitempty"`
 }
 
-// RequiredResourceAccess specifies the set of OAuth 2.0 permission scopes and app roles under the specified resource
-// that an application requires access to. The specified OAuth 2.0 permission scopes may be requested by client
-// applications (through the requiredResourceAccess collection) when calling a resource application. The
+// MarshalJSON is the custom marshaler for PasswordProfile.
+func (pp PasswordProfile) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if pp.Password != nil {
+		objectMap["password"] = pp.Password
+	}
+	if pp.ForceChangePasswordNextLogin != nil {
+		objectMap["forceChangePasswordNextLogin"] = pp.ForceChangePasswordNextLogin
+	}
+	for k, v := range pp.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
+}
+
+// RequiredResourceAccess specifies the set of OAuth 2.0 permission scopes and app roles under the specified
+// resource that an application requires access to. The specified OAuth 2.0 permission scopes may be requested by
+// client applications (through the requiredResourceAccess collection) when calling a resource application. The
 // requiredResourceAccess property of the Application entity is a collection of ReqiredResourceAccess.
 type RequiredResourceAccess struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// ResourceAccess - The list of OAuth2.0 permission scopes and app roles that the application requires from the specified resource.
 	ResourceAccess *[]ResourceAccess `json:"resourceAccess,omitempty"`
 	// ResourceAppID - The unique identifier for the resource that the application requires access to. This should be equal to the appId declared on the target resource application.
 	ResourceAppID *string `json:"resourceAppId,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for RequiredResourceAccess.
+func (rra RequiredResourceAccess) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if rra.ResourceAccess != nil {
+		objectMap["resourceAccess"] = rra.ResourceAccess
+	}
+	if rra.ResourceAppID != nil {
+		objectMap["resourceAppId"] = rra.ResourceAppID
+	}
+	for k, v := range rra.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
+}
+
 // ResourceAccess specifies an OAuth 2.0 permission scope or an app role that an application requires. The
 // resourceAccess property of the RequiredResourceAccess type is a collection of ResourceAccess.
 type ResourceAccess struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// ID - The unique identifier for one of the OAuth2Permission or AppRole instances that the resource application exposes.
 	ID *string `json:"id,omitempty"`
 	// Type - Specifies whether the id property references an OAuth2Permission or an AppRole. Possible values are "scope" or "role".
 	Type *string `json:"type,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ResourceAccess.
+func (ra ResourceAccess) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ra.ID != nil {
+		objectMap["id"] = ra.ID
+	}
+	if ra.Type != nil {
+		objectMap["type"] = ra.Type
+	}
+	for k, v := range ra.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // ServicePrincipal active Directory service principal information.
@@ -952,7 +1355,7 @@ type ServicePrincipal struct {
 	// ObjectType - Possible values include: 'ObjectTypeDirectoryObject', 'ObjectTypeApplication', 'ObjectTypeGroup', 'ObjectTypeServicePrincipal', 'ObjectTypeUser'
 	ObjectType ObjectType `json:"objectType,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// DisplayName - The display name of the service principal.
 	DisplayName *string `json:"displayName,omitempty"`
 	// AppID - The application ID.
@@ -964,12 +1367,27 @@ type ServicePrincipal struct {
 // MarshalJSON is the custom marshaler for ServicePrincipal.
 func (sp ServicePrincipal) MarshalJSON() ([]byte, error) {
 	sp.ObjectType = ObjectTypeServicePrincipal
-	type Alias ServicePrincipal
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(sp),
-	})
+	objectMap := make(map[string]interface{})
+	if sp.DisplayName != nil {
+		objectMap["displayName"] = sp.DisplayName
+	}
+	if sp.AppID != nil {
+		objectMap["appId"] = sp.AppID
+	}
+	if sp.ServicePrincipalNames != nil {
+		objectMap["servicePrincipalNames"] = sp.ServicePrincipalNames
+	}
+	if sp.ObjectID != nil {
+		objectMap["objectId"] = sp.ObjectID
+	}
+	if sp.DeletionTimestamp != nil {
+		objectMap["deletionTimestamp"] = sp.DeletionTimestamp
+	}
+	objectMap["objectType"] = sp.ObjectType
+	for k, v := range sp.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // AsApplication is the BasicDirectoryObject implementation for ServicePrincipal.
@@ -1005,7 +1423,7 @@ func (sp ServicePrincipal) AsBasicDirectoryObject() (BasicDirectoryObject, bool)
 // ServicePrincipalCreateParameters request parameters for creating a new service principal.
 type ServicePrincipalCreateParameters struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// AppID - application Id
 	AppID *string `json:"appId,omitempty"`
 	// AccountEnabled - Whether the account is enabled
@@ -1014,6 +1432,27 @@ type ServicePrincipalCreateParameters struct {
 	KeyCredentials *[]KeyCredential `json:"keyCredentials,omitempty"`
 	// PasswordCredentials - A collection of PasswordCredential objects
 	PasswordCredentials *[]PasswordCredential `json:"passwordCredentials,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ServicePrincipalCreateParameters.
+func (spcp ServicePrincipalCreateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if spcp.AppID != nil {
+		objectMap["appId"] = spcp.AppID
+	}
+	if spcp.AccountEnabled != nil {
+		objectMap["accountEnabled"] = spcp.AccountEnabled
+	}
+	if spcp.KeyCredentials != nil {
+		objectMap["keyCredentials"] = spcp.KeyCredentials
+	}
+	if spcp.PasswordCredentials != nil {
+		objectMap["passwordCredentials"] = spcp.PasswordCredentials
+	}
+	for k, v := range spcp.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // ServicePrincipalListResult server response for get tenant service principals API call.
@@ -1110,11 +1549,26 @@ func (page ServicePrincipalListResultPage) Values() []ServicePrincipal {
 // tenant.
 type SignInName struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// Type - A string value that can be used to classify user sign-in types in your directory, such as 'emailAddress' or 'userName'.
 	Type *string `json:"type,omitempty"`
 	// Value - The sign-in used by the local account. Must be unique across the company/tenant. For example, 'johnc@example.com'.
 	Value *string `json:"value,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for SignInName.
+func (sin SignInName) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if sin.Type != nil {
+		objectMap["type"] = sin.Type
+	}
+	if sin.Value != nil {
+		objectMap["value"] = sin.Value
+	}
+	for k, v := range sin.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // User active Directory user information.
@@ -1127,7 +1581,7 @@ type User struct {
 	// ObjectType - Possible values include: 'ObjectTypeDirectoryObject', 'ObjectTypeApplication', 'ObjectTypeGroup', 'ObjectTypeServicePrincipal', 'ObjectTypeUser'
 	ObjectType ObjectType `json:"objectType,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// ImmutableID - This must be specified if you are using a federated domain for the user's userPrincipalName (UPN) property when creating a new user account. It is used to associate an on-premises Active Directory user account with their Azure AD user object.
 	ImmutableID *string `json:"immutableId,omitempty"`
 	// UsageLocation - A two letter country code (ISO standard 3166). Required for users that will be assigned licenses due to legal requirement to check for availability of services in countries. Examples include: "US", "JP", and "GB".
@@ -1155,12 +1609,49 @@ type User struct {
 // MarshalJSON is the custom marshaler for User.
 func (u User) MarshalJSON() ([]byte, error) {
 	u.ObjectType = ObjectTypeUser
-	type Alias User
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(u),
-	})
+	objectMap := make(map[string]interface{})
+	if u.ImmutableID != nil {
+		objectMap["immutableId"] = u.ImmutableID
+	}
+	if u.UsageLocation != nil {
+		objectMap["usageLocation"] = u.UsageLocation
+	}
+	if u.GivenName != nil {
+		objectMap["givenName"] = u.GivenName
+	}
+	if u.Surname != nil {
+		objectMap["surname"] = u.Surname
+	}
+	objectMap["userType"] = u.UserType
+	if u.AccountEnabled != nil {
+		objectMap["accountEnabled"] = u.AccountEnabled
+	}
+	if u.DisplayName != nil {
+		objectMap["displayName"] = u.DisplayName
+	}
+	if u.UserPrincipalName != nil {
+		objectMap["userPrincipalName"] = u.UserPrincipalName
+	}
+	if u.MailNickname != nil {
+		objectMap["mailNickname"] = u.MailNickname
+	}
+	if u.Mail != nil {
+		objectMap["mail"] = u.Mail
+	}
+	if u.SignInNames != nil {
+		objectMap["signInNames"] = u.SignInNames
+	}
+	if u.ObjectID != nil {
+		objectMap["objectId"] = u.ObjectID
+	}
+	if u.DeletionTimestamp != nil {
+		objectMap["deletionTimestamp"] = u.DeletionTimestamp
+	}
+	objectMap["objectType"] = u.ObjectType
+	for k, v := range u.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // AsApplication is the BasicDirectoryObject implementation for User.
@@ -1196,7 +1687,7 @@ func (u User) AsBasicDirectoryObject() (BasicDirectoryObject, bool) {
 // UserBase ...
 type UserBase struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// ImmutableID - This must be specified if you are using a federated domain for the user's userPrincipalName (UPN) property when creating a new user account. It is used to associate an on-premises Active Directory user account with their Azure AD user object.
 	ImmutableID *string `json:"immutableId,omitempty"`
 	// UsageLocation - A two letter country code (ISO standard 3166). Required for users that will be assigned licenses due to legal requirement to check for availability of services in countries. Examples include: "US", "JP", and "GB".
@@ -1209,8 +1700,32 @@ type UserBase struct {
 	UserType UserType `json:"userType,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for UserBase.
+func (ub UserBase) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ub.ImmutableID != nil {
+		objectMap["immutableId"] = ub.ImmutableID
+	}
+	if ub.UsageLocation != nil {
+		objectMap["usageLocation"] = ub.UsageLocation
+	}
+	if ub.GivenName != nil {
+		objectMap["givenName"] = ub.GivenName
+	}
+	if ub.Surname != nil {
+		objectMap["surname"] = ub.Surname
+	}
+	objectMap["userType"] = ub.UserType
+	for k, v := range ub.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
+}
+
 // UserCreateParameters request parameters for creating a new work or school account user.
 type UserCreateParameters struct {
+	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
+	AdditionalProperties map[string]interface{} `json:""`
 	// ImmutableID - This must be specified if you are using a federated domain for the user's userPrincipalName (UPN) property when creating a new user account. It is used to associate an on-premises Active Directory user account with their Azure AD user object.
 	ImmutableID *string `json:"immutableId,omitempty"`
 	// UsageLocation - A two letter country code (ISO standard 3166). Required for users that will be assigned licenses due to legal requirement to check for availability of services in countries. Examples include: "US", "JP", and "GB".
@@ -1222,7 +1737,7 @@ type UserCreateParameters struct {
 	// UserType - A string value that can be used to classify user types in your directory, such as 'Member' and 'Guest'. Possible values include: 'Member', 'Guest'
 	UserType UserType `json:"userType,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// AccountEnabled - Whether the account is enabled.
 	AccountEnabled *bool `json:"accountEnabled,omitempty"`
 	// DisplayName - The display name of the user.
@@ -1237,12 +1752,64 @@ type UserCreateParameters struct {
 	Mail *string `json:"mail,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for UserCreateParameters.
+func (ucp UserCreateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ucp.AccountEnabled != nil {
+		objectMap["accountEnabled"] = ucp.AccountEnabled
+	}
+	if ucp.DisplayName != nil {
+		objectMap["displayName"] = ucp.DisplayName
+	}
+	if ucp.PasswordProfile != nil {
+		objectMap["passwordProfile"] = ucp.PasswordProfile
+	}
+	if ucp.UserPrincipalName != nil {
+		objectMap["userPrincipalName"] = ucp.UserPrincipalName
+	}
+	if ucp.MailNickname != nil {
+		objectMap["mailNickname"] = ucp.MailNickname
+	}
+	if ucp.Mail != nil {
+		objectMap["mail"] = ucp.Mail
+	}
+	if ucp.ImmutableID != nil {
+		objectMap["immutableId"] = ucp.ImmutableID
+	}
+	if ucp.UsageLocation != nil {
+		objectMap["usageLocation"] = ucp.UsageLocation
+	}
+	if ucp.GivenName != nil {
+		objectMap["givenName"] = ucp.GivenName
+	}
+	if ucp.Surname != nil {
+		objectMap["surname"] = ucp.Surname
+	}
+	objectMap["userType"] = ucp.UserType
+	for k, v := range ucp.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
+}
+
 // UserGetMemberGroupsParameters request parameters for GetMemberGroups API call.
 type UserGetMemberGroupsParameters struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// SecurityEnabledOnly - If true, only membership in security-enabled groups should be checked. Otherwise, membership in all groups should be checked.
 	SecurityEnabledOnly *bool `json:"securityEnabledOnly,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for UserGetMemberGroupsParameters.
+func (ugmgp UserGetMemberGroupsParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ugmgp.SecurityEnabledOnly != nil {
+		objectMap["securityEnabledOnly"] = ugmgp.SecurityEnabledOnly
+	}
+	for k, v := range ugmgp.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // UserGetMemberGroupsResult server response for GetMemberGroups API call.
@@ -1344,6 +1911,8 @@ func (page UserListResultPage) Values() []User {
 
 // UserUpdateParameters request parameters for updating an existing work or school account user.
 type UserUpdateParameters struct {
+	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
+	AdditionalProperties map[string]interface{} `json:""`
 	// ImmutableID - This must be specified if you are using a federated domain for the user's userPrincipalName (UPN) property when creating a new user account. It is used to associate an on-premises Active Directory user account with their Azure AD user object.
 	ImmutableID *string `json:"immutableId,omitempty"`
 	// UsageLocation - A two letter country code (ISO standard 3166). Required for users that will be assigned licenses due to legal requirement to check for availability of services in countries. Examples include: "US", "JP", and "GB".
@@ -1355,7 +1924,7 @@ type UserUpdateParameters struct {
 	// UserType - A string value that can be used to classify user types in your directory, such as 'Member' and 'Guest'. Possible values include: 'Member', 'Guest'
 	UserType UserType `json:"userType,omitempty"`
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*map[string]interface{} `json:",omitempty"`
+	AdditionalProperties map[string]interface{} `json:""`
 	// AccountEnabled - Whether the account is enabled.
 	AccountEnabled *bool `json:"accountEnabled,omitempty"`
 	// DisplayName - The display name of the user.
@@ -1366,4 +1935,41 @@ type UserUpdateParameters struct {
 	UserPrincipalName *string `json:"userPrincipalName,omitempty"`
 	// MailNickname - The mail alias for the user.
 	MailNickname *string `json:"mailNickname,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for UserUpdateParameters.
+func (uup UserUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if uup.AccountEnabled != nil {
+		objectMap["accountEnabled"] = uup.AccountEnabled
+	}
+	if uup.DisplayName != nil {
+		objectMap["displayName"] = uup.DisplayName
+	}
+	if uup.PasswordProfile != nil {
+		objectMap["passwordProfile"] = uup.PasswordProfile
+	}
+	if uup.UserPrincipalName != nil {
+		objectMap["userPrincipalName"] = uup.UserPrincipalName
+	}
+	if uup.MailNickname != nil {
+		objectMap["mailNickname"] = uup.MailNickname
+	}
+	if uup.ImmutableID != nil {
+		objectMap["immutableId"] = uup.ImmutableID
+	}
+	if uup.UsageLocation != nil {
+		objectMap["usageLocation"] = uup.UsageLocation
+	}
+	if uup.GivenName != nil {
+		objectMap["givenName"] = uup.GivenName
+	}
+	if uup.Surname != nil {
+		objectMap["surname"] = uup.Surname
+	}
+	objectMap["userType"] = uup.UserType
+	for k, v := range uup.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }

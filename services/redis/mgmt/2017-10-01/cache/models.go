@@ -115,13 +115,31 @@ type AccessKeys struct {
 // CommonProperties create/Update/Get common properties of the redis cache.
 type CommonProperties struct {
 	// RedisConfiguration - All Redis Settings. Few possible keys: rdb-backup-enabled,rdb-storage-connection-string,rdb-backup-frequency,maxmemory-delta,maxmemory-policy,notify-keyspace-events,maxmemory-samples,slowlog-log-slower-than,slowlog-max-len,list-max-ziplist-entries,list-max-ziplist-value,hash-max-ziplist-entries,hash-max-ziplist-value,set-max-intset-entries,zset-max-ziplist-entries,zset-max-ziplist-value etc.
-	RedisConfiguration *map[string]*string `json:"redisConfiguration,omitempty"`
+	RedisConfiguration map[string]*string `json:"redisConfiguration"`
 	// EnableNonSslPort - Specifies whether the non-ssl Redis server port (6379) is enabled.
 	EnableNonSslPort *bool `json:"enableNonSslPort,omitempty"`
 	// TenantSettings - A dictionary of tenant settings
-	TenantSettings *map[string]*string `json:"tenantSettings,omitempty"`
+	TenantSettings map[string]*string `json:"tenantSettings"`
 	// ShardCount - The number of shards to be created on a Premium Cluster Cache.
 	ShardCount *int32 `json:"shardCount,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for CommonProperties.
+func (cp CommonProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if cp.RedisConfiguration != nil {
+		objectMap["redisConfiguration"] = cp.RedisConfiguration
+	}
+	if cp.EnableNonSslPort != nil {
+		objectMap["enableNonSslPort"] = cp.EnableNonSslPort
+	}
+	if cp.TenantSettings != nil {
+		objectMap["tenantSettings"] = cp.TenantSettings
+	}
+	if cp.ShardCount != nil {
+		objectMap["shardCount"] = cp.ShardCount
+	}
+	return json.Marshal(objectMap)
 }
 
 // CreateParameters parameters supplied to the Create Redis operation.
@@ -133,7 +151,25 @@ type CreateParameters struct {
 	// Location - The geo-location where the resource lives
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for CreateParameters.
+func (cp CreateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if cp.CreateProperties != nil {
+		objectMap["properties"] = cp.CreateProperties
+	}
+	if cp.Zones != nil {
+		objectMap["zones"] = cp.Zones
+	}
+	if cp.Location != nil {
+		objectMap["location"] = cp.Location
+	}
+	if cp.Tags != nil {
+		objectMap["tags"] = cp.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for CreateParameters struct.
@@ -143,46 +179,45 @@ func (cp *CreateParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties CreateProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var createProperties CreateProperties
+				err = json.Unmarshal(*v, &createProperties)
+				if err != nil {
+					return err
+				}
+				cp.CreateProperties = &createProperties
+			}
+		case "zones":
+			if v != nil {
+				var zones []string
+				err = json.Unmarshal(*v, &zones)
+				if err != nil {
+					return err
+				}
+				cp.Zones = &zones
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				cp.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				cp.Tags = tags
+			}
 		}
-		cp.CreateProperties = &properties
-	}
-
-	v = m["zones"]
-	if v != nil {
-		var zones []string
-		err = json.Unmarshal(*m["zones"], &zones)
-		if err != nil {
-			return err
-		}
-		cp.Zones = &zones
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		cp.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		cp.Tags = &tags
 	}
 
 	return nil
@@ -191,11 +226,11 @@ func (cp *CreateParameters) UnmarshalJSON(body []byte) error {
 // CreateProperties properties supplied to Create Redis operation.
 type CreateProperties struct {
 	// RedisConfiguration - All Redis Settings. Few possible keys: rdb-backup-enabled,rdb-storage-connection-string,rdb-backup-frequency,maxmemory-delta,maxmemory-policy,notify-keyspace-events,maxmemory-samples,slowlog-log-slower-than,slowlog-max-len,list-max-ziplist-entries,list-max-ziplist-value,hash-max-ziplist-entries,hash-max-ziplist-value,set-max-intset-entries,zset-max-ziplist-entries,zset-max-ziplist-value etc.
-	RedisConfiguration *map[string]*string `json:"redisConfiguration,omitempty"`
+	RedisConfiguration map[string]*string `json:"redisConfiguration"`
 	// EnableNonSslPort - Specifies whether the non-ssl Redis server port (6379) is enabled.
 	EnableNonSslPort *bool `json:"enableNonSslPort,omitempty"`
 	// TenantSettings - A dictionary of tenant settings
-	TenantSettings *map[string]*string `json:"tenantSettings,omitempty"`
+	TenantSettings map[string]*string `json:"tenantSettings"`
 	// ShardCount - The number of shards to be created on a Premium Cluster Cache.
 	ShardCount *int32 `json:"shardCount,omitempty"`
 	// Sku - The SKU of the Redis cache to deploy.
@@ -204,6 +239,33 @@ type CreateProperties struct {
 	SubnetID *string `json:"subnetId,omitempty"`
 	// StaticIP - Static IP address. Required when deploying a Redis cache inside an existing Azure Virtual Network.
 	StaticIP *string `json:"staticIP,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for CreateProperties.
+func (cp CreateProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if cp.Sku != nil {
+		objectMap["sku"] = cp.Sku
+	}
+	if cp.SubnetID != nil {
+		objectMap["subnetId"] = cp.SubnetID
+	}
+	if cp.StaticIP != nil {
+		objectMap["staticIP"] = cp.StaticIP
+	}
+	if cp.RedisConfiguration != nil {
+		objectMap["redisConfiguration"] = cp.RedisConfiguration
+	}
+	if cp.EnableNonSslPort != nil {
+		objectMap["enableNonSslPort"] = cp.EnableNonSslPort
+	}
+	if cp.TenantSettings != nil {
+		objectMap["tenantSettings"] = cp.TenantSettings
+	}
+	if cp.ShardCount != nil {
+		objectMap["shardCount"] = cp.ShardCount
+	}
+	return json.Marshal(objectMap)
 }
 
 // ExportRDBParameters parameters for Redis export operation.
@@ -216,8 +278,8 @@ type ExportRDBParameters struct {
 	Container *string `json:"container,omitempty"`
 }
 
-// FirewallRule a firewall rule on a redis cache has a name, and describes a contiguous range of IP addresses permitted
-// to connect
+// FirewallRule a firewall rule on a redis cache has a name, and describes a contiguous range of IP addresses
+// permitted to connect
 type FirewallRule struct {
 	autorest.Response `json:"-"`
 	// ID - Resource ID.
@@ -237,46 +299,45 @@ func (fr *FirewallRule) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties FirewallRuleProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var firewallRuleProperties FirewallRuleProperties
+				err = json.Unmarshal(*v, &firewallRuleProperties)
+				if err != nil {
+					return err
+				}
+				fr.FirewallRuleProperties = &firewallRuleProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				fr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				fr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				fr.Type = &typeVar
+			}
 		}
-		fr.FirewallRuleProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		fr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		fr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		fr.Type = &typeVar
 	}
 
 	return nil
@@ -295,16 +356,18 @@ func (frcp *FirewallRuleCreateParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties FirewallRuleProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var firewallRuleProperties FirewallRuleProperties
+				err = json.Unmarshal(*v, &firewallRuleProperties)
+				if err != nil {
+					return err
+				}
+				frcp.FirewallRuleProperties = &firewallRuleProperties
+			}
 		}
-		frcp.FirewallRuleProperties = &properties
 	}
 
 	return nil
@@ -485,16 +548,18 @@ func (lscp *LinkedServerCreateParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties LinkedServerCreateProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var linkedServerCreateProperties LinkedServerCreateProperties
+				err = json.Unmarshal(*v, &linkedServerCreateProperties)
+				if err != nil {
+					return err
+				}
+				lscp.LinkedServerCreateProperties = &linkedServerCreateProperties
+			}
 		}
-		lscp.LinkedServerCreateProperties = &properties
 	}
 
 	return nil
@@ -542,46 +607,45 @@ func (lswp *LinkedServerWithProperties) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties LinkedServerProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var linkedServerProperties LinkedServerProperties
+				err = json.Unmarshal(*v, &linkedServerProperties)
+				if err != nil {
+					return err
+				}
+				lswp.LinkedServerProperties = &linkedServerProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				lswp.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				lswp.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				lswp.Type = &typeVar
+			}
 		}
-		lswp.LinkedServerProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		lswp.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		lswp.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		lswp.Type = &typeVar
 	}
 
 	return nil
@@ -596,7 +660,8 @@ type LinkedServerWithPropertiesList struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// LinkedServerWithPropertiesListIterator provides access to a complete listing of LinkedServerWithProperties values.
+// LinkedServerWithPropertiesListIterator provides access to a complete listing of LinkedServerWithProperties
+// values.
 type LinkedServerWithPropertiesListIterator struct {
 	i    int
 	page LinkedServerWithPropertiesListPage
@@ -811,8 +876,8 @@ type OperationDisplay struct {
 	Description *string `json:"description,omitempty"`
 }
 
-// OperationListResult result of the request to list REST API operations. It contains a list of operations and a URL
-// nextLink to get the next set of results.
+// OperationListResult result of the request to list REST API operations. It contains a list of operations and a
+// URL nextLink to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of operations supported by the resource provider.
@@ -934,46 +999,45 @@ func (ps *PatchSchedule) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ScheduleEntries
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var scheduleEntries ScheduleEntries
+				err = json.Unmarshal(*v, &scheduleEntries)
+				if err != nil {
+					return err
+				}
+				ps.ScheduleEntries = &scheduleEntries
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				ps.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				ps.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ps.Type = &typeVar
+			}
 		}
-		ps.ScheduleEntries = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		ps.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		ps.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		ps.Type = &typeVar
 	}
 
 	return nil
@@ -982,11 +1046,11 @@ func (ps *PatchSchedule) UnmarshalJSON(body []byte) error {
 // Properties properties of the redis cache.
 type Properties struct {
 	// RedisConfiguration - All Redis Settings. Few possible keys: rdb-backup-enabled,rdb-storage-connection-string,rdb-backup-frequency,maxmemory-delta,maxmemory-policy,notify-keyspace-events,maxmemory-samples,slowlog-log-slower-than,slowlog-max-len,list-max-ziplist-entries,list-max-ziplist-value,hash-max-ziplist-entries,hash-max-ziplist-value,set-max-intset-entries,zset-max-ziplist-entries,zset-max-ziplist-value etc.
-	RedisConfiguration *map[string]*string `json:"redisConfiguration,omitempty"`
+	RedisConfiguration map[string]*string `json:"redisConfiguration"`
 	// EnableNonSslPort - Specifies whether the non-ssl Redis server port (6379) is enabled.
 	EnableNonSslPort *bool `json:"enableNonSslPort,omitempty"`
 	// TenantSettings - A dictionary of tenant settings
-	TenantSettings *map[string]*string `json:"tenantSettings,omitempty"`
+	TenantSettings map[string]*string `json:"tenantSettings"`
 	// ShardCount - The number of shards to be created on a Premium Cluster Cache.
 	ShardCount *int32 `json:"shardCount,omitempty"`
 	// Sku - The SKU of the Redis cache to deploy.
@@ -1011,8 +1075,56 @@ type Properties struct {
 	LinkedServers *[]LinkedServer `json:"linkedServers,omitempty"`
 }
 
-// ProxyResource the resource model definition for a ARM proxy resource. It will have everything other than required
-// location and tags
+// MarshalJSON is the custom marshaler for Properties.
+func (p Properties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if p.RedisVersion != nil {
+		objectMap["redisVersion"] = p.RedisVersion
+	}
+	if p.ProvisioningState != nil {
+		objectMap["provisioningState"] = p.ProvisioningState
+	}
+	if p.HostName != nil {
+		objectMap["hostName"] = p.HostName
+	}
+	if p.Port != nil {
+		objectMap["port"] = p.Port
+	}
+	if p.SslPort != nil {
+		objectMap["sslPort"] = p.SslPort
+	}
+	if p.AccessKeys != nil {
+		objectMap["accessKeys"] = p.AccessKeys
+	}
+	if p.LinkedServers != nil {
+		objectMap["linkedServers"] = p.LinkedServers
+	}
+	if p.Sku != nil {
+		objectMap["sku"] = p.Sku
+	}
+	if p.SubnetID != nil {
+		objectMap["subnetId"] = p.SubnetID
+	}
+	if p.StaticIP != nil {
+		objectMap["staticIP"] = p.StaticIP
+	}
+	if p.RedisConfiguration != nil {
+		objectMap["redisConfiguration"] = p.RedisConfiguration
+	}
+	if p.EnableNonSslPort != nil {
+		objectMap["enableNonSslPort"] = p.EnableNonSslPort
+	}
+	if p.TenantSettings != nil {
+		objectMap["tenantSettings"] = p.TenantSettings
+	}
+	if p.ShardCount != nil {
+		objectMap["shardCount"] = p.ShardCount
+	}
+	return json.Marshal(objectMap)
+}
+
+// ProxyResource the resource model definition for a ARM proxy resource. It will have everything other than
+// required location and tags
 type ProxyResource struct {
 	// ID - Resource ID.
 	ID *string `json:"id,omitempty"`
@@ -1180,13 +1292,40 @@ type ResourceType struct {
 	// Type - Resource type.
 	Type *string `json:"type,omitempty"`
 	// Tags - Resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Location - The geo-location where the resource lives
 	Location *string `json:"location,omitempty"`
 	// Properties - Redis cache properties.
 	*Properties `json:"properties,omitempty"`
 	// Zones - A list of availability zones denoting where the resource needs to come from.
 	Zones *[]string `json:"zones,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ResourceType.
+func (rt ResourceType) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if rt.Properties != nil {
+		objectMap["properties"] = rt.Properties
+	}
+	if rt.Zones != nil {
+		objectMap["zones"] = rt.Zones
+	}
+	if rt.Tags != nil {
+		objectMap["tags"] = rt.Tags
+	}
+	if rt.Location != nil {
+		objectMap["location"] = rt.Location
+	}
+	if rt.ID != nil {
+		objectMap["id"] = rt.ID
+	}
+	if rt.Name != nil {
+		objectMap["name"] = rt.Name
+	}
+	if rt.Type != nil {
+		objectMap["type"] = rt.Type
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for ResourceType struct.
@@ -1196,76 +1335,72 @@ func (rt *ResourceType) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties Properties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var properties Properties
+				err = json.Unmarshal(*v, &properties)
+				if err != nil {
+					return err
+				}
+				rt.Properties = &properties
+			}
+		case "zones":
+			if v != nil {
+				var zones []string
+				err = json.Unmarshal(*v, &zones)
+				if err != nil {
+					return err
+				}
+				rt.Zones = &zones
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				rt.Tags = tags
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				rt.Location = &location
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				rt.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				rt.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				rt.Type = &typeVar
+			}
 		}
-		rt.Properties = &properties
-	}
-
-	v = m["zones"]
-	if v != nil {
-		var zones []string
-		err = json.Unmarshal(*m["zones"], &zones)
-		if err != nil {
-			return err
-		}
-		rt.Zones = &zones
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		rt.Tags = &tags
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		rt.Location = &location
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		rt.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		rt.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		rt.Type = &typeVar
 	}
 
 	return nil
@@ -1306,9 +1441,30 @@ type TrackedResource struct {
 	// Type - Resource type.
 	Type *string `json:"type,omitempty"`
 	// Tags - Resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Location - The geo-location where the resource lives
 	Location *string `json:"location,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for TrackedResource.
+func (tr TrackedResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if tr.Tags != nil {
+		objectMap["tags"] = tr.Tags
+	}
+	if tr.Location != nil {
+		objectMap["location"] = tr.Location
+	}
+	if tr.ID != nil {
+		objectMap["id"] = tr.ID
+	}
+	if tr.Name != nil {
+		objectMap["name"] = tr.Name
+	}
+	if tr.Type != nil {
+		objectMap["type"] = tr.Type
+	}
+	return json.Marshal(objectMap)
 }
 
 // UpdateParameters parameters supplied to the Update Redis operation.
@@ -1316,7 +1472,19 @@ type UpdateParameters struct {
 	// UpdateProperties - Redis cache properties.
 	*UpdateProperties `json:"properties,omitempty"`
 	// Tags - Resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for UpdateParameters.
+func (up UpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if up.UpdateProperties != nil {
+		objectMap["properties"] = up.UpdateProperties
+	}
+	if up.Tags != nil {
+		objectMap["tags"] = up.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for UpdateParameters struct.
@@ -1326,26 +1494,27 @@ func (up *UpdateParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties UpdateProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var updateProperties UpdateProperties
+				err = json.Unmarshal(*v, &updateProperties)
+				if err != nil {
+					return err
+				}
+				up.UpdateProperties = &updateProperties
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				up.Tags = tags
+			}
 		}
-		up.UpdateProperties = &properties
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		up.Tags = &tags
 	}
 
 	return nil
@@ -1354,13 +1523,34 @@ func (up *UpdateParameters) UnmarshalJSON(body []byte) error {
 // UpdateProperties patchable properties of the redis cache.
 type UpdateProperties struct {
 	// RedisConfiguration - All Redis Settings. Few possible keys: rdb-backup-enabled,rdb-storage-connection-string,rdb-backup-frequency,maxmemory-delta,maxmemory-policy,notify-keyspace-events,maxmemory-samples,slowlog-log-slower-than,slowlog-max-len,list-max-ziplist-entries,list-max-ziplist-value,hash-max-ziplist-entries,hash-max-ziplist-value,set-max-intset-entries,zset-max-ziplist-entries,zset-max-ziplist-value etc.
-	RedisConfiguration *map[string]*string `json:"redisConfiguration,omitempty"`
+	RedisConfiguration map[string]*string `json:"redisConfiguration"`
 	// EnableNonSslPort - Specifies whether the non-ssl Redis server port (6379) is enabled.
 	EnableNonSslPort *bool `json:"enableNonSslPort,omitempty"`
 	// TenantSettings - A dictionary of tenant settings
-	TenantSettings *map[string]*string `json:"tenantSettings,omitempty"`
+	TenantSettings map[string]*string `json:"tenantSettings"`
 	// ShardCount - The number of shards to be created on a Premium Cluster Cache.
 	ShardCount *int32 `json:"shardCount,omitempty"`
 	// Sku - The SKU of the Redis cache to deploy.
 	Sku *Sku `json:"sku,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for UpdateProperties.
+func (up UpdateProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if up.Sku != nil {
+		objectMap["sku"] = up.Sku
+	}
+	if up.RedisConfiguration != nil {
+		objectMap["redisConfiguration"] = up.RedisConfiguration
+	}
+	if up.EnableNonSslPort != nil {
+		objectMap["enableNonSslPort"] = up.EnableNonSslPort
+	}
+	if up.TenantSettings != nil {
+		objectMap["tenantSettings"] = up.TenantSettings
+	}
+	if up.ShardCount != nil {
+		objectMap["shardCount"] = up.ShardCount
+	}
+	return json.Marshal(objectMap)
 }

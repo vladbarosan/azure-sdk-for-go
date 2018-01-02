@@ -20,6 +20,7 @@ package face
 import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/date"
+	"github.com/satori/go.uuid"
 )
 
 // AttributeTypes enumerates the values for attribute types.
@@ -249,12 +250,12 @@ type CreatePersonRequest struct {
 type CreatePersonResult struct {
 	autorest.Response `json:"-"`
 	// PersonID - personID of the new created person.
-	PersonID *string `json:"personId,omitempty"`
+	PersonID *uuid.UUID `json:"personId,omitempty"`
 }
 
 // DetectedFace detected Face object.
 type DetectedFace struct {
-	FaceID         *string     `json:"faceId,omitempty"`
+	FaceID         *uuid.UUID  `json:"faceId,omitempty"`
 	FaceRectangle  *Rectangle  `json:"faceRectangle,omitempty"`
 	FaceLandmarks  *Landmarks  `json:"faceLandmarks,omitempty"`
 	FaceAttributes *Attributes `json:"faceAttributes,omitempty"`
@@ -296,11 +297,11 @@ type FacialHairProperties struct {
 // FindSimilarRequest request body for find similar operation.
 type FindSimilarRequest struct {
 	// FaceID - FaceId of the query face. User needs to call Face - Detect first to get a valid faceId. Note that this faceId is not persisted and will expire 24 hours after the detection call
-	FaceID *string `json:"faceId,omitempty"`
+	FaceID *uuid.UUID `json:"faceId,omitempty"`
 	// FaceListID - An existing user-specified unique candidate face list, created in Face List - Create a Face List. Face list contains a set of persistedFaceIds which are persisted and will never expire. Parameter faceListId and faceIds should not be provided at the same time
 	FaceListID *string `json:"faceListId,omitempty"`
 	// FaceIds - An array of candidate faceIds. All of them are created by Face - Detect and the faceIds will expire 24 hours after the detection call.
-	FaceIds *[]string `json:"faceIds,omitempty"`
+	FaceIds *[]uuid.UUID `json:"faceIds,omitempty"`
 	// MaxNumOfCandidatesReturned - The number of top similar faces returned. The valid range is [1, 1000].
 	MaxNumOfCandidatesReturned *int32 `json:"maxNumOfCandidatesReturned,omitempty"`
 	// Mode - Similar face searching mode. It can be "matchPerson" or "matchFace". Possible values include: 'MatchPerson', 'MatchFace'
@@ -323,16 +324,16 @@ type GetFaceListResult struct {
 // GroupRequest request body for group request.
 type GroupRequest struct {
 	// FaceIds - Array of candidate faceId created by Face - Detect. The maximum is 1000 faces
-	FaceIds *[]string `json:"faceIds,omitempty"`
+	FaceIds *[]uuid.UUID `json:"faceIds,omitempty"`
 }
 
 // GroupResponse an array of face groups based on face similarity.
 type GroupResponse struct {
 	autorest.Response `json:"-"`
 	// Groups - A partition of the original faces based on face similarity. Groups are ranked by number of faces
-	Groups *[][]string `json:"groups,omitempty"`
+	Groups *[][]uuid.UUID `json:"groups,omitempty"`
 	// MessyGroup - Face ids array of faces that cannot find any similar faces from original faces.
-	MessyGroup *[]string `json:"messyGroup,omitempty"`
+	MessyGroup *[]uuid.UUID `json:"messyGroup,omitempty"`
 }
 
 // HairProperties properties describing hair attributes.
@@ -356,7 +357,7 @@ type IdentifyRequest struct {
 	// PersonGroupID - personGroupId of the target person group, created by PersonGroups.Create
 	PersonGroupID *string `json:"personGroupId,omitempty"`
 	// FaceIds - Array of candidate faceId created by Face - Detect.
-	FaceIds *[]string `json:"faceIds,omitempty"`
+	FaceIds *[]uuid.UUID `json:"faceIds,omitempty"`
 	// MaxNumOfCandidatesReturned - The number of top similar faces returned.
 	MaxNumOfCandidatesReturned *int32   `json:"maxNumOfCandidatesReturned,omitempty"`
 	ConfidenceThreshold        *float64 `json:"confidenceThreshold,omitempty"`
@@ -365,14 +366,14 @@ type IdentifyRequest struct {
 // IdentifyResultCandidate all possible faces that may qualify.
 type IdentifyResultCandidate struct {
 	// PersonID - Id of candidate
-	PersonID   *string  `json:"personId,omitempty"`
-	Confidence *float64 `json:"confidence,omitempty"`
+	PersonID   *uuid.UUID `json:"personId,omitempty"`
+	Confidence *float64   `json:"confidence,omitempty"`
 }
 
 // IdentifyResultItem response body for identify face operation.
 type IdentifyResultItem struct {
 	// FaceID - faceId of the query face
-	FaceID     *string                    `json:"faceId,omitempty"`
+	FaceID     *uuid.UUID                 `json:"faceId,omitempty"`
 	Candidates *[]IdentifyResultCandidate `json:"candidates,omitempty"`
 }
 
@@ -478,14 +479,14 @@ type OcclusionProperties struct {
 type PersistedFaceResult struct {
 	autorest.Response `json:"-"`
 	// PersistedFaceID - persistedFaceId of candidate face when find by faceListId. persistedFaceId in face list is persisted and will not expire. As showed in below response
-	PersistedFaceID *string `json:"persistedFaceId,omitempty"`
+	PersistedFaceID *uuid.UUID `json:"persistedFaceId,omitempty"`
 }
 
 // PersonFaceResult personFace object.
 type PersonFaceResult struct {
 	autorest.Response `json:"-"`
 	// PersistedFaceID - The persistedFaceId of the target face, which is persisted and will not expire. Different from faceId created by Face - Detect and will expire in 24 hours after the detection call.
-	PersistedFaceID *string `json:"persistedFaceId,omitempty"`
+	PersistedFaceID *uuid.UUID `json:"persistedFaceId,omitempty"`
 	// UserData - User-provided data attached to the face. The size limit is 1KB.
 	UserData *string `json:"userData,omitempty"`
 }
@@ -505,9 +506,9 @@ type PersonGroupResult struct {
 type PersonResult struct {
 	autorest.Response `json:"-"`
 	// PersonID - personId of the target face list.
-	PersonID *string `json:"personId,omitempty"`
+	PersonID *uuid.UUID `json:"personId,omitempty"`
 	// PersistedFaceIds - persistedFaceIds of registered faces in the person. These persistedFaceIds are returned from Person - Add a Person Face, and will not expire.
-	PersistedFaceIds *[]string `json:"persistedFaceIds,omitempty"`
+	PersistedFaceIds *[]uuid.UUID `json:"persistedFaceIds,omitempty"`
 	// Name - Person's display name, maximum length is 128.
 	Name *string `json:"name,omitempty"`
 	// UserData - User-provided data attached to this person. Length should not exceed 16KB.
@@ -537,10 +538,10 @@ type Rectangle struct {
 // SimilarFaceResult response body for find similar face operation.
 type SimilarFaceResult struct {
 	// FaceID - faceId of candidate face when find by faceIds. faceId is created by Face - Detect and will expire 24 hours after the detection call
-	FaceID *string `json:"faceId,omitempty"`
+	FaceID *uuid.UUID `json:"faceId,omitempty"`
 	// PersistedFaceID - persistedFaceId of candidate face when find by faceListId. persistedFaceId in face list is persisted and will not expire. As showed in below response
-	PersistedFaceID *string  `json:"persistedFaceId,omitempty"`
-	Confidence      *float64 `json:"confidence,omitempty"`
+	PersistedFaceID *uuid.UUID `json:"persistedFaceId,omitempty"`
+	Confidence      *float64   `json:"confidence,omitempty"`
 }
 
 // TrainingStatus training status object.
@@ -565,9 +566,9 @@ type UpdatePersonFaceDataRequest struct {
 // VerifyPersonGroupRequest request body for verify operation.
 type VerifyPersonGroupRequest struct {
 	// FaceID - faceId the face, comes from Face - Detect
-	FaceID *string `json:"faceId,omitempty"`
+	FaceID *uuid.UUID `json:"faceId,omitempty"`
 	// PersonID - Specify a certain person in a person group. personId is created in Persons.Create.
-	PersonID *string `json:"personId,omitempty"`
+	PersonID *uuid.UUID `json:"personId,omitempty"`
 	// PersonGroupID - Using existing personGroupId and personId for fast loading a specified person. personGroupId is created in Person Groups.Create.
 	PersonGroupID *string `json:"personGroupId,omitempty"`
 }
@@ -575,9 +576,9 @@ type VerifyPersonGroupRequest struct {
 // VerifyRequest request body for verify operation.
 type VerifyRequest struct {
 	// FaceID1 - faceId of the first face, comes from Face - Detect
-	FaceID1 *string `json:"faceId1,omitempty"`
+	FaceID1 *uuid.UUID `json:"faceId1,omitempty"`
 	// FaceID2 - faceId of the second face, comes from Face - Detect
-	FaceID2 *string `json:"faceId2,omitempty"`
+	FaceID2 *uuid.UUID `json:"faceId2,omitempty"`
 }
 
 // VerifyResult result of the verify operation.

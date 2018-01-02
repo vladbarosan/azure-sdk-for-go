@@ -123,12 +123,12 @@ type EventHubEventSubscriptionDestination struct {
 // MarshalJSON is the custom marshaler for EventHubEventSubscriptionDestination.
 func (ehesd EventHubEventSubscriptionDestination) MarshalJSON() ([]byte, error) {
 	ehesd.EndpointType = EndpointTypeEventHub
-	type Alias EventHubEventSubscriptionDestination
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(ehesd),
-	})
+	objectMap := make(map[string]interface{})
+	if ehesd.EventHubEventSubscriptionDestinationProperties != nil {
+		objectMap["properties"] = ehesd.EventHubEventSubscriptionDestinationProperties
+	}
+	objectMap["endpointType"] = ehesd.EndpointType
+	return json.Marshal(objectMap)
 }
 
 // AsWebHookEventSubscriptionDestination is the BasicEventSubscriptionDestination implementation for EventHubEventSubscriptionDestination.
@@ -158,26 +158,27 @@ func (ehesd *EventHubEventSubscriptionDestination) UnmarshalJSON(body []byte) er
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties EventHubEventSubscriptionDestinationProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var eventHubEventSubscriptionDestinationProperties EventHubEventSubscriptionDestinationProperties
+				err = json.Unmarshal(*v, &eventHubEventSubscriptionDestinationProperties)
+				if err != nil {
+					return err
+				}
+				ehesd.EventHubEventSubscriptionDestinationProperties = &eventHubEventSubscriptionDestinationProperties
+			}
+		case "endpointType":
+			if v != nil {
+				var endpointType EndpointType
+				err = json.Unmarshal(*v, &endpointType)
+				if err != nil {
+					return err
+				}
+				ehesd.EndpointType = endpointType
+			}
 		}
-		ehesd.EventHubEventSubscriptionDestinationProperties = &properties
-	}
-
-	v = m["endpointType"]
-	if v != nil {
-		var endpointType EndpointType
-		err = json.Unmarshal(*m["endpointType"], &endpointType)
-		if err != nil {
-			return err
-		}
-		ehesd.EndpointType = endpointType
 	}
 
 	return nil
@@ -209,46 +210,45 @@ func (es *EventSubscription) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties EventSubscriptionProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var eventSubscriptionProperties EventSubscriptionProperties
+				err = json.Unmarshal(*v, &eventSubscriptionProperties)
+				if err != nil {
+					return err
+				}
+				es.EventSubscriptionProperties = &eventSubscriptionProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				es.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				es.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				es.Type = &typeVar
+			}
 		}
-		es.EventSubscriptionProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		es.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		es.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		es.Type = &typeVar
 	}
 
 	return nil
@@ -311,12 +311,9 @@ func unmarshalBasicEventSubscriptionDestinationArray(body []byte) ([]BasicEventS
 // MarshalJSON is the custom marshaler for EventSubscriptionDestination.
 func (esd EventSubscriptionDestination) MarshalJSON() ([]byte, error) {
 	esd.EndpointType = EndpointTypeEventSubscriptionDestination
-	type Alias EventSubscriptionDestination
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(esd),
-	})
+	objectMap := make(map[string]interface{})
+	objectMap["endpointType"] = esd.EndpointType
+	return json.Marshal(objectMap)
 }
 
 // AsWebHookEventSubscriptionDestination is the BasicEventSubscriptionDestination implementation for EventSubscriptionDestination.
@@ -384,61 +381,60 @@ func (esp *EventSubscriptionProperties) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["topic"]
-	if v != nil {
-		var topic string
-		err = json.Unmarshal(*m["topic"], &topic)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "topic":
+			if v != nil {
+				var topic string
+				err = json.Unmarshal(*v, &topic)
+				if err != nil {
+					return err
+				}
+				esp.Topic = &topic
+			}
+		case "provisioningState":
+			if v != nil {
+				var provisioningState EventSubscriptionProvisioningState
+				err = json.Unmarshal(*v, &provisioningState)
+				if err != nil {
+					return err
+				}
+				esp.ProvisioningState = provisioningState
+			}
+		case "destination":
+			if v != nil {
+				destination, err := unmarshalBasicEventSubscriptionDestination(*v)
+				if err != nil {
+					return err
+				}
+				esp.Destination = destination
+			}
+		case "filter":
+			if v != nil {
+				var filter EventSubscriptionFilter
+				err = json.Unmarshal(*v, &filter)
+				if err != nil {
+					return err
+				}
+				esp.Filter = &filter
+			}
+		case "labels":
+			if v != nil {
+				var labels []string
+				err = json.Unmarshal(*v, &labels)
+				if err != nil {
+					return err
+				}
+				esp.Labels = &labels
+			}
 		}
-		esp.Topic = &topic
-	}
-
-	v = m["provisioningState"]
-	if v != nil {
-		var provisioningState EventSubscriptionProvisioningState
-		err = json.Unmarshal(*m["provisioningState"], &provisioningState)
-		if err != nil {
-			return err
-		}
-		esp.ProvisioningState = provisioningState
-	}
-
-	v = m["destination"]
-	if v != nil {
-		destination, err := unmarshalBasicEventSubscriptionDestination(*m["destination"])
-		if err != nil {
-			return err
-		}
-		esp.Destination = destination
-	}
-
-	v = m["filter"]
-	if v != nil {
-		var filter EventSubscriptionFilter
-		err = json.Unmarshal(*m["filter"], &filter)
-		if err != nil {
-			return err
-		}
-		esp.Filter = &filter
-	}
-
-	v = m["labels"]
-	if v != nil {
-		var labels []string
-		err = json.Unmarshal(*m["labels"], &labels)
-		if err != nil {
-			return err
-		}
-		esp.Labels = &labels
 	}
 
 	return nil
 }
 
-// EventSubscriptionsCreateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// EventSubscriptionsCreateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type EventSubscriptionsCreateFuture struct {
 	azure.Future
 	req *http.Request
@@ -469,7 +465,8 @@ func (future EventSubscriptionsCreateFuture) Result(client EventSubscriptionsCli
 	return
 }
 
-// EventSubscriptionsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// EventSubscriptionsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type EventSubscriptionsDeleteFuture struct {
 	azure.Future
 	req *http.Request
@@ -507,7 +504,8 @@ type EventSubscriptionsListResult struct {
 	Value *[]EventSubscription `json:"value,omitempty"`
 }
 
-// EventSubscriptionsUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// EventSubscriptionsUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type EventSubscriptionsUpdateFuture struct {
 	azure.Future
 	req *http.Request
@@ -555,35 +553,35 @@ func (esup *EventSubscriptionUpdateParameters) UnmarshalJSON(body []byte) error 
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["destination"]
-	if v != nil {
-		destination, err := unmarshalBasicEventSubscriptionDestination(*m["destination"])
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "destination":
+			if v != nil {
+				destination, err := unmarshalBasicEventSubscriptionDestination(*v)
+				if err != nil {
+					return err
+				}
+				esup.Destination = destination
+			}
+		case "filter":
+			if v != nil {
+				var filter EventSubscriptionFilter
+				err = json.Unmarshal(*v, &filter)
+				if err != nil {
+					return err
+				}
+				esup.Filter = &filter
+			}
+		case "labels":
+			if v != nil {
+				var labels []string
+				err = json.Unmarshal(*v, &labels)
+				if err != nil {
+					return err
+				}
+				esup.Labels = &labels
+			}
 		}
-		esup.Destination = destination
-	}
-
-	v = m["filter"]
-	if v != nil {
-		var filter EventSubscriptionFilter
-		err = json.Unmarshal(*m["filter"], &filter)
-		if err != nil {
-			return err
-		}
-		esup.Filter = &filter
-	}
-
-	v = m["labels"]
-	if v != nil {
-		var labels []string
-		err = json.Unmarshal(*m["labels"], &labels)
-		if err != nil {
-			return err
-		}
-		esup.Labels = &labels
 	}
 
 	return nil
@@ -608,46 +606,45 @@ func (et *EventType) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties EventTypeProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var eventTypeProperties EventTypeProperties
+				err = json.Unmarshal(*v, &eventTypeProperties)
+				if err != nil {
+					return err
+				}
+				et.EventTypeProperties = &eventTypeProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				et.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				et.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				et.Type = &typeVar
+			}
 		}
-		et.EventTypeProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		et.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		et.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		et.Type = &typeVar
 	}
 
 	return nil
@@ -679,7 +676,7 @@ type Operation struct {
 	// Origin - Origin of the operation. Possible values include: 'User', 'System', 'UserAndSystem'
 	Origin OperationOrigin `json:"origin,omitempty"`
 	// Properties - Properties of the operation
-	Properties *map[string]interface{} `json:"properties,omitempty"`
+	Properties interface{} `json:"properties,omitempty"`
 }
 
 // OperationInfo information about an operation
@@ -723,9 +720,33 @@ type Topic struct {
 	// Location - Location of the resource
 	Location *string `json:"location,omitempty"`
 	// Tags - Tags of the resource
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// TopicProperties - Properties of the topic
 	*TopicProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Topic.
+func (t Topic) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if t.TopicProperties != nil {
+		objectMap["properties"] = t.TopicProperties
+	}
+	if t.Location != nil {
+		objectMap["location"] = t.Location
+	}
+	if t.Tags != nil {
+		objectMap["tags"] = t.Tags
+	}
+	if t.ID != nil {
+		objectMap["id"] = t.ID
+	}
+	if t.Name != nil {
+		objectMap["name"] = t.Name
+	}
+	if t.Type != nil {
+		objectMap["type"] = t.Type
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for Topic struct.
@@ -735,66 +756,63 @@ func (t *Topic) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties TopicProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var topicProperties TopicProperties
+				err = json.Unmarshal(*v, &topicProperties)
+				if err != nil {
+					return err
+				}
+				t.TopicProperties = &topicProperties
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				t.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				t.Tags = tags
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				t.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				t.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				t.Type = &typeVar
+			}
 		}
-		t.TopicProperties = &properties
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		t.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		t.Tags = &tags
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		t.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		t.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		t.Type = &typeVar
 	}
 
 	return nil
@@ -943,46 +961,45 @@ func (tti *TopicTypeInfo) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties TopicTypeProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var topicTypeProperties TopicTypeProperties
+				err = json.Unmarshal(*v, &topicTypeProperties)
+				if err != nil {
+					return err
+				}
+				tti.TopicTypeProperties = &topicTypeProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				tti.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				tti.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				tti.Type = &typeVar
+			}
 		}
-		tti.TopicTypeProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		tti.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		tti.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		tti.Type = &typeVar
 	}
 
 	return nil
@@ -1014,7 +1031,16 @@ type TopicTypesListResult struct {
 // TopicUpdateParameters properties of the Topic update
 type TopicUpdateParameters struct {
 	// Tags - Tags of the resource
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for TopicUpdateParameters.
+func (tup TopicUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if tup.Tags != nil {
+		objectMap["tags"] = tup.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // TrackedResource definition of a Tracked Resource
@@ -1028,7 +1054,28 @@ type TrackedResource struct {
 	// Location - Location of the resource
 	Location *string `json:"location,omitempty"`
 	// Tags - Tags of the resource
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for TrackedResource.
+func (tr TrackedResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if tr.Location != nil {
+		objectMap["location"] = tr.Location
+	}
+	if tr.Tags != nil {
+		objectMap["tags"] = tr.Tags
+	}
+	if tr.ID != nil {
+		objectMap["id"] = tr.ID
+	}
+	if tr.Name != nil {
+		objectMap["name"] = tr.Name
+	}
+	if tr.Type != nil {
+		objectMap["type"] = tr.Type
+	}
+	return json.Marshal(objectMap)
 }
 
 // WebHookEventSubscriptionDestination information about the webhook destination for an event subscription
@@ -1042,12 +1089,12 @@ type WebHookEventSubscriptionDestination struct {
 // MarshalJSON is the custom marshaler for WebHookEventSubscriptionDestination.
 func (whesd WebHookEventSubscriptionDestination) MarshalJSON() ([]byte, error) {
 	whesd.EndpointType = EndpointTypeWebHook
-	type Alias WebHookEventSubscriptionDestination
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(whesd),
-	})
+	objectMap := make(map[string]interface{})
+	if whesd.WebHookEventSubscriptionDestinationProperties != nil {
+		objectMap["properties"] = whesd.WebHookEventSubscriptionDestinationProperties
+	}
+	objectMap["endpointType"] = whesd.EndpointType
+	return json.Marshal(objectMap)
 }
 
 // AsWebHookEventSubscriptionDestination is the BasicEventSubscriptionDestination implementation for WebHookEventSubscriptionDestination.
@@ -1077,26 +1124,27 @@ func (whesd *WebHookEventSubscriptionDestination) UnmarshalJSON(body []byte) err
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties WebHookEventSubscriptionDestinationProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var webHookEventSubscriptionDestinationProperties WebHookEventSubscriptionDestinationProperties
+				err = json.Unmarshal(*v, &webHookEventSubscriptionDestinationProperties)
+				if err != nil {
+					return err
+				}
+				whesd.WebHookEventSubscriptionDestinationProperties = &webHookEventSubscriptionDestinationProperties
+			}
+		case "endpointType":
+			if v != nil {
+				var endpointType EndpointType
+				err = json.Unmarshal(*v, &endpointType)
+				if err != nil {
+					return err
+				}
+				whesd.EndpointType = endpointType
+			}
 		}
-		whesd.WebHookEventSubscriptionDestinationProperties = &properties
-	}
-
-	v = m["endpointType"]
-	if v != nil {
-		var endpointType EndpointType
-		err = json.Unmarshal(*m["endpointType"], &endpointType)
-		if err != nil {
-			return err
-		}
-		whesd.EndpointType = endpointType
 	}
 
 	return nil

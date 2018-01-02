@@ -128,46 +128,45 @@ func (c *Configuration) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ConfigurationProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var configurationProperties ConfigurationProperties
+				err = json.Unmarshal(*v, &configurationProperties)
+				if err != nil {
+					return err
+				}
+				c.ConfigurationProperties = &configurationProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				c.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				c.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				c.Type = &typeVar
+			}
 		}
-		c.ConfigurationProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		c.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		c.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		c.Type = &typeVar
 	}
 
 	return nil
@@ -248,46 +247,45 @@ func (d *Database) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties DatabaseProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var databaseProperties DatabaseProperties
+				err = json.Unmarshal(*v, &databaseProperties)
+				if err != nil {
+					return err
+				}
+				d.DatabaseProperties = &databaseProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				d.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				d.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				d.Type = &typeVar
+			}
 		}
-		d.DatabaseProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		d.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		d.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		d.Type = &typeVar
 	}
 
 	return nil
@@ -308,7 +306,8 @@ type DatabaseProperties struct {
 	Collation *string `json:"collation,omitempty"`
 }
 
-// DatabasesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DatabasesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DatabasesCreateOrUpdateFuture struct {
 	azure.Future
 	req *http.Request
@@ -390,46 +389,45 @@ func (fr *FirewallRule) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties FirewallRuleProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var firewallRuleProperties FirewallRuleProperties
+				err = json.Unmarshal(*v, &firewallRuleProperties)
+				if err != nil {
+					return err
+				}
+				fr.FirewallRuleProperties = &firewallRuleProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				fr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				fr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				fr.Type = &typeVar
+			}
 		}
-		fr.FirewallRuleProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		fr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		fr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		fr.Type = &typeVar
 	}
 
 	return nil
@@ -532,46 +530,45 @@ func (lf *LogFile) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties LogFileProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var logFileProperties LogFileProperties
+				err = json.Unmarshal(*v, &logFileProperties)
+				if err != nil {
+					return err
+				}
+				lf.LogFileProperties = &logFileProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				lf.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				lf.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				lf.Type = &typeVar
+			}
 		}
-		lf.LogFileProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		lf.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		lf.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		lf.Type = &typeVar
 	}
 
 	return nil
@@ -628,7 +625,23 @@ type Operation struct {
 	// Origin - The intended executor of the operation. Possible values include: 'NotSpecified', 'User', 'System'
 	Origin OperationOrigin `json:"origin,omitempty"`
 	// Properties - Additional descriptions for the operation.
-	Properties *map[string]*map[string]interface{} `json:"properties,omitempty"`
+	Properties map[string]interface{} `json:"properties"`
+}
+
+// MarshalJSON is the custom marshaler for Operation.
+func (o Operation) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if o.Name != nil {
+		objectMap["name"] = o.Name
+	}
+	if o.Display != nil {
+		objectMap["display"] = o.Display
+	}
+	objectMap["origin"] = o.Origin
+	if o.Properties != nil {
+		objectMap["properties"] = o.Properties
+	}
+	return json.Marshal(objectMap)
 }
 
 // OperationDisplay display metadata associated with the operation.
@@ -701,11 +714,38 @@ type Server struct {
 	// Location - The location the resource resides in.
 	Location *string `json:"location,omitempty"`
 	// Tags - Application-specific metadata in the form of key-value pairs.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Sku - The SKU (pricing tier) of the server.
 	Sku *Sku `json:"sku,omitempty"`
 	// ServerProperties - Properties of the server.
 	*ServerProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Server.
+func (s Server) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if s.Sku != nil {
+		objectMap["sku"] = s.Sku
+	}
+	if s.ServerProperties != nil {
+		objectMap["properties"] = s.ServerProperties
+	}
+	if s.Location != nil {
+		objectMap["location"] = s.Location
+	}
+	if s.Tags != nil {
+		objectMap["tags"] = s.Tags
+	}
+	if s.ID != nil {
+		objectMap["id"] = s.ID
+	}
+	if s.Name != nil {
+		objectMap["name"] = s.Name
+	}
+	if s.Type != nil {
+		objectMap["type"] = s.Type
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for Server struct.
@@ -715,76 +755,72 @@ func (s *Server) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["sku"]
-	if v != nil {
-		var sku Sku
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "sku":
+			if v != nil {
+				var sku Sku
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				s.Sku = &sku
+			}
+		case "properties":
+			if v != nil {
+				var serverProperties ServerProperties
+				err = json.Unmarshal(*v, &serverProperties)
+				if err != nil {
+					return err
+				}
+				s.ServerProperties = &serverProperties
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				s.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				s.Tags = tags
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				s.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				s.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				s.Type = &typeVar
+			}
 		}
-		s.Sku = &sku
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties ServerProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		s.ServerProperties = &properties
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		s.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		s.Tags = &tags
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		s.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		s.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		s.Type = &typeVar
 	}
 
 	return nil
@@ -799,7 +835,23 @@ type ServerForCreate struct {
 	// Location - The location the resource resides in.
 	Location *string `json:"location,omitempty"`
 	// Tags - Application-specific metadata in the form of key-value pairs.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for ServerForCreate.
+func (sfc ServerForCreate) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if sfc.Sku != nil {
+		objectMap["sku"] = sfc.Sku
+	}
+	objectMap["properties"] = sfc.Properties
+	if sfc.Location != nil {
+		objectMap["location"] = sfc.Location
+	}
+	if sfc.Tags != nil {
+		objectMap["tags"] = sfc.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for ServerForCreate struct.
@@ -809,45 +861,44 @@ func (sfc *ServerForCreate) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["sku"]
-	if v != nil {
-		var sku Sku
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "sku":
+			if v != nil {
+				var sku Sku
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				sfc.Sku = &sku
+			}
+		case "properties":
+			if v != nil {
+				properties, err := unmarshalBasicServerPropertiesForCreate(*v)
+				if err != nil {
+					return err
+				}
+				sfc.Properties = properties
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				sfc.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				sfc.Tags = tags
+			}
 		}
-		sfc.Sku = &sku
-	}
-
-	v = m["properties"]
-	if v != nil {
-		properties, err := unmarshalBasicServerPropertiesForCreate(*m["properties"])
-		if err != nil {
-			return err
-		}
-		sfc.Properties = properties
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		sfc.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		sfc.Tags = &tags
 	}
 
 	return nil
@@ -939,12 +990,14 @@ func unmarshalBasicServerPropertiesForCreateArray(body []byte) ([]BasicServerPro
 // MarshalJSON is the custom marshaler for ServerPropertiesForCreate.
 func (spfc ServerPropertiesForCreate) MarshalJSON() ([]byte, error) {
 	spfc.CreateMode = CreateModeServerPropertiesForCreate
-	type Alias ServerPropertiesForCreate
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(spfc),
-	})
+	objectMap := make(map[string]interface{})
+	if spfc.StorageMB != nil {
+		objectMap["storageMB"] = spfc.StorageMB
+	}
+	objectMap["version"] = spfc.Version
+	objectMap["sslEnforcement"] = spfc.SslEnforcement
+	objectMap["createMode"] = spfc.CreateMode
+	return json.Marshal(objectMap)
 }
 
 // AsServerPropertiesForDefaultCreate is the BasicServerPropertiesForCreate implementation for ServerPropertiesForCreate.
@@ -986,12 +1039,20 @@ type ServerPropertiesForDefaultCreate struct {
 // MarshalJSON is the custom marshaler for ServerPropertiesForDefaultCreate.
 func (spfdc ServerPropertiesForDefaultCreate) MarshalJSON() ([]byte, error) {
 	spfdc.CreateMode = CreateModeDefault
-	type Alias ServerPropertiesForDefaultCreate
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(spfdc),
-	})
+	objectMap := make(map[string]interface{})
+	if spfdc.AdministratorLogin != nil {
+		objectMap["administratorLogin"] = spfdc.AdministratorLogin
+	}
+	if spfdc.AdministratorLoginPassword != nil {
+		objectMap["administratorLoginPassword"] = spfdc.AdministratorLoginPassword
+	}
+	if spfdc.StorageMB != nil {
+		objectMap["storageMB"] = spfdc.StorageMB
+	}
+	objectMap["version"] = spfdc.Version
+	objectMap["sslEnforcement"] = spfdc.SslEnforcement
+	objectMap["createMode"] = spfdc.CreateMode
+	return json.Marshal(objectMap)
 }
 
 // AsServerPropertiesForDefaultCreate is the BasicServerPropertiesForCreate implementation for ServerPropertiesForDefaultCreate.
@@ -1033,12 +1094,20 @@ type ServerPropertiesForRestore struct {
 // MarshalJSON is the custom marshaler for ServerPropertiesForRestore.
 func (spfr ServerPropertiesForRestore) MarshalJSON() ([]byte, error) {
 	spfr.CreateMode = CreateModePointInTimeRestore
-	type Alias ServerPropertiesForRestore
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(spfr),
-	})
+	objectMap := make(map[string]interface{})
+	if spfr.SourceServerID != nil {
+		objectMap["sourceServerId"] = spfr.SourceServerID
+	}
+	if spfr.RestorePointInTime != nil {
+		objectMap["restorePointInTime"] = spfr.RestorePointInTime
+	}
+	if spfr.StorageMB != nil {
+		objectMap["storageMB"] = spfr.StorageMB
+	}
+	objectMap["version"] = spfr.Version
+	objectMap["sslEnforcement"] = spfr.SslEnforcement
+	objectMap["createMode"] = spfr.CreateMode
+	return json.Marshal(objectMap)
 }
 
 // AsServerPropertiesForDefaultCreate is the BasicServerPropertiesForCreate implementation for ServerPropertiesForRestore.
@@ -1161,7 +1230,22 @@ type ServerUpdateParameters struct {
 	// ServerUpdateParametersProperties - The properties that can be updated for a server.
 	*ServerUpdateParametersProperties `json:"properties,omitempty"`
 	// Tags - Application-specific metadata in the form of key-value pairs.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for ServerUpdateParameters.
+func (sup ServerUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if sup.Sku != nil {
+		objectMap["sku"] = sup.Sku
+	}
+	if sup.ServerUpdateParametersProperties != nil {
+		objectMap["properties"] = sup.ServerUpdateParametersProperties
+	}
+	if sup.Tags != nil {
+		objectMap["tags"] = sup.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for ServerUpdateParameters struct.
@@ -1171,36 +1255,36 @@ func (sup *ServerUpdateParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["sku"]
-	if v != nil {
-		var sku Sku
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "sku":
+			if v != nil {
+				var sku Sku
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				sup.Sku = &sku
+			}
+		case "properties":
+			if v != nil {
+				var serverUpdateParametersProperties ServerUpdateParametersProperties
+				err = json.Unmarshal(*v, &serverUpdateParametersProperties)
+				if err != nil {
+					return err
+				}
+				sup.ServerUpdateParametersProperties = &serverUpdateParametersProperties
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				sup.Tags = tags
+			}
 		}
-		sup.Sku = &sku
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties ServerUpdateParametersProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		sup.ServerUpdateParametersProperties = &properties
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		sup.Tags = &tags
 	}
 
 	return nil
@@ -1243,7 +1327,28 @@ type TrackedResource struct {
 	// Location - The location the resource resides in.
 	Location *string `json:"location,omitempty"`
 	// Tags - Application-specific metadata in the form of key-value pairs.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for TrackedResource.
+func (tr TrackedResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if tr.Location != nil {
+		objectMap["location"] = tr.Location
+	}
+	if tr.Tags != nil {
+		objectMap["tags"] = tr.Tags
+	}
+	if tr.ID != nil {
+		objectMap["id"] = tr.ID
+	}
+	if tr.Name != nil {
+		objectMap["name"] = tr.Name
+	}
+	if tr.Type != nil {
+		objectMap["type"] = tr.Type
+	}
+	return json.Marshal(objectMap)
 }
 
 // VirtualNetworkRule a virtual network rule.
@@ -1266,46 +1371,45 @@ func (vnr *VirtualNetworkRule) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties VirtualNetworkRuleProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var virtualNetworkRuleProperties VirtualNetworkRuleProperties
+				err = json.Unmarshal(*v, &virtualNetworkRuleProperties)
+				if err != nil {
+					return err
+				}
+				vnr.VirtualNetworkRuleProperties = &virtualNetworkRuleProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				vnr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				vnr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				vnr.Type = &typeVar
+			}
 		}
-		vnr.VirtualNetworkRuleProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		vnr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		vnr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		vnr.Type = &typeVar
 	}
 
 	return nil
@@ -1423,8 +1527,8 @@ type VirtualNetworkRuleProperties struct {
 	State VirtualNetworkRuleState `json:"state,omitempty"`
 }
 
-// VirtualNetworkRulesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// VirtualNetworkRulesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type VirtualNetworkRulesCreateOrUpdateFuture struct {
 	azure.Future
 	req *http.Request

@@ -18,6 +18,7 @@ package devices
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
@@ -242,8 +243,8 @@ type CertificateProperties struct {
 	Updated *date.TimeRFC1123 `json:"updated,omitempty"`
 }
 
-// CertificatePropertiesWithNonce the description of an X509 CA Certificate including the challenge nonce issued for
-// the Proof-Of-Possession flow.
+// CertificatePropertiesWithNonce the description of an X509 CA Certificate including the challenge nonce issued
+// for the Proof-Of-Possession flow.
 type CertificatePropertiesWithNonce struct {
 	// Subject - The certificate's subject name.
 	Subject *string `json:"subject,omitempty"`
@@ -306,15 +307,30 @@ type ErrorDetails struct {
 type EventHubConsumerGroupInfo struct {
 	autorest.Response `json:"-"`
 	// Tags - The tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// ID - The Event Hub-compatible consumer group identifier.
 	ID *string `json:"id,omitempty"`
 	// Name - The Event Hub-compatible consumer group name.
 	Name *string `json:"name,omitempty"`
 }
 
-// EventHubConsumerGroupsListResult the JSON-serialized array of Event Hub-compatible consumer group names with a next
-// link.
+// MarshalJSON is the custom marshaler for EventHubConsumerGroupInfo.
+func (ehcgi EventHubConsumerGroupInfo) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ehcgi.Tags != nil {
+		objectMap["tags"] = ehcgi.Tags
+	}
+	if ehcgi.ID != nil {
+		objectMap["id"] = ehcgi.ID
+	}
+	if ehcgi.Name != nil {
+		objectMap["name"] = ehcgi.Name
+	}
+	return json.Marshal(objectMap)
+}
+
+// EventHubConsumerGroupsListResult the JSON-serialized array of Event Hub-compatible consumer group names with a
+// next link.
 type EventHubConsumerGroupsListResult struct {
 	autorest.Response `json:"-"`
 	// Value - The array of Event Hub-compatible consumer group names.
@@ -438,8 +454,8 @@ type ExportDevicesRequest struct {
 	ExcludeKeys *bool `json:"ExcludeKeys,omitempty"`
 }
 
-// FallbackRouteProperties the properties of the fallback route. IoT Hub uses these properties when it routes messages
-// to the fallback endpoint.
+// FallbackRouteProperties the properties of the fallback route. IoT Hub uses these properties when it routes
+// messages to the fallback endpoint.
 type FallbackRouteProperties struct {
 	// Source - The source to which the routing rule is to be applied to. For example, DeviceMessages
 	Source *string `json:"source,omitempty"`
@@ -493,7 +509,7 @@ type IotHubDescription struct {
 	// Location - The resource location.
 	Location *string `json:"location,omitempty"`
 	// Tags - The resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Subscriptionid - The subscription identifier.
 	Subscriptionid *string `json:"subscriptionid,omitempty"`
 	// Resourcegroup - The name of the resource group that contains the IoT hub. A resource group name uniquely identifies the resource group within the subscription.
@@ -502,6 +518,42 @@ type IotHubDescription struct {
 	Etag       *string           `json:"etag,omitempty"`
 	Properties *IotHubProperties `json:"properties,omitempty"`
 	Sku        *IotHubSkuInfo    `json:"sku,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for IotHubDescription.
+func (ihd IotHubDescription) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ihd.Subscriptionid != nil {
+		objectMap["subscriptionid"] = ihd.Subscriptionid
+	}
+	if ihd.Resourcegroup != nil {
+		objectMap["resourcegroup"] = ihd.Resourcegroup
+	}
+	if ihd.Etag != nil {
+		objectMap["etag"] = ihd.Etag
+	}
+	if ihd.Properties != nil {
+		objectMap["properties"] = ihd.Properties
+	}
+	if ihd.Sku != nil {
+		objectMap["sku"] = ihd.Sku
+	}
+	if ihd.ID != nil {
+		objectMap["id"] = ihd.ID
+	}
+	if ihd.Name != nil {
+		objectMap["name"] = ihd.Name
+	}
+	if ihd.Type != nil {
+		objectMap["type"] = ihd.Type
+	}
+	if ihd.Location != nil {
+		objectMap["location"] = ihd.Location
+	}
+	if ihd.Tags != nil {
+		objectMap["tags"] = ihd.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // IotHubDescriptionListResult the JSON-serialized array of IotHubDescription objects with a next link.
@@ -628,12 +680,12 @@ type IotHubProperties struct {
 	// HostName - The name of the host.
 	HostName *string `json:"hostName,omitempty"`
 	// EventHubEndpoints - The Event Hub-compatible endpoint properties. The possible keys to this dictionary are events and operationsMonitoringEvents. Both of these keys have to be present in the dictionary while making create or update calls for the IoT hub.
-	EventHubEndpoints *map[string]*EventHubProperties `json:"eventHubEndpoints,omitempty"`
-	Routing           *RoutingProperties              `json:"routing,omitempty"`
+	EventHubEndpoints map[string]*EventHubProperties `json:"eventHubEndpoints"`
+	Routing           *RoutingProperties             `json:"routing,omitempty"`
 	// StorageEndpoints - The list of Azure Storage endpoints where you can upload files. Currently you can configure only one Azure Storage account and that MUST have its key as $default. Specifying more than one storage account causes an error to be thrown. Not specifying a value for this property when the enableFileUploadNotifications property is set to True, causes an error to be thrown.
-	StorageEndpoints *map[string]*StorageEndpointProperties `json:"storageEndpoints,omitempty"`
+	StorageEndpoints map[string]*StorageEndpointProperties `json:"storageEndpoints"`
 	// MessagingEndpoints - The messaging endpoint properties for the file upload notification queue.
-	MessagingEndpoints *map[string]*MessagingEndpointProperties `json:"messagingEndpoints,omitempty"`
+	MessagingEndpoints map[string]*MessagingEndpointProperties `json:"messagingEndpoints"`
 	// EnableFileUploadNotifications - If True, file upload notifications are enabled.
 	EnableFileUploadNotifications *bool                    `json:"enableFileUploadNotifications,omitempty"`
 	CloudToDevice                 *CloudToDeviceProperties `json:"cloudToDevice,omitempty"`
@@ -642,6 +694,49 @@ type IotHubProperties struct {
 	OperationsMonitoringProperties *OperationsMonitoringProperties `json:"operationsMonitoringProperties,omitempty"`
 	// Features - The capabilities and features enabled for the IoT hub. Possible values include: 'None', 'DeviceManagement'
 	Features Capabilities `json:"features,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for IotHubProperties.
+func (ihp IotHubProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ihp.AuthorizationPolicies != nil {
+		objectMap["authorizationPolicies"] = ihp.AuthorizationPolicies
+	}
+	if ihp.IPFilterRules != nil {
+		objectMap["ipFilterRules"] = ihp.IPFilterRules
+	}
+	if ihp.ProvisioningState != nil {
+		objectMap["provisioningState"] = ihp.ProvisioningState
+	}
+	if ihp.HostName != nil {
+		objectMap["hostName"] = ihp.HostName
+	}
+	if ihp.EventHubEndpoints != nil {
+		objectMap["eventHubEndpoints"] = ihp.EventHubEndpoints
+	}
+	if ihp.Routing != nil {
+		objectMap["routing"] = ihp.Routing
+	}
+	if ihp.StorageEndpoints != nil {
+		objectMap["storageEndpoints"] = ihp.StorageEndpoints
+	}
+	if ihp.MessagingEndpoints != nil {
+		objectMap["messagingEndpoints"] = ihp.MessagingEndpoints
+	}
+	if ihp.EnableFileUploadNotifications != nil {
+		objectMap["enableFileUploadNotifications"] = ihp.EnableFileUploadNotifications
+	}
+	if ihp.CloudToDevice != nil {
+		objectMap["cloudToDevice"] = ihp.CloudToDevice
+	}
+	if ihp.Comments != nil {
+		objectMap["comments"] = ihp.Comments
+	}
+	if ihp.OperationsMonitoringProperties != nil {
+		objectMap["operationsMonitoringProperties"] = ihp.OperationsMonitoringProperties
+	}
+	objectMap["features"] = ihp.Features
+	return json.Marshal(objectMap)
 }
 
 // IotHubQuotaMetricInfo quota metrics properties.
@@ -1210,10 +1305,19 @@ func (page OperationListResultPage) Values() []Operation {
 }
 
 // OperationsMonitoringProperties the operations monitoring properties for the IoT hub. The possible keys to the
-// dictionary are Connections, DeviceTelemetry, C2DCommands, DeviceIdentityOperations, FileUploadOperations, Routes,
-// D2CTwinOperations, C2DTwinOperations, TwinQueries, JobsOperations, DirectMethods.
+// dictionary are Connections, DeviceTelemetry, C2DCommands, DeviceIdentityOperations, FileUploadOperations,
+// Routes, D2CTwinOperations, C2DTwinOperations, TwinQueries, JobsOperations, DirectMethods.
 type OperationsMonitoringProperties struct {
-	Events *map[string]*OperationMonitoringLevel `json:"events,omitempty"`
+	Events map[string]*OperationMonitoringLevel `json:"events"`
+}
+
+// MarshalJSON is the custom marshaler for OperationsMonitoringProperties.
+func (omp OperationsMonitoringProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if omp.Events != nil {
+		objectMap["events"] = omp.Events
+	}
+	return json.Marshal(objectMap)
 }
 
 // RegistryStatistics identity registry statistics.
@@ -1238,7 +1342,28 @@ type Resource struct {
 	// Location - The resource location.
 	Location *string `json:"location,omitempty"`
 	// Tags - The resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // RouteProperties the properties of a routing rule that your IoT hub uses to route messages to endpoints.
@@ -1255,9 +1380,9 @@ type RouteProperties struct {
 	IsEnabled *bool `json:"isEnabled,omitempty"`
 }
 
-// RoutingEndpoints the properties related to the custom endpoints to which your IoT hub routes messages based on the
-// routing rules. A maximum of 10 custom endpoints are allowed across all endpoint types for paid hubs and only 1
-// custom endpoint is allowed across all endpoint types for free hubs.
+// RoutingEndpoints the properties related to the custom endpoints to which your IoT hub routes messages based on
+// the routing rules. A maximum of 10 custom endpoints are allowed across all endpoint types for paid hubs and only
+// 1 custom endpoint is allowed across all endpoint types for free hubs.
 type RoutingEndpoints struct {
 	// ServiceBusQueues - The list of Service Bus queue endpoints that IoT hub routes the messages to, based on the routing rules.
 	ServiceBusQueues *[]RoutingServiceBusQueueEndpointProperties `json:"serviceBusQueues,omitempty"`
@@ -1340,7 +1465,7 @@ type RoutingStorageContainerProperties struct {
 // SetObject ...
 type SetObject struct {
 	autorest.Response `json:"-"`
-	Value             *map[string]interface{} `json:"value,omitempty"`
+	Value             interface{} `json:"value,omitempty"`
 }
 
 // SharedAccessSignatureAuthorizationRule the properties of an IoT hub shared access policy.

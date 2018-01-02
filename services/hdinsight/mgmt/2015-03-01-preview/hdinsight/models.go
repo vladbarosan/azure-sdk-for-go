@@ -7,6 +7,7 @@ package hdinsight
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/to"
@@ -91,9 +92,33 @@ type Application struct {
 	// Etag - The ETag for the application
 	Etag *string `json:"etag,omitempty"`
 	// Tags - The tags for the application.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Properties - The properties of the application.
 	Properties *ApplicationGetProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Application.
+func (a Application) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if a.Etag != nil {
+		objectMap["etag"] = a.Etag
+	}
+	if a.Tags != nil {
+		objectMap["tags"] = a.Tags
+	}
+	if a.Properties != nil {
+		objectMap["properties"] = a.Properties
+	}
+	if a.ID != nil {
+		objectMap["id"] = a.ID
+	}
+	if a.Name != nil {
+		objectMap["name"] = a.Name
+	}
+	if a.Type != nil {
+		objectMap["type"] = a.Type
+	}
+	return json.Marshal(objectMap)
 }
 
 // ApplicationGetEndpoint gets the application SSH endpoint
@@ -109,7 +134,7 @@ type ApplicationGetEndpoint struct {
 // ApplicationGetHTTPSEndpoint gets the application HTTP endpoints.
 type ApplicationGetHTTPSEndpoint struct {
 	// AdditionalProperties - Unmatched properties from the message are deserialized this collection
-	AdditionalProperties *map[string]*string `json:",omitempty"`
+	AdditionalProperties map[string]*string `json:""`
 	// AccessModes - The list of access modes for the application.
 	AccessModes *[]string `json:"accessModes,omitempty"`
 	// Location - The location of the endpoint.
@@ -118,6 +143,27 @@ type ApplicationGetHTTPSEndpoint struct {
 	DestinationPort *int32 `json:"destinationPort,omitempty"`
 	// PublicPort - The public port to connect to.
 	PublicPort *int32 `json:"publicPort,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ApplicationGetHTTPSEndpoint.
+func (aghe ApplicationGetHTTPSEndpoint) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if aghe.AccessModes != nil {
+		objectMap["accessModes"] = aghe.AccessModes
+	}
+	if aghe.Location != nil {
+		objectMap["location"] = aghe.Location
+	}
+	if aghe.DestinationPort != nil {
+		objectMap["destinationPort"] = aghe.DestinationPort
+	}
+	if aghe.PublicPort != nil {
+		objectMap["publicPort"] = aghe.PublicPort
+	}
+	for k, v := range aghe.AdditionalProperties {
+		objectMap[k] = v
+	}
+	return json.Marshal(objectMap)
 }
 
 // ApplicationGetProperties the HDInsight cluster application GET response.
@@ -148,8 +194,8 @@ type ApplicationGetProperties struct {
 	AdditionalProperties *string `json:"additionalProperties,omitempty"`
 }
 
-// ApplicationListResult result of the request to list cluster Applications. It contains a list of operations and a URL
-// link to get the next set of results.
+// ApplicationListResult result of the request to list cluster Applications. It contains a list of operations and a
+// URL link to get the next set of results.
 type ApplicationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of HDInsight applications installed on HDInsight cluster.
@@ -286,17 +332,41 @@ func (future ApplicationsDeleteFuture) Result(client ApplicationsClient) (ar aut
 type CapabilitiesResult struct {
 	autorest.Response `json:"-"`
 	// Versions - The version capability.
-	Versions *map[string]*VersionsCapability `json:"versions,omitempty"`
+	Versions map[string]*VersionsCapability `json:"versions"`
 	// Regions - The virtual machine size compatibilty features.
-	Regions *map[string]*RegionsCapability `json:"regions,omitempty"`
+	Regions map[string]*RegionsCapability `json:"regions"`
 	// VMSizes - The virtual machine sizes.
-	VMSizes *map[string]*VMSizesCapability `json:"vmSizes,omitempty"`
+	VMSizes map[string]*VMSizesCapability `json:"vmSizes"`
 	// VMSizeFilters - The virtual machine size compatibilty filters.
 	VMSizeFilters *[]VMSizeCompatibilityFilter `json:"vmSize_filters,omitempty"`
 	// Features - The capabilty features.
 	Features *[]string `json:"features,omitempty"`
 	// Quota - The quota capability.
 	Quota *QuotaCapability `json:"quota,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for CapabilitiesResult.
+func (cr CapabilitiesResult) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if cr.Versions != nil {
+		objectMap["versions"] = cr.Versions
+	}
+	if cr.Regions != nil {
+		objectMap["regions"] = cr.Regions
+	}
+	if cr.VMSizes != nil {
+		objectMap["vmSizes"] = cr.VMSizes
+	}
+	if cr.VMSizeFilters != nil {
+		objectMap["vmSize_filters"] = cr.VMSizeFilters
+	}
+	if cr.Features != nil {
+		objectMap["features"] = cr.Features
+	}
+	if cr.Quota != nil {
+		objectMap["quota"] = cr.Quota
+	}
+	return json.Marshal(objectMap)
 }
 
 // Cluster the HDInsight cluster.
@@ -311,11 +381,38 @@ type Cluster struct {
 	// Location - The Azure Region where the resource lives
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Etag - The ETag for the resource
 	Etag *string `json:"etag,omitempty"`
 	// Properties - The properties of the cluster.
 	Properties *ClusterGetProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Cluster.
+func (c Cluster) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if c.Etag != nil {
+		objectMap["etag"] = c.Etag
+	}
+	if c.Properties != nil {
+		objectMap["properties"] = c.Properties
+	}
+	if c.Location != nil {
+		objectMap["location"] = c.Location
+	}
+	if c.Tags != nil {
+		objectMap["tags"] = c.Tags
+	}
+	if c.ID != nil {
+		objectMap["id"] = c.ID
+	}
+	if c.Name != nil {
+		objectMap["name"] = c.Name
+	}
+	if c.Type != nil {
+		objectMap["type"] = c.Type
+	}
+	return json.Marshal(objectMap)
 }
 
 // ClusterCreateParametersExtended the CreateCluster request parameters.
@@ -323,9 +420,24 @@ type ClusterCreateParametersExtended struct {
 	// Location - The location of the cluster.
 	Location *string `json:"location,omitempty"`
 	// Tags - The resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Properties - The cluster create parameters.
 	Properties *ClusterCreateProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ClusterCreateParametersExtended.
+func (ccpe ClusterCreateParametersExtended) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ccpe.Location != nil {
+		objectMap["location"] = ccpe.Location
+	}
+	if ccpe.Tags != nil {
+		objectMap["tags"] = ccpe.Tags
+	}
+	if ccpe.Properties != nil {
+		objectMap["properties"] = ccpe.Properties
+	}
+	return json.Marshal(objectMap)
 }
 
 // ClusterCreateProperties the cluster create parameters.
@@ -353,9 +465,25 @@ type ClusterDefinition struct {
 	// Kind - The type of cluster.
 	Kind *string `json:"kind,omitempty"`
 	// ComponentVersion - The versions of different services in the cluster.
-	ComponentVersion *map[string]*string `json:"componentVersion,omitempty"`
+	ComponentVersion map[string]*string `json:"componentVersion"`
 	// Configurations - The cluster configurations.
-	Configurations *map[string]interface{} `json:"configurations,omitempty"`
+	Configurations interface{} `json:"configurations,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ClusterDefinition.
+func (cd ClusterDefinition) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if cd.Blueprint != nil {
+		objectMap["blueprint"] = cd.Blueprint
+	}
+	if cd.Kind != nil {
+		objectMap["kind"] = cd.Kind
+	}
+	if cd.ComponentVersion != nil {
+		objectMap["componentVersion"] = cd.ComponentVersion
+	}
+	objectMap["configurations"] = cd.Configurations
+	return json.Marshal(objectMap)
 }
 
 // ClusterGetProperties the properties of cluster.
@@ -524,7 +652,16 @@ type ClusterMonitoringResponse struct {
 // ClusterPatchParameters the PatchCluster request parameters
 type ClusterPatchParameters struct {
 	// Tags - The resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for ClusterPatchParameters.
+func (cpp ClusterPatchParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if cpp.Tags != nil {
+		objectMap["tags"] = cpp.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // ClusterResizeParameters the Resize Cluster request parameters.
@@ -664,8 +801,8 @@ type ComputeProfile struct {
 	Roles *[]Role `json:"roles,omitempty"`
 }
 
-// ConfigurationsUpdateHTTPSettingsFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ConfigurationsUpdateHTTPSettingsFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ConfigurationsUpdateHTTPSettingsFuture struct {
 	azure.Future
 	req *http.Request
@@ -851,8 +988,8 @@ type OperationDisplay struct {
 	Operation *string `json:"operation,omitempty"`
 }
 
-// OperationListResult result of the request to list HDInsight operations. It contains a list of operations and a URL
-// link to get the next set of results.
+// OperationListResult result of the request to list HDInsight operations. It contains a list of operations and a
+// URL link to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - The list of HDInsight operations supported by the HDInsight resource provider.
@@ -968,8 +1105,8 @@ type OsProfile struct {
 	LinuxOperatingSystemProfile *LinuxOperatingSystemProfile `json:"linuxOperatingSystemProfile,omitempty"`
 }
 
-// ProxyResource the resource model definition for a ARM proxy resource. It will have everything other than required
-// location and tags
+// ProxyResource the resource model definition for a ARM proxy resource. It will have everything other than
+// required location and tags
 type ProxyResource struct {
 	// ID - Fully qualified resource Id for the resource.
 	ID *string `json:"id,omitempty"`
@@ -1099,7 +1236,8 @@ type ScriptActionExecutionHistoryList struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// ScriptActionExecutionHistoryListIterator provides access to a complete listing of RuntimeScriptActionDetail values.
+// ScriptActionExecutionHistoryListIterator provides access to a complete listing of RuntimeScriptActionDetail
+// values.
 type ScriptActionExecutionHistoryListIterator struct {
 	i    int
 	page ScriptActionExecutionHistoryListPage
@@ -1337,7 +1475,16 @@ type SecurityProfile struct {
 // SetString ...
 type SetString struct {
 	autorest.Response `json:"-"`
-	Value             *map[string]*string `json:"value,omitempty"`
+	Value             map[string]*string `json:"value"`
+}
+
+// MarshalJSON is the custom marshaler for SetString.
+func (ss SetString) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ss.Value != nil {
+		objectMap["value"] = ss.Value
+	}
+	return json.Marshal(objectMap)
 }
 
 // SSHProfile the list of SSH public keys.
@@ -1381,7 +1528,28 @@ type TrackedResource struct {
 	// Location - The Azure Region where the resource lives
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for TrackedResource.
+func (tr TrackedResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if tr.Location != nil {
+		objectMap["location"] = tr.Location
+	}
+	if tr.Tags != nil {
+		objectMap["tags"] = tr.Tags
+	}
+	if tr.ID != nil {
+		objectMap["id"] = tr.ID
+	}
+	if tr.Name != nil {
+		objectMap["name"] = tr.Name
+	}
+	if tr.Type != nil {
+		objectMap["type"] = tr.Type
+	}
+	return json.Marshal(objectMap)
 }
 
 // VersionsCapability the version capability.
@@ -1399,7 +1567,25 @@ type VersionSpec struct {
 	// IsDefault - Whether or not the version is the default version.
 	IsDefault *string `json:"isDefault,omitempty"`
 	// ComponentVersions - The component version property.
-	ComponentVersions *map[string]*string `json:"componentVersions,omitempty"`
+	ComponentVersions map[string]*string `json:"componentVersions"`
+}
+
+// MarshalJSON is the custom marshaler for VersionSpec.
+func (vs VersionSpec) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if vs.FriendlyName != nil {
+		objectMap["friendlyName"] = vs.FriendlyName
+	}
+	if vs.DisplayName != nil {
+		objectMap["displayName"] = vs.DisplayName
+	}
+	if vs.IsDefault != nil {
+		objectMap["isDefault"] = vs.IsDefault
+	}
+	if vs.ComponentVersions != nil {
+		objectMap["componentVersions"] = vs.ComponentVersions
+	}
+	return json.Marshal(objectMap)
 }
 
 // VirtualNetworkProfile the virtual network properties.

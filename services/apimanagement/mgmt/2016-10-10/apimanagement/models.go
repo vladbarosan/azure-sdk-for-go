@@ -648,9 +648,9 @@ type BackendBaseParameters struct {
 	// Certificate - List of Client Certificate Thumbprint.
 	Certificate *[]string `json:"certificate,omitempty"`
 	// Query - Query Parameter description.
-	Query *map[string][]string `json:"query,omitempty"`
+	Query map[string][]string `json:"query"`
 	// Header - Header Parameter description.
-	Header *map[string][]string `json:"header,omitempty"`
+	Header map[string][]string `json:"header"`
 	// URL - WebProxy Server AbsoluteUri property which includes the entire URI stored in the Uri instance, including all fragments and query strings.
 	URL *string `json:"url,omitempty"`
 	// Username - Username to connect to the WebProxy server
@@ -666,6 +666,42 @@ type BackendBaseParameters struct {
 	*BackendProperties `json:"properties,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for BackendBaseParameters.
+func (bbp BackendBaseParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if bbp.Certificate != nil {
+		objectMap["certificate"] = bbp.Certificate
+	}
+	if bbp.Query != nil {
+		objectMap["query"] = bbp.Query
+	}
+	if bbp.Header != nil {
+		objectMap["header"] = bbp.Header
+	}
+	if bbp.URL != nil {
+		objectMap["url"] = bbp.URL
+	}
+	if bbp.Username != nil {
+		objectMap["username"] = bbp.Username
+	}
+	if bbp.Password != nil {
+		objectMap["password"] = bbp.Password
+	}
+	if bbp.Title != nil {
+		objectMap["title"] = bbp.Title
+	}
+	if bbp.Description != nil {
+		objectMap["description"] = bbp.Description
+	}
+	if bbp.ResourceID != nil {
+		objectMap["resourceId"] = bbp.ResourceID
+	}
+	if bbp.BackendProperties != nil {
+		objectMap["properties"] = bbp.BackendProperties
+	}
+	return json.Marshal(objectMap)
+}
+
 // UnmarshalJSON is the custom unmarshaler for BackendBaseParameters struct.
 func (bbp *BackendBaseParameters) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -673,106 +709,99 @@ func (bbp *BackendBaseParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["certificate"]
-	if v != nil {
-		var certificate []string
-		err = json.Unmarshal(*m["certificate"], &certificate)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "certificate":
+			if v != nil {
+				var certificate []string
+				err = json.Unmarshal(*v, &certificate)
+				if err != nil {
+					return err
+				}
+				bbp.Certificate = &certificate
+			}
+		case "query":
+			if v != nil {
+				var query map[string][]string
+				err = json.Unmarshal(*v, &query)
+				if err != nil {
+					return err
+				}
+				bbp.Query = query
+			}
+		case "header":
+			if v != nil {
+				var header map[string][]string
+				err = json.Unmarshal(*v, &header)
+				if err != nil {
+					return err
+				}
+				bbp.Header = header
+			}
+		case "url":
+			if v != nil {
+				var URL string
+				err = json.Unmarshal(*v, &URL)
+				if err != nil {
+					return err
+				}
+				bbp.URL = &URL
+			}
+		case "username":
+			if v != nil {
+				var username string
+				err = json.Unmarshal(*v, &username)
+				if err != nil {
+					return err
+				}
+				bbp.Username = &username
+			}
+		case "password":
+			if v != nil {
+				var password string
+				err = json.Unmarshal(*v, &password)
+				if err != nil {
+					return err
+				}
+				bbp.Password = &password
+			}
+		case "title":
+			if v != nil {
+				var title string
+				err = json.Unmarshal(*v, &title)
+				if err != nil {
+					return err
+				}
+				bbp.Title = &title
+			}
+		case "description":
+			if v != nil {
+				var description string
+				err = json.Unmarshal(*v, &description)
+				if err != nil {
+					return err
+				}
+				bbp.Description = &description
+			}
+		case "resourceId":
+			if v != nil {
+				var resourceID string
+				err = json.Unmarshal(*v, &resourceID)
+				if err != nil {
+					return err
+				}
+				bbp.ResourceID = &resourceID
+			}
+		case "properties":
+			if v != nil {
+				var backendProperties BackendProperties
+				err = json.Unmarshal(*v, &backendProperties)
+				if err != nil {
+					return err
+				}
+				bbp.BackendProperties = &backendProperties
+			}
 		}
-		bbp.Certificate = &certificate
-	}
-
-	v = m["query"]
-	if v != nil {
-		var query map[string][]string
-		err = json.Unmarshal(*m["query"], &query)
-		if err != nil {
-			return err
-		}
-		bbp.Query = &query
-	}
-
-	v = m["header"]
-	if v != nil {
-		var header map[string][]string
-		err = json.Unmarshal(*m["header"], &header)
-		if err != nil {
-			return err
-		}
-		bbp.Header = &header
-	}
-
-	v = m["url"]
-	if v != nil {
-		var URLVar string
-		err = json.Unmarshal(*m["url"], &URLVar)
-		if err != nil {
-			return err
-		}
-		bbp.URL = &URLVar
-	}
-
-	v = m["username"]
-	if v != nil {
-		var username string
-		err = json.Unmarshal(*m["username"], &username)
-		if err != nil {
-			return err
-		}
-		bbp.Username = &username
-	}
-
-	v = m["password"]
-	if v != nil {
-		var password string
-		err = json.Unmarshal(*m["password"], &password)
-		if err != nil {
-			return err
-		}
-		bbp.Password = &password
-	}
-
-	v = m["title"]
-	if v != nil {
-		var title string
-		err = json.Unmarshal(*m["title"], &title)
-		if err != nil {
-			return err
-		}
-		bbp.Title = &title
-	}
-
-	v = m["description"]
-	if v != nil {
-		var description string
-		err = json.Unmarshal(*m["description"], &description)
-		if err != nil {
-			return err
-		}
-		bbp.Description = &description
-	}
-
-	v = m["resourceId"]
-	if v != nil {
-		var resourceID string
-		err = json.Unmarshal(*m["resourceId"], &resourceID)
-		if err != nil {
-			return err
-		}
-		bbp.ResourceID = &resourceID
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties BackendProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		bbp.BackendProperties = &properties
 	}
 
 	return nil
@@ -887,9 +916,9 @@ type BackendContract struct {
 	// Certificate - List of Client Certificate Thumbprint.
 	Certificate *[]string `json:"certificate,omitempty"`
 	// Query - Query Parameter description.
-	Query *map[string][]string `json:"query,omitempty"`
+	Query map[string][]string `json:"query"`
 	// Header - Header Parameter description.
-	Header *map[string][]string `json:"header,omitempty"`
+	Header map[string][]string `json:"header"`
 	// URL - WebProxy Server AbsoluteUri property which includes the entire URI stored in the Uri instance, including all fragments and query strings.
 	URL *string `json:"url,omitempty"`
 	// Username - Username to connect to the WebProxy server
@@ -909,6 +938,46 @@ type BackendContract struct {
 	Protocol BackendProtocol `json:"protocol,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for BackendContract.
+func (bc BackendContract) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if bc.ID != nil {
+		objectMap["id"] = bc.ID
+	}
+	objectMap["protocol"] = bc.Protocol
+	if bc.Certificate != nil {
+		objectMap["certificate"] = bc.Certificate
+	}
+	if bc.Query != nil {
+		objectMap["query"] = bc.Query
+	}
+	if bc.Header != nil {
+		objectMap["header"] = bc.Header
+	}
+	if bc.URL != nil {
+		objectMap["url"] = bc.URL
+	}
+	if bc.Username != nil {
+		objectMap["username"] = bc.Username
+	}
+	if bc.Password != nil {
+		objectMap["password"] = bc.Password
+	}
+	if bc.Title != nil {
+		objectMap["title"] = bc.Title
+	}
+	if bc.Description != nil {
+		objectMap["description"] = bc.Description
+	}
+	if bc.ResourceID != nil {
+		objectMap["resourceId"] = bc.ResourceID
+	}
+	if bc.BackendProperties != nil {
+		objectMap["properties"] = bc.BackendProperties
+	}
+	return json.Marshal(objectMap)
+}
+
 // BackendCredentialsContract details of the Credentials used to connect to Backend.
 type BackendCredentialsContract struct {
 	// Scheme - Authentication Scheme name.
@@ -918,9 +987,30 @@ type BackendCredentialsContract struct {
 	// Certificate - List of Client Certificate Thumbprint.
 	Certificate *[]string `json:"certificate,omitempty"`
 	// Query - Query Parameter description.
-	Query *map[string][]string `json:"query,omitempty"`
+	Query map[string][]string `json:"query"`
 	// Header - Header Parameter description.
-	Header *map[string][]string `json:"header,omitempty"`
+	Header map[string][]string `json:"header"`
+}
+
+// MarshalJSON is the custom marshaler for BackendCredentialsContract.
+func (bcc BackendCredentialsContract) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if bcc.Certificate != nil {
+		objectMap["certificate"] = bcc.Certificate
+	}
+	if bcc.Query != nil {
+		objectMap["query"] = bcc.Query
+	}
+	if bcc.Header != nil {
+		objectMap["header"] = bcc.Header
+	}
+	if bcc.Scheme != nil {
+		objectMap["scheme"] = bcc.Scheme
+	}
+	if bcc.Parameter != nil {
+		objectMap["parameter"] = bcc.Parameter
+	}
+	return json.Marshal(objectMap)
 }
 
 // BackendProperties properties specific to a Backend.
@@ -948,9 +1038,9 @@ type BackendResponse struct {
 	// Certificate - List of Client Certificate Thumbprint.
 	Certificate *[]string `json:"certificate,omitempty"`
 	// Query - Query Parameter description.
-	Query *map[string][]string `json:"query,omitempty"`
+	Query map[string][]string `json:"query"`
 	// Header - Header Parameter description.
-	Header *map[string][]string `json:"header,omitempty"`
+	Header map[string][]string `json:"header"`
 	// URL - WebProxy Server AbsoluteUri property which includes the entire URI stored in the Uri instance, including all fragments and query strings.
 	URL *string `json:"url,omitempty"`
 	// Username - Username to connect to the WebProxy server
@@ -970,14 +1060,54 @@ type BackendResponse struct {
 	Protocol BackendProtocol `json:"protocol,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for BackendResponse.
+func (br BackendResponse) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if br.ID != nil {
+		objectMap["id"] = br.ID
+	}
+	objectMap["protocol"] = br.Protocol
+	if br.Certificate != nil {
+		objectMap["certificate"] = br.Certificate
+	}
+	if br.Query != nil {
+		objectMap["query"] = br.Query
+	}
+	if br.Header != nil {
+		objectMap["header"] = br.Header
+	}
+	if br.URL != nil {
+		objectMap["url"] = br.URL
+	}
+	if br.Username != nil {
+		objectMap["username"] = br.Username
+	}
+	if br.Password != nil {
+		objectMap["password"] = br.Password
+	}
+	if br.Title != nil {
+		objectMap["title"] = br.Title
+	}
+	if br.Description != nil {
+		objectMap["description"] = br.Description
+	}
+	if br.ResourceID != nil {
+		objectMap["resourceId"] = br.ResourceID
+	}
+	if br.BackendProperties != nil {
+		objectMap["properties"] = br.BackendProperties
+	}
+	return json.Marshal(objectMap)
+}
+
 // BackendUpdateParameters parameters supplied to the Update Backend operation.
 type BackendUpdateParameters struct {
 	// Certificate - List of Client Certificate Thumbprint.
 	Certificate *[]string `json:"certificate,omitempty"`
 	// Query - Query Parameter description.
-	Query *map[string][]string `json:"query,omitempty"`
+	Query map[string][]string `json:"query"`
 	// Header - Header Parameter description.
-	Header *map[string][]string `json:"header,omitempty"`
+	Header map[string][]string `json:"header"`
 	// URL - WebProxy Server AbsoluteUri property which includes the entire URI stored in the Uri instance, including all fragments and query strings.
 	URL *string `json:"url,omitempty"`
 	// Username - Username to connect to the WebProxy server
@@ -993,6 +1123,43 @@ type BackendUpdateParameters struct {
 	*BackendProperties `json:"properties,omitempty"`
 	// Protocol - Backend communication protocol. Possible values include: 'BackendProtocolHTTP', 'BackendProtocolSoap'
 	Protocol BackendProtocol `json:"protocol,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for BackendUpdateParameters.
+func (bup BackendUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	objectMap["protocol"] = bup.Protocol
+	if bup.Certificate != nil {
+		objectMap["certificate"] = bup.Certificate
+	}
+	if bup.Query != nil {
+		objectMap["query"] = bup.Query
+	}
+	if bup.Header != nil {
+		objectMap["header"] = bup.Header
+	}
+	if bup.URL != nil {
+		objectMap["url"] = bup.URL
+	}
+	if bup.Username != nil {
+		objectMap["username"] = bup.Username
+	}
+	if bup.Password != nil {
+		objectMap["password"] = bup.Password
+	}
+	if bup.Title != nil {
+		objectMap["title"] = bup.Title
+	}
+	if bup.Description != nil {
+		objectMap["description"] = bup.Description
+	}
+	if bup.ResourceID != nil {
+		objectMap["resourceId"] = bup.ResourceID
+	}
+	if bup.BackendProperties != nil {
+		objectMap["properties"] = bup.BackendProperties
+	}
+	return json.Marshal(objectMap)
 }
 
 // CertificateCollection paged Certificates list representation.
@@ -1344,8 +1511,9 @@ type HostnameConfiguration struct {
 	Certificate *CertificateInformation `json:"certificate,omitempty"`
 }
 
-// IdentityProviderContract the external Identity Providers like Facebook, Google, Microsoft, Twitter or Azure Active
-// Directory which can be used to enable access to the API Management service developer portal for all users.
+// IdentityProviderContract the external Identity Providers like Facebook, Google, Microsoft, Twitter or Azure
+// Active Directory which can be used to enable access to the API Management service developer portal for all
+// users.
 type IdentityProviderContract struct {
 	autorest.Response `json:"-"`
 	// ClientID - Client Id of the Application in the external Identity Provider. It is App ID for Facebook login, Client ID for Google login, App ID for Microsoft.
@@ -1486,13 +1654,31 @@ type LoggerCreateParameters struct {
 	// Description - Logger description.
 	Description *string `json:"description,omitempty"`
 	// Credentials - The name and SendRule connection string of the event hub.
-	Credentials *map[string]*string `json:"credentials,omitempty"`
+	Credentials map[string]*string `json:"credentials"`
 	// IsBuffered - Whether records are buffered in the logger before publishing. Default is assumed to be true.
 	IsBuffered *bool `json:"isBuffered,omitempty"`
 }
 
-// LoggerResponse the Logger entity in API Management represents an event sink that you can use to log API Management
-// events. Currently the Logger entity supports logging API Management events to Azure Event Hubs.
+// MarshalJSON is the custom marshaler for LoggerCreateParameters.
+func (lcp LoggerCreateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if lcp.Type != nil {
+		objectMap["type"] = lcp.Type
+	}
+	if lcp.Description != nil {
+		objectMap["description"] = lcp.Description
+	}
+	if lcp.Credentials != nil {
+		objectMap["credentials"] = lcp.Credentials
+	}
+	if lcp.IsBuffered != nil {
+		objectMap["isBuffered"] = lcp.IsBuffered
+	}
+	return json.Marshal(objectMap)
+}
+
+// LoggerResponse the Logger entity in API Management represents an event sink that you can use to log API
+// Management events. Currently the Logger entity supports logging API Management events to Azure Event Hubs.
 type LoggerResponse struct {
 	autorest.Response `json:"-"`
 	// ID - Uniquely identifies the logger within the current API Management service instance. The value is a valid relative URL in the format of /loggers/{loggerId} where {loggerId} is a logger identifier.
@@ -1502,9 +1688,30 @@ type LoggerResponse struct {
 	// Description - Logger description.
 	Description *string `json:"description,omitempty"`
 	// Credentials - The name and SendRule connection string of the event hub.
-	Credentials *map[string]*string `json:"credentials,omitempty"`
+	Credentials map[string]*string `json:"credentials"`
 	// IsBuffered - Whether records are buffered in the logger before publishing. Default is assumed to be true.
 	IsBuffered *bool `json:"isBuffered,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for LoggerResponse.
+func (lr LoggerResponse) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if lr.ID != nil {
+		objectMap["id"] = lr.ID
+	}
+	if lr.Type != nil {
+		objectMap["type"] = lr.Type
+	}
+	if lr.Description != nil {
+		objectMap["description"] = lr.Description
+	}
+	if lr.Credentials != nil {
+		objectMap["credentials"] = lr.Credentials
+	}
+	if lr.IsBuffered != nil {
+		objectMap["isBuffered"] = lr.IsBuffered
+	}
+	return json.Marshal(objectMap)
 }
 
 // LoggerUpdateParameters parameters supplied to the Update Logger operation.
@@ -1514,9 +1721,27 @@ type LoggerUpdateParameters struct {
 	// Description - Logger description.
 	Description *string `json:"description,omitempty"`
 	// Credentials - Logger credentials.
-	Credentials *map[string]*string `json:"credentials,omitempty"`
+	Credentials map[string]*string `json:"credentials"`
 	// IsBuffered - whether records are buffered in the logger before publishing. Default is assumed to be true.
 	IsBuffered *bool `json:"isBuffered,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for LoggerUpdateParameters.
+func (lup LoggerUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if lup.Type != nil {
+		objectMap["type"] = lup.Type
+	}
+	if lup.Description != nil {
+		objectMap["description"] = lup.Description
+	}
+	if lup.Credentials != nil {
+		objectMap["credentials"] = lup.Credentials
+	}
+	if lup.IsBuffered != nil {
+		objectMap["isBuffered"] = lup.IsBuffered
+	}
+	return json.Marshal(objectMap)
 }
 
 // NetworkStatusContract network Status details.
@@ -1918,8 +2143,8 @@ type OperationEntityBaseContract struct {
 	Responses *[]ResultContract `json:"responses,omitempty"`
 }
 
-// OperationListResult result of the request to list REST API operations. It contains a list of operations and a URL
-// nextLink to get the next set of results.
+// OperationListResult result of the request to list REST API operations. It contains a list of operations and a
+// URL nextLink to get the next set of results.
 type OperationListResult struct {
 	autorest.Response `json:"-"`
 	// Value - List of operations supported by the resource provider.
@@ -2626,7 +2851,28 @@ type Resource struct {
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // ResultContract operation response details.
@@ -2832,9 +3078,61 @@ type ServiceProperties struct {
 	// AdditionalLocations - Additional datacenter locations of the API Management service.
 	AdditionalLocations *[]AdditionalRegion `json:"additionalLocations,omitempty"`
 	// CustomProperties - Custom properties of the API Management service, like disabling TLS 1.0.
-	CustomProperties *map[string]*string `json:"customProperties,omitempty"`
+	CustomProperties map[string]*string `json:"customProperties"`
 	// VpnType - The type of VPN in which API Managemet service needs to be configured in. None (Default Value) means the API Management service is not part of any Virtual Network, External means the API Management deployment is set up inside a Virtual Network having an Internet Facing Endpoint, and Internal means that API Management deployment is setup inside a Virtual Network having an Intranet Facing Endpoint only. Possible values include: 'VirtualNetworkTypeNone', 'VirtualNetworkTypeExternal', 'VirtualNetworkTypeInternal'
 	VpnType VirtualNetworkType `json:"vpnType,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ServiceProperties.
+func (sp ServiceProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if sp.PublisherEmail != nil {
+		objectMap["publisherEmail"] = sp.PublisherEmail
+	}
+	if sp.PublisherName != nil {
+		objectMap["publisherName"] = sp.PublisherName
+	}
+	if sp.ProvisioningState != nil {
+		objectMap["provisioningState"] = sp.ProvisioningState
+	}
+	if sp.TargetProvisioningState != nil {
+		objectMap["targetProvisioningState"] = sp.TargetProvisioningState
+	}
+	if sp.CreatedAtUtc != nil {
+		objectMap["createdAtUtc"] = sp.CreatedAtUtc
+	}
+	if sp.RuntimeURL != nil {
+		objectMap["runtimeUrl"] = sp.RuntimeURL
+	}
+	if sp.PortalURL != nil {
+		objectMap["portalUrl"] = sp.PortalURL
+	}
+	if sp.ManagementAPIURL != nil {
+		objectMap["managementApiUrl"] = sp.ManagementAPIURL
+	}
+	if sp.ScmURL != nil {
+		objectMap["scmUrl"] = sp.ScmURL
+	}
+	if sp.AddresserEmail != nil {
+		objectMap["addresserEmail"] = sp.AddresserEmail
+	}
+	if sp.HostnameConfigurations != nil {
+		objectMap["hostnameConfigurations"] = sp.HostnameConfigurations
+	}
+	if sp.StaticIPs != nil {
+		objectMap["staticIPs"] = sp.StaticIPs
+	}
+	if sp.Vpnconfiguration != nil {
+		objectMap["vpnconfiguration"] = sp.Vpnconfiguration
+	}
+	if sp.AdditionalLocations != nil {
+		objectMap["additionalLocations"] = sp.AdditionalLocations
+	}
+	if sp.CustomProperties != nil {
+		objectMap["customProperties"] = sp.CustomProperties
+	}
+	objectMap["vpnType"] = sp.VpnType
+	return json.Marshal(objectMap)
 }
 
 // ServiceResource a single API Management service resource in List or Get response.
@@ -2849,13 +3147,43 @@ type ServiceResource struct {
 	// Location - Resource location.
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// ServiceProperties - Properties of the API Management service.
 	*ServiceProperties `json:"properties,omitempty"`
 	// Sku - SKU properties of the API Management service.
 	Sku *ServiceSkuProperties `json:"sku,omitempty"`
 	// Etag - ETag of the resource.
 	Etag *string `json:"etag,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ServiceResource.
+func (sr ServiceResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if sr.ServiceProperties != nil {
+		objectMap["properties"] = sr.ServiceProperties
+	}
+	if sr.Sku != nil {
+		objectMap["sku"] = sr.Sku
+	}
+	if sr.Etag != nil {
+		objectMap["etag"] = sr.Etag
+	}
+	if sr.ID != nil {
+		objectMap["id"] = sr.ID
+	}
+	if sr.Name != nil {
+		objectMap["name"] = sr.Name
+	}
+	if sr.Type != nil {
+		objectMap["type"] = sr.Type
+	}
+	if sr.Location != nil {
+		objectMap["location"] = sr.Location
+	}
+	if sr.Tags != nil {
+		objectMap["tags"] = sr.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for ServiceResource struct.
@@ -2865,86 +3193,81 @@ func (sr *ServiceResource) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ServiceProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var serviceProperties ServiceProperties
+				err = json.Unmarshal(*v, &serviceProperties)
+				if err != nil {
+					return err
+				}
+				sr.ServiceProperties = &serviceProperties
+			}
+		case "sku":
+			if v != nil {
+				var sku ServiceSkuProperties
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				sr.Sku = &sku
+			}
+		case "etag":
+			if v != nil {
+				var etag string
+				err = json.Unmarshal(*v, &etag)
+				if err != nil {
+					return err
+				}
+				sr.Etag = &etag
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				sr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				sr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sr.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				sr.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				sr.Tags = tags
+			}
 		}
-		sr.ServiceProperties = &properties
-	}
-
-	v = m["sku"]
-	if v != nil {
-		var sku ServiceSkuProperties
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
-		}
-		sr.Sku = &sku
-	}
-
-	v = m["etag"]
-	if v != nil {
-		var etag string
-		err = json.Unmarshal(*m["etag"], &etag)
-		if err != nil {
-			return err
-		}
-		sr.Etag = &etag
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		sr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		sr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		sr.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		sr.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		sr.Tags = &tags
 	}
 
 	return nil
@@ -3115,7 +3438,8 @@ func (future ServicesUpdateFuture) Result(client ServicesClient) (sr ServiceReso
 	return
 }
 
-// ServicesUpdateHostnameFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// ServicesUpdateHostnameFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ServicesUpdateHostnameFuture struct {
 	azure.Future
 	req *http.Request
@@ -3161,7 +3485,22 @@ type ServiceUpdateParameters struct {
 	// Sku - SKU properties of the API Management service.
 	Sku *ServiceSkuProperties `json:"sku,omitempty"`
 	// Tags - Resource tags.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for ServiceUpdateParameters.
+func (sup ServiceUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if sup.ServiceProperties != nil {
+		objectMap["properties"] = sup.ServiceProperties
+	}
+	if sup.Sku != nil {
+		objectMap["sku"] = sup.Sku
+	}
+	if sup.Tags != nil {
+		objectMap["tags"] = sup.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for ServiceUpdateParameters struct.
@@ -3171,43 +3510,43 @@ func (sup *ServiceUpdateParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ServiceProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var serviceProperties ServiceProperties
+				err = json.Unmarshal(*v, &serviceProperties)
+				if err != nil {
+					return err
+				}
+				sup.ServiceProperties = &serviceProperties
+			}
+		case "sku":
+			if v != nil {
+				var sku ServiceSkuProperties
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				sup.Sku = &sku
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				sup.Tags = tags
+			}
 		}
-		sup.ServiceProperties = &properties
-	}
-
-	v = m["sku"]
-	if v != nil {
-		var sku ServiceSkuProperties
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
-		}
-		sup.Sku = &sku
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		sup.Tags = &tags
 	}
 
 	return nil
 }
 
-// ServiceUploadCertificateParameters parameters supplied to the Upload SSL certificate for an API Management service
-// operation.
+// ServiceUploadCertificateParameters parameters supplied to the Upload SSL certificate for an API Management
+// service operation.
 type ServiceUploadCertificateParameters struct {
 	// Type - Hostname type. Possible values include: 'Proxy', 'Portal', 'Management', 'Scm'
 	Type HostnameType `json:"type,omitempty"`
@@ -3428,7 +3767,8 @@ func (future TenantConfigurationDeployFuture) Result(client TenantConfigurationC
 	return
 }
 
-// TenantConfigurationSaveFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// TenantConfigurationSaveFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type TenantConfigurationSaveFuture struct {
 	azure.Future
 	req *http.Request

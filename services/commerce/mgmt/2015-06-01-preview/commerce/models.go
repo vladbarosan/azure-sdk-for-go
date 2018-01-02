@@ -82,11 +82,47 @@ type MeterInfo struct {
 	// MeterRegion - The region in which the Azure service is available.
 	MeterRegion *string `json:"MeterRegion,omitempty"`
 	// MeterRates - The list of key/value pairs for the meter rates, in the format 'key':'value' where key = the meter quantity, and value = the corresponding price
-	MeterRates *map[string]*float64 `json:"MeterRates,omitempty"`
+	MeterRates map[string]*float64 `json:"MeterRates"`
 	// EffectiveDate - Indicates the date from which the meter rate is effective.
 	EffectiveDate *date.Time `json:"EffectiveDate,omitempty"`
 	// IncludedQuantity - The resource quantity that is included in the offer at no cost. Consumption beyond this quantity will be charged.
 	IncludedQuantity *float64 `json:"IncludedQuantity,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for MeterInfo.
+func (mi MeterInfo) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mi.MeterID != nil {
+		objectMap["MeterId"] = mi.MeterID
+	}
+	if mi.MeterName != nil {
+		objectMap["MeterName"] = mi.MeterName
+	}
+	if mi.MeterCategory != nil {
+		objectMap["MeterCategory"] = mi.MeterCategory
+	}
+	if mi.MeterSubCategory != nil {
+		objectMap["MeterSubCategory"] = mi.MeterSubCategory
+	}
+	if mi.Unit != nil {
+		objectMap["Unit"] = mi.Unit
+	}
+	if mi.MeterTags != nil {
+		objectMap["MeterTags"] = mi.MeterTags
+	}
+	if mi.MeterRegion != nil {
+		objectMap["MeterRegion"] = mi.MeterRegion
+	}
+	if mi.MeterRates != nil {
+		objectMap["MeterRates"] = mi.MeterRates
+	}
+	if mi.EffectiveDate != nil {
+		objectMap["EffectiveDate"] = mi.EffectiveDate
+	}
+	if mi.IncludedQuantity != nil {
+		objectMap["IncludedQuantity"] = mi.IncludedQuantity
+	}
+	return json.Marshal(objectMap)
 }
 
 // MonetaryCommitment indicates that a monetary commitment is required for this offer
@@ -96,7 +132,7 @@ type MonetaryCommitment struct {
 	// Name - Possible values include: 'NameOfferTermInfo', 'NameMonetaryCredit', 'NameMonetaryCommitment', 'NameRecurringCharge'
 	Name Name `json:"Name,omitempty"`
 	// TieredDiscount - The list of key/value pairs for the tiered meter rates, in the format 'key':'value' where key = price, and value = the corresponding discount percentage. This field is used only by offer terms of type 'Monetary Commitment'.
-	TieredDiscount *map[string]*decimal.Decimal `json:"TieredDiscount,omitempty"`
+	TieredDiscount map[string]*decimal.Decimal `json:"TieredDiscount"`
 	// ExcludedMeterIds - An array of meter ids that are excluded from the given offer terms.
 	ExcludedMeterIds *[]uuid.UUID `json:"ExcludedMeterIds,omitempty"`
 }
@@ -104,12 +140,18 @@ type MonetaryCommitment struct {
 // MarshalJSON is the custom marshaler for MonetaryCommitment.
 func (mc MonetaryCommitment) MarshalJSON() ([]byte, error) {
 	mc.Name = NameMonetaryCommitment
-	type Alias MonetaryCommitment
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(mc),
-	})
+	objectMap := make(map[string]interface{})
+	if mc.TieredDiscount != nil {
+		objectMap["TieredDiscount"] = mc.TieredDiscount
+	}
+	if mc.ExcludedMeterIds != nil {
+		objectMap["ExcludedMeterIds"] = mc.ExcludedMeterIds
+	}
+	if mc.EffectiveDate != nil {
+		objectMap["EffectiveDate"] = mc.EffectiveDate
+	}
+	objectMap["Name"] = mc.Name
+	return json.Marshal(objectMap)
 }
 
 // AsMonetaryCredit is the BasicOfferTermInfo implementation for MonetaryCommitment.
@@ -152,12 +194,18 @@ type MonetaryCredit struct {
 // MarshalJSON is the custom marshaler for MonetaryCredit.
 func (mc MonetaryCredit) MarshalJSON() ([]byte, error) {
 	mc.Name = NameMonetaryCredit
-	type Alias MonetaryCredit
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(mc),
-	})
+	objectMap := make(map[string]interface{})
+	if mc.Credit != nil {
+		objectMap["Credit"] = mc.Credit
+	}
+	if mc.ExcludedMeterIds != nil {
+		objectMap["ExcludedMeterIds"] = mc.ExcludedMeterIds
+	}
+	if mc.EffectiveDate != nil {
+		objectMap["EffectiveDate"] = mc.EffectiveDate
+	}
+	objectMap["Name"] = mc.Name
+	return json.Marshal(objectMap)
 }
 
 // AsMonetaryCredit is the BasicOfferTermInfo implementation for MonetaryCredit.
@@ -249,12 +297,12 @@ func unmarshalBasicOfferTermInfoArray(body []byte) ([]BasicOfferTermInfo, error)
 // MarshalJSON is the custom marshaler for OfferTermInfo.
 func (oti OfferTermInfo) MarshalJSON() ([]byte, error) {
 	oti.Name = NameOfferTermInfo
-	type Alias OfferTermInfo
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(oti),
-	})
+	objectMap := make(map[string]interface{})
+	if oti.EffectiveDate != nil {
+		objectMap["EffectiveDate"] = oti.EffectiveDate
+	}
+	objectMap["Name"] = oti.Name
+	return json.Marshal(objectMap)
 }
 
 // AsMonetaryCredit is the BasicOfferTermInfo implementation for OfferTermInfo.
@@ -308,12 +356,15 @@ type RecurringCharge struct {
 // MarshalJSON is the custom marshaler for RecurringCharge.
 func (rc RecurringCharge) MarshalJSON() ([]byte, error) {
 	rc.Name = NameRecurringCharge
-	type Alias RecurringCharge
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(rc),
-	})
+	objectMap := make(map[string]interface{})
+	if rc.RecurringCharge != nil {
+		objectMap["RecurringCharge"] = rc.RecurringCharge
+	}
+	if rc.EffectiveDate != nil {
+		objectMap["EffectiveDate"] = rc.EffectiveDate
+	}
+	objectMap["Name"] = rc.Name
+	return json.Marshal(objectMap)
 }
 
 // AsMonetaryCredit is the BasicOfferTermInfo implementation for RecurringCharge.
@@ -363,55 +414,53 @@ func (rrci *ResourceRateCardInfo) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["Currency"]
-	if v != nil {
-		var currency string
-		err = json.Unmarshal(*m["Currency"], &currency)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "Currency":
+			if v != nil {
+				var currency string
+				err = json.Unmarshal(*v, &currency)
+				if err != nil {
+					return err
+				}
+				rrci.Currency = &currency
+			}
+		case "Locale":
+			if v != nil {
+				var locale string
+				err = json.Unmarshal(*v, &locale)
+				if err != nil {
+					return err
+				}
+				rrci.Locale = &locale
+			}
+		case "IsTaxIncluded":
+			if v != nil {
+				var isTaxIncluded bool
+				err = json.Unmarshal(*v, &isTaxIncluded)
+				if err != nil {
+					return err
+				}
+				rrci.IsTaxIncluded = &isTaxIncluded
+			}
+		case "OfferTerms":
+			if v != nil {
+				offerTerms, err := unmarshalBasicOfferTermInfoArray(*v)
+				if err != nil {
+					return err
+				}
+				rrci.OfferTerms = &offerTerms
+			}
+		case "Meters":
+			if v != nil {
+				var meters []MeterInfo
+				err = json.Unmarshal(*v, &meters)
+				if err != nil {
+					return err
+				}
+				rrci.Meters = &meters
+			}
 		}
-		rrci.Currency = &currency
-	}
-
-	v = m["Locale"]
-	if v != nil {
-		var locale string
-		err = json.Unmarshal(*m["Locale"], &locale)
-		if err != nil {
-			return err
-		}
-		rrci.Locale = &locale
-	}
-
-	v = m["IsTaxIncluded"]
-	if v != nil {
-		var isTaxIncluded bool
-		err = json.Unmarshal(*m["IsTaxIncluded"], &isTaxIncluded)
-		if err != nil {
-			return err
-		}
-		rrci.IsTaxIncluded = &isTaxIncluded
-	}
-
-	v = m["OfferTerms"]
-	if v != nil {
-		offerTerms, err := unmarshalBasicOfferTermInfoArray(*m["OfferTerms"])
-		if err != nil {
-			return err
-		}
-		rrci.OfferTerms = &offerTerms
-	}
-
-	v = m["Meters"]
-	if v != nil {
-		var meters []MeterInfo
-		err = json.Unmarshal(*m["Meters"], &meters)
-		if err != nil {
-			return err
-		}
-		rrci.Meters = &meters
 	}
 
 	return nil
@@ -436,46 +485,45 @@ func (ua *UsageAggregation) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				ua.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				ua.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ua.Type = &typeVar
+			}
+		case "properties":
+			if v != nil {
+				var usageSample UsageSample
+				err = json.Unmarshal(*v, &usageSample)
+				if err != nil {
+					return err
+				}
+				ua.UsageSample = &usageSample
+			}
 		}
-		ua.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		ua.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		ua.Type = &typeVar
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties UsageSample
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		ua.UsageSample = &properties
 	}
 
 	return nil
@@ -594,7 +642,7 @@ type UsageSample struct {
 	// UsageEndTime - UTC end time for the usage bucket to which this usage aggregate belongs.
 	UsageEndTime *date.Time `json:"usageEndTime,omitempty"`
 	// Quantity - The amount of the resource consumption that occurred in this time frame.
-	Quantity *map[string]interface{} `json:"quantity,omitempty"`
+	Quantity interface{} `json:"quantity,omitempty"`
 	// Unit - The unit in which the usage for this resource is being counted, e.g. Hours, GB.
 	Unit *string `json:"unit,omitempty"`
 	// MeterName - Friendly name of the resource being consumed.

@@ -1101,12 +1101,19 @@ type ApplicationHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for ApplicationHealthEvaluation.
 func (ahe ApplicationHealthEvaluation) MarshalJSON() ([]byte, error) {
 	ahe.Kind = KindApplication
-	type Alias ApplicationHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(ahe),
-	})
+	objectMap := make(map[string]interface{})
+	if ahe.ServiceName != nil {
+		objectMap["ServiceName"] = ahe.ServiceName
+	}
+	if ahe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = ahe.UnhealthyEvaluations
+	}
+	if ahe.Description != nil {
+		objectMap["Description"] = ahe.Description
+	}
+	objectMap["AggregatedHealthState"] = ahe.AggregatedHealthState
+	objectMap["Kind"] = ahe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationHealthEvaluation.
@@ -1308,12 +1315,22 @@ type ApplicationsHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for ApplicationsHealthEvaluation.
 func (ahe ApplicationsHealthEvaluation) MarshalJSON() ([]byte, error) {
 	ahe.Kind = KindApplications
-	type Alias ApplicationsHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(ahe),
-	})
+	objectMap := make(map[string]interface{})
+	if ahe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = ahe.UnhealthyEvaluations
+	}
+	if ahe.TotalCount != nil {
+		objectMap["TotalCount"] = ahe.TotalCount
+	}
+	if ahe.MaxPercentUnhealthyApplications != nil {
+		objectMap["MaxPercentUnhealthyApplications"] = ahe.MaxPercentUnhealthyApplications
+	}
+	if ahe.Description != nil {
+		objectMap["Description"] = ahe.Description
+	}
+	objectMap["AggregatedHealthState"] = ahe.AggregatedHealthState
+	objectMap["Kind"] = ahe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationsHealthEvaluation.
@@ -1460,12 +1477,25 @@ type ApplicationTypeHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for ApplicationTypeHealthEvaluation.
 func (athe ApplicationTypeHealthEvaluation) MarshalJSON() ([]byte, error) {
 	athe.Kind = KindApplicationType
-	type Alias ApplicationTypeHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(athe),
-	})
+	objectMap := make(map[string]interface{})
+	if athe.ApplicationTypeName != nil {
+		objectMap["ApplicationTypeName"] = athe.ApplicationTypeName
+	}
+	if athe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = athe.UnhealthyEvaluations
+	}
+	if athe.TotalCount != nil {
+		objectMap["TotalCount"] = athe.TotalCount
+	}
+	if athe.MaxPercentUnhealthyApplications != nil {
+		objectMap["MaxPercentUnhealthyApplications"] = athe.MaxPercentUnhealthyApplications
+	}
+	if athe.Description != nil {
+		objectMap["Description"] = athe.Description
+	}
+	objectMap["AggregatedHealthState"] = athe.AggregatedHealthState
+	objectMap["Kind"] = athe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ApplicationTypeHealthEvaluation.
@@ -1819,12 +1849,36 @@ func unmarshalBasicCreateServiceDescriptionArray(body []byte) ([]BasicCreateServ
 // MarshalJSON is the custom marshaler for CreateServiceDescription.
 func (csd CreateServiceDescription) MarshalJSON() ([]byte, error) {
 	csd.ServiceKind = ServiceKindCreateServiceDescription
-	type Alias CreateServiceDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(csd),
-	})
+	objectMap := make(map[string]interface{})
+	if csd.ApplicationName != nil {
+		objectMap["ApplicationName"] = csd.ApplicationName
+	}
+	if csd.ServiceName != nil {
+		objectMap["ServiceName"] = csd.ServiceName
+	}
+	if csd.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = csd.ServiceTypeName
+	}
+	if csd.PartitionDescription != nil {
+		objectMap["PartitionDescription"] = csd.PartitionDescription
+	}
+	if csd.PlacementConstraints != nil {
+		objectMap["PlacementConstraints"] = csd.PlacementConstraints
+	}
+	if csd.CorrelationScheme != nil {
+		objectMap["CorrelationScheme"] = csd.CorrelationScheme
+	}
+	if csd.ServiceLoadMetrics != nil {
+		objectMap["ServiceLoadMetrics"] = csd.ServiceLoadMetrics
+	}
+	if csd.ServicePlacementPolicies != nil {
+		objectMap["ServicePlacementPolicies"] = csd.ServicePlacementPolicies
+	}
+	if csd.Flags != nil {
+		objectMap["Flags"] = csd.Flags
+	}
+	objectMap["ServiceKind"] = csd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessCreateServiceDescription is the BasicCreateServiceDescription implementation for CreateServiceDescription.
@@ -1914,12 +1968,39 @@ func unmarshalBasicCreateServiceGroupDescriptionArray(body []byte) ([]BasicCreat
 // MarshalJSON is the custom marshaler for CreateServiceGroupDescription.
 func (csgd CreateServiceGroupDescription) MarshalJSON() ([]byte, error) {
 	csgd.ServiceKind = ServiceKindBasicCreateServiceGroupDescriptionServiceKindCreateServiceGroupDescription
-	type Alias CreateServiceGroupDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(csgd),
-	})
+	objectMap := make(map[string]interface{})
+	if csgd.ApplicationName != nil {
+		objectMap["ApplicationName"] = csgd.ApplicationName
+	}
+	if csgd.ServiceName != nil {
+		objectMap["ServiceName"] = csgd.ServiceName
+	}
+	if csgd.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = csgd.ServiceTypeName
+	}
+	if csgd.PartitionDescription != nil {
+		objectMap["PartitionDescription"] = csgd.PartitionDescription
+	}
+	if csgd.PlacementConstraints != nil {
+		objectMap["PlacementConstraints"] = csgd.PlacementConstraints
+	}
+	if csgd.CorrelationScheme != nil {
+		objectMap["CorrelationScheme"] = csgd.CorrelationScheme
+	}
+	if csgd.ServiceLoadMetrics != nil {
+		objectMap["ServiceLoadMetrics"] = csgd.ServiceLoadMetrics
+	}
+	if csgd.ServicePlacementPolicies != nil {
+		objectMap["ServicePlacementPolicies"] = csgd.ServicePlacementPolicies
+	}
+	if csgd.Flags != nil {
+		objectMap["Flags"] = csgd.Flags
+	}
+	if csgd.ServiceGroupMemberDescription != nil {
+		objectMap["ServiceGroupMemberDescription"] = csgd.ServiceGroupMemberDescription
+	}
+	objectMap["ServiceKind"] = csgd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessCreateServiceGroupDescription is the BasicCreateServiceGroupDescription implementation for CreateServiceGroupDescription.
@@ -1959,12 +2040,28 @@ type DeltaNodesCheckHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for DeltaNodesCheckHealthEvaluation.
 func (dnche DeltaNodesCheckHealthEvaluation) MarshalJSON() ([]byte, error) {
 	dnche.Kind = KindDeltaNodesCheck
-	type Alias DeltaNodesCheckHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(dnche),
-	})
+	objectMap := make(map[string]interface{})
+	if dnche.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = dnche.UnhealthyEvaluations
+	}
+	if dnche.BaselineErrorCount != nil {
+		objectMap["BaselineErrorCount"] = dnche.BaselineErrorCount
+	}
+	if dnche.BaselineTotalCount != nil {
+		objectMap["BaselineTotalCount"] = dnche.BaselineTotalCount
+	}
+	if dnche.TotalCount != nil {
+		objectMap["TotalCount"] = dnche.TotalCount
+	}
+	if dnche.MaxPercentDeltaUnhealthyNodes != nil {
+		objectMap["MaxPercentDeltaUnhealthyNodes"] = dnche.MaxPercentDeltaUnhealthyNodes
+	}
+	if dnche.Description != nil {
+		objectMap["Description"] = dnche.Description
+	}
+	objectMap["AggregatedHealthState"] = dnche.AggregatedHealthState
+	objectMap["Kind"] = dnche.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for DeltaNodesCheckHealthEvaluation.
@@ -2121,12 +2218,22 @@ type DeployedApplicationHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for DeployedApplicationHealthEvaluation.
 func (dahe DeployedApplicationHealthEvaluation) MarshalJSON() ([]byte, error) {
 	dahe.Kind = KindDeployedApplication
-	type Alias DeployedApplicationHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(dahe),
-	})
+	objectMap := make(map[string]interface{})
+	if dahe.ApplicationName != nil {
+		objectMap["ApplicationName"] = dahe.ApplicationName
+	}
+	if dahe.NodeName != nil {
+		objectMap["NodeName"] = dahe.NodeName
+	}
+	if dahe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = dahe.UnhealthyEvaluations
+	}
+	if dahe.Description != nil {
+		objectMap["Description"] = dahe.Description
+	}
+	objectMap["AggregatedHealthState"] = dahe.AggregatedHealthState
+	objectMap["Kind"] = dahe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationHealthEvaluation.
@@ -2271,12 +2378,22 @@ type DeployedApplicationsHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for DeployedApplicationsHealthEvaluation.
 func (dahe DeployedApplicationsHealthEvaluation) MarshalJSON() ([]byte, error) {
 	dahe.Kind = KindDeployedApplications
-	type Alias DeployedApplicationsHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(dahe),
-	})
+	objectMap := make(map[string]interface{})
+	if dahe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = dahe.UnhealthyEvaluations
+	}
+	if dahe.TotalCount != nil {
+		objectMap["TotalCount"] = dahe.TotalCount
+	}
+	if dahe.MaxPercentUnhealthyDeployedApplications != nil {
+		objectMap["MaxPercentUnhealthyDeployedApplications"] = dahe.MaxPercentUnhealthyDeployedApplications
+	}
+	if dahe.Description != nil {
+		objectMap["Description"] = dahe.Description
+	}
+	objectMap["AggregatedHealthState"] = dahe.AggregatedHealthState
+	objectMap["Kind"] = dahe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for DeployedApplicationsHealthEvaluation.
@@ -2506,12 +2623,25 @@ type DeployedServicePackageHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for DeployedServicePackageHealthEvaluation.
 func (dsphe DeployedServicePackageHealthEvaluation) MarshalJSON() ([]byte, error) {
 	dsphe.Kind = KindDeployedServicePackage
-	type Alias DeployedServicePackageHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(dsphe),
-	})
+	objectMap := make(map[string]interface{})
+	if dsphe.ApplicationName != nil {
+		objectMap["ApplicationName"] = dsphe.ApplicationName
+	}
+	if dsphe.NodeName != nil {
+		objectMap["NodeName"] = dsphe.NodeName
+	}
+	if dsphe.ServiceManifestName != nil {
+		objectMap["ServiceManifestName"] = dsphe.ServiceManifestName
+	}
+	if dsphe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = dsphe.UnhealthyEvaluations
+	}
+	if dsphe.Description != nil {
+		objectMap["Description"] = dsphe.Description
+	}
+	objectMap["AggregatedHealthState"] = dsphe.AggregatedHealthState
+	objectMap["Kind"] = dsphe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackageHealthEvaluation.
@@ -2652,12 +2782,19 @@ type DeployedServicePackagesHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for DeployedServicePackagesHealthEvaluation.
 func (dsphe DeployedServicePackagesHealthEvaluation) MarshalJSON() ([]byte, error) {
 	dsphe.Kind = KindDeployedServicePackages
-	type Alias DeployedServicePackagesHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(dsphe),
-	})
+	objectMap := make(map[string]interface{})
+	if dsphe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = dsphe.UnhealthyEvaluations
+	}
+	if dsphe.TotalCount != nil {
+		objectMap["TotalCount"] = dsphe.TotalCount
+	}
+	if dsphe.Description != nil {
+		objectMap["Description"] = dsphe.Description
+	}
+	objectMap["AggregatedHealthState"] = dsphe.AggregatedHealthState
+	objectMap["Kind"] = dsphe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for DeployedServicePackagesHealthEvaluation.
@@ -2825,12 +2962,19 @@ type EventHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for EventHealthEvaluation.
 func (ehe EventHealthEvaluation) MarshalJSON() ([]byte, error) {
 	ehe.Kind = KindEvent
-	type Alias EventHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(ehe),
-	})
+	objectMap := make(map[string]interface{})
+	if ehe.UnhealthyEvent != nil {
+		objectMap["UnhealthyEvent"] = ehe.UnhealthyEvent
+	}
+	if ehe.ConsiderWarningAsError != nil {
+		objectMap["ConsiderWarningAsError"] = ehe.ConsiderWarningAsError
+	}
+	if ehe.Description != nil {
+		objectMap["Description"] = ehe.Description
+	}
+	objectMap["AggregatedHealthState"] = ehe.AggregatedHealthState
+	objectMap["Kind"] = ehe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for EventHealthEvaluation.
@@ -3103,12 +3247,13 @@ func unmarshalBasicHealthEvaluationArray(body []byte) ([]BasicHealthEvaluation, 
 // MarshalJSON is the custom marshaler for HealthEvaluation.
 func (he HealthEvaluation) MarshalJSON() ([]byte, error) {
 	he.Kind = KindHealthEvaluation
-	type Alias HealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(he),
-	})
+	objectMap := make(map[string]interface{})
+	if he.Description != nil {
+		objectMap["Description"] = he.Description
+	}
+	objectMap["AggregatedHealthState"] = he.AggregatedHealthState
+	objectMap["Kind"] = he.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for HealthEvaluation.
@@ -3389,12 +3534,19 @@ type NodeHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for NodeHealthEvaluation.
 func (nhe NodeHealthEvaluation) MarshalJSON() ([]byte, error) {
 	nhe.Kind = KindNode
-	type Alias NodeHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(nhe),
-	})
+	objectMap := make(map[string]interface{})
+	if nhe.NodeName != nil {
+		objectMap["NodeName"] = nhe.NodeName
+	}
+	if nhe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = nhe.UnhealthyEvaluations
+	}
+	if nhe.Description != nil {
+		objectMap["Description"] = nhe.Description
+	}
+	objectMap["AggregatedHealthState"] = nhe.AggregatedHealthState
+	objectMap["Kind"] = nhe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for NodeHealthEvaluation.
@@ -3577,12 +3729,22 @@ type NodesHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for NodesHealthEvaluation.
 func (nhe NodesHealthEvaluation) MarshalJSON() ([]byte, error) {
 	nhe.Kind = KindNodes
-	type Alias NodesHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(nhe),
-	})
+	objectMap := make(map[string]interface{})
+	if nhe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = nhe.UnhealthyEvaluations
+	}
+	if nhe.TotalCount != nil {
+		objectMap["TotalCount"] = nhe.TotalCount
+	}
+	if nhe.MaxPercentUnhealthyNodes != nil {
+		objectMap["MaxPercentUnhealthyNodes"] = nhe.MaxPercentUnhealthyNodes
+	}
+	if nhe.Description != nil {
+		objectMap["Description"] = nhe.Description
+	}
+	objectMap["AggregatedHealthState"] = nhe.AggregatedHealthState
+	objectMap["Kind"] = nhe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for NodesHealthEvaluation.
@@ -3757,12 +3919,19 @@ type PartitionHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for PartitionHealthEvaluation.
 func (phe PartitionHealthEvaluation) MarshalJSON() ([]byte, error) {
 	phe.Kind = KindPartition
-	type Alias PartitionHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(phe),
-	})
+	objectMap := make(map[string]interface{})
+	if phe.PartitionID != nil {
+		objectMap["PartitionId"] = phe.PartitionID
+	}
+	if phe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = phe.UnhealthyEvaluations
+	}
+	if phe.Description != nil {
+		objectMap["Description"] = phe.Description
+	}
+	objectMap["AggregatedHealthState"] = phe.AggregatedHealthState
+	objectMap["Kind"] = phe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for PartitionHealthEvaluation.
@@ -3941,12 +4110,22 @@ type PartitionsHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for PartitionsHealthEvaluation.
 func (phe PartitionsHealthEvaluation) MarshalJSON() ([]byte, error) {
 	phe.Kind = KindPartitions
-	type Alias PartitionsHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(phe),
-	})
+	objectMap := make(map[string]interface{})
+	if phe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = phe.UnhealthyEvaluations
+	}
+	if phe.TotalCount != nil {
+		objectMap["TotalCount"] = phe.TotalCount
+	}
+	if phe.MaxPercentUnhealthyPartitionsPerService != nil {
+		objectMap["MaxPercentUnhealthyPartitionsPerService"] = phe.MaxPercentUnhealthyPartitionsPerService
+	}
+	if phe.Description != nil {
+		objectMap["Description"] = phe.Description
+	}
+	objectMap["AggregatedHealthState"] = phe.AggregatedHealthState
+	objectMap["Kind"] = phe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for PartitionsHealthEvaluation.
@@ -4122,12 +4301,22 @@ type ReplicaHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for ReplicaHealthEvaluation.
 func (rhe ReplicaHealthEvaluation) MarshalJSON() ([]byte, error) {
 	rhe.Kind = KindReplica
-	type Alias ReplicaHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(rhe),
-	})
+	objectMap := make(map[string]interface{})
+	if rhe.PartitionID != nil {
+		objectMap["PartitionId"] = rhe.PartitionID
+	}
+	if rhe.ReplicaOrInstanceID != nil {
+		objectMap["ReplicaOrInstanceId"] = rhe.ReplicaOrInstanceID
+	}
+	if rhe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = rhe.UnhealthyEvaluations
+	}
+	if rhe.Description != nil {
+		objectMap["Description"] = rhe.Description
+	}
+	objectMap["AggregatedHealthState"] = rhe.AggregatedHealthState
+	objectMap["Kind"] = rhe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ReplicaHealthEvaluation.
@@ -4287,12 +4476,22 @@ type ReplicasHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for ReplicasHealthEvaluation.
 func (rhe ReplicasHealthEvaluation) MarshalJSON() ([]byte, error) {
 	rhe.Kind = KindReplicas
-	type Alias ReplicasHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(rhe),
-	})
+	objectMap := make(map[string]interface{})
+	if rhe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = rhe.UnhealthyEvaluations
+	}
+	if rhe.TotalCount != nil {
+		objectMap["TotalCount"] = rhe.TotalCount
+	}
+	if rhe.MaxPercentUnhealthyPartitionsPerService != nil {
+		objectMap["MaxPercentUnhealthyPartitionsPerService"] = rhe.MaxPercentUnhealthyPartitionsPerService
+	}
+	if rhe.Description != nil {
+		objectMap["Description"] = rhe.Description
+	}
+	objectMap["AggregatedHealthState"] = rhe.AggregatedHealthState
+	objectMap["Kind"] = rhe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ReplicasHealthEvaluation.
@@ -4526,12 +4725,36 @@ func unmarshalBasicServiceDescriptionArray(body []byte) ([]BasicServiceDescripti
 // MarshalJSON is the custom marshaler for ServiceDescription.
 func (sd ServiceDescription) MarshalJSON() ([]byte, error) {
 	sd.ServiceKind = ServiceKindBasicServiceDescriptionServiceKindServiceDescription
-	type Alias ServiceDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(sd),
-	})
+	objectMap := make(map[string]interface{})
+	if sd.ApplicationName != nil {
+		objectMap["ApplicationName"] = sd.ApplicationName
+	}
+	if sd.ServiceName != nil {
+		objectMap["ServiceName"] = sd.ServiceName
+	}
+	if sd.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = sd.ServiceTypeName
+	}
+	if sd.PartitionDescription != nil {
+		objectMap["PartitionDescription"] = sd.PartitionDescription
+	}
+	if sd.PlacementConstraints != nil {
+		objectMap["PlacementConstraints"] = sd.PlacementConstraints
+	}
+	if sd.CorrelationScheme != nil {
+		objectMap["CorrelationScheme"] = sd.CorrelationScheme
+	}
+	if sd.ServiceLoadMetrics != nil {
+		objectMap["ServiceLoadMetrics"] = sd.ServiceLoadMetrics
+	}
+	if sd.ServicePlacementPolicies != nil {
+		objectMap["ServicePlacementPolicies"] = sd.ServicePlacementPolicies
+	}
+	if sd.Flags != nil {
+		objectMap["Flags"] = sd.Flags
+	}
+	objectMap["ServiceKind"] = sd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessServiceDescription is the BasicServiceDescription implementation for ServiceDescription.
@@ -4645,12 +4868,39 @@ func unmarshalBasicServiceGroupDescriptionArray(body []byte) ([]BasicServiceGrou
 // MarshalJSON is the custom marshaler for ServiceGroupDescription.
 func (sgd ServiceGroupDescription) MarshalJSON() ([]byte, error) {
 	sgd.ServiceKind = ServiceKindBasicServiceGroupDescriptionServiceKindServiceGroupDescription
-	type Alias ServiceGroupDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(sgd),
-	})
+	objectMap := make(map[string]interface{})
+	if sgd.ApplicationName != nil {
+		objectMap["ApplicationName"] = sgd.ApplicationName
+	}
+	if sgd.ServiceName != nil {
+		objectMap["ServiceName"] = sgd.ServiceName
+	}
+	if sgd.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = sgd.ServiceTypeName
+	}
+	if sgd.PartitionDescription != nil {
+		objectMap["PartitionDescription"] = sgd.PartitionDescription
+	}
+	if sgd.PlacementConstraints != nil {
+		objectMap["PlacementConstraints"] = sgd.PlacementConstraints
+	}
+	if sgd.CorrelationScheme != nil {
+		objectMap["CorrelationScheme"] = sgd.CorrelationScheme
+	}
+	if sgd.ServiceLoadMetrics != nil {
+		objectMap["ServiceLoadMetrics"] = sgd.ServiceLoadMetrics
+	}
+	if sgd.ServicePlacementPolicies != nil {
+		objectMap["ServicePlacementPolicies"] = sgd.ServicePlacementPolicies
+	}
+	if sgd.Flags != nil {
+		objectMap["Flags"] = sgd.Flags
+	}
+	if sgd.ServiceGroupMemberDescription != nil {
+		objectMap["ServiceGroupMemberDescription"] = sgd.ServiceGroupMemberDescription
+	}
+	objectMap["ServiceKind"] = sgd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessServiceGroupDescription is the BasicServiceGroupDescription implementation for ServiceGroupDescription.
@@ -4729,12 +4979,19 @@ type ServiceHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for ServiceHealthEvaluation.
 func (she ServiceHealthEvaluation) MarshalJSON() ([]byte, error) {
 	she.Kind = KindService
-	type Alias ServiceHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(she),
-	})
+	objectMap := make(map[string]interface{})
+	if she.ServiceName != nil {
+		objectMap["ServiceName"] = she.ServiceName
+	}
+	if she.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = she.UnhealthyEvaluations
+	}
+	if she.Description != nil {
+		objectMap["Description"] = she.Description
+	}
+	objectMap["AggregatedHealthState"] = she.AggregatedHealthState
+	objectMap["Kind"] = she.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ServiceHealthEvaluation.
@@ -4914,12 +5171,25 @@ type ServicesHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for ServicesHealthEvaluation.
 func (she ServicesHealthEvaluation) MarshalJSON() ([]byte, error) {
 	she.Kind = KindServices
-	type Alias ServicesHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(she),
-	})
+	objectMap := make(map[string]interface{})
+	if she.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = she.ServiceTypeName
+	}
+	if she.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = she.UnhealthyEvaluations
+	}
+	if she.TotalCount != nil {
+		objectMap["TotalCount"] = she.TotalCount
+	}
+	if she.MaxPercentUnhealthyServices != nil {
+		objectMap["MaxPercentUnhealthyServices"] = she.MaxPercentUnhealthyServices
+	}
+	if she.Description != nil {
+		objectMap["Description"] = she.Description
+	}
+	objectMap["AggregatedHealthState"] = she.AggregatedHealthState
+	objectMap["Kind"] = she.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for ServicesHealthEvaluation.
@@ -5092,7 +5362,7 @@ type StartClusterUpgrade struct {
 	// EnableDeltaHealthEvaluation - The evaluation of the enable delta health
 	EnableDeltaHealthEvaluation *bool `json:"EnableDeltaHealthEvaluation,omitempty"`
 	// MonitoringPolicy - The policy of the monitoring
-	MonitoringPolicy *map[string]interface{} `json:"MonitoringPolicy,omitempty"`
+	MonitoringPolicy interface{} `json:"MonitoringPolicy,omitempty"`
 	// ClusterUpgradeHealthPolicy - The policy of the cluster upgrade health
 	ClusterUpgradeHealthPolicy *ClusterUpgradeHealthPolicy `json:"ClusterUpgradeHealthPolicy,omitempty"`
 	// ApplicationHealthPolicyMap - The map of the application health policy
@@ -5126,12 +5396,58 @@ type StatefulCreateServiceDescription struct {
 // MarshalJSON is the custom marshaler for StatefulCreateServiceDescription.
 func (scsd StatefulCreateServiceDescription) MarshalJSON() ([]byte, error) {
 	scsd.ServiceKind = ServiceKindStateful1
-	type Alias StatefulCreateServiceDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(scsd),
-	})
+	objectMap := make(map[string]interface{})
+	if scsd.TargetReplicaSetSize != nil {
+		objectMap["TargetReplicaSetSize"] = scsd.TargetReplicaSetSize
+	}
+	if scsd.MinReplicaSetSize != nil {
+		objectMap["MinReplicaSetSize"] = scsd.MinReplicaSetSize
+	}
+	if scsd.HasPersistedState != nil {
+		objectMap["HasPersistedState"] = scsd.HasPersistedState
+	}
+	if scsd.ReplicaRestartWaitDurationSeconds != nil {
+		objectMap["ReplicaRestartWaitDurationSeconds"] = scsd.ReplicaRestartWaitDurationSeconds
+	}
+	if scsd.QuorumLossWaitDurationSeconds != nil {
+		objectMap["QuorumLossWaitDurationSeconds"] = scsd.QuorumLossWaitDurationSeconds
+	}
+	if scsd.StandByReplicaKeepDurationSeconds != nil {
+		objectMap["StandByReplicaKeepDurationSeconds"] = scsd.StandByReplicaKeepDurationSeconds
+	}
+	objectMap["DefaultMoveCost"] = scsd.DefaultMoveCost
+	if scsd.IsDefaultMoveCostSpecified != nil {
+		objectMap["IsDefaultMoveCostSpecified"] = scsd.IsDefaultMoveCostSpecified
+	}
+	if scsd.ApplicationName != nil {
+		objectMap["ApplicationName"] = scsd.ApplicationName
+	}
+	if scsd.ServiceName != nil {
+		objectMap["ServiceName"] = scsd.ServiceName
+	}
+	if scsd.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = scsd.ServiceTypeName
+	}
+	if scsd.PartitionDescription != nil {
+		objectMap["PartitionDescription"] = scsd.PartitionDescription
+	}
+	if scsd.PlacementConstraints != nil {
+		objectMap["PlacementConstraints"] = scsd.PlacementConstraints
+	}
+	if scsd.CorrelationScheme != nil {
+		objectMap["CorrelationScheme"] = scsd.CorrelationScheme
+	}
+	if scsd.ServiceLoadMetrics != nil {
+		objectMap["ServiceLoadMetrics"] = scsd.ServiceLoadMetrics
+	}
+	if scsd.ServicePlacementPolicies != nil {
+		objectMap["ServicePlacementPolicies"] = scsd.ServicePlacementPolicies
+	}
+	if scsd.Flags != nil {
+		objectMap["Flags"] = scsd.Flags
+	}
+	objectMap["ServiceKind"] = scsd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessCreateServiceDescription is the BasicCreateServiceDescription implementation for StatefulCreateServiceDescription.
@@ -5182,12 +5498,61 @@ type StatefulCreateServiceGroupDescription struct {
 // MarshalJSON is the custom marshaler for StatefulCreateServiceGroupDescription.
 func (scsgd StatefulCreateServiceGroupDescription) MarshalJSON() ([]byte, error) {
 	scsgd.ServiceKind = ServiceKindBasicCreateServiceGroupDescriptionServiceKindStateful
-	type Alias StatefulCreateServiceGroupDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(scsgd),
-	})
+	objectMap := make(map[string]interface{})
+	if scsgd.TargetReplicaSetSize != nil {
+		objectMap["TargetReplicaSetSize"] = scsgd.TargetReplicaSetSize
+	}
+	if scsgd.MinReplicaSetSize != nil {
+		objectMap["MinReplicaSetSize"] = scsgd.MinReplicaSetSize
+	}
+	if scsgd.HasPersistedState != nil {
+		objectMap["HasPersistedState"] = scsgd.HasPersistedState
+	}
+	if scsgd.ReplicaRestartWaitDurationSeconds != nil {
+		objectMap["ReplicaRestartWaitDurationSeconds"] = scsgd.ReplicaRestartWaitDurationSeconds
+	}
+	if scsgd.QuorumLossWaitDurationSeconds != nil {
+		objectMap["QuorumLossWaitDurationSeconds"] = scsgd.QuorumLossWaitDurationSeconds
+	}
+	if scsgd.StandByReplicaKeepDurationSeconds != nil {
+		objectMap["StandByReplicaKeepDurationSeconds"] = scsgd.StandByReplicaKeepDurationSeconds
+	}
+	objectMap["DefaultMoveCost"] = scsgd.DefaultMoveCost
+	if scsgd.IsDefaultMoveCostSpecified != nil {
+		objectMap["IsDefaultMoveCostSpecified"] = scsgd.IsDefaultMoveCostSpecified
+	}
+	if scsgd.ApplicationName != nil {
+		objectMap["ApplicationName"] = scsgd.ApplicationName
+	}
+	if scsgd.ServiceName != nil {
+		objectMap["ServiceName"] = scsgd.ServiceName
+	}
+	if scsgd.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = scsgd.ServiceTypeName
+	}
+	if scsgd.PartitionDescription != nil {
+		objectMap["PartitionDescription"] = scsgd.PartitionDescription
+	}
+	if scsgd.PlacementConstraints != nil {
+		objectMap["PlacementConstraints"] = scsgd.PlacementConstraints
+	}
+	if scsgd.CorrelationScheme != nil {
+		objectMap["CorrelationScheme"] = scsgd.CorrelationScheme
+	}
+	if scsgd.ServiceLoadMetrics != nil {
+		objectMap["ServiceLoadMetrics"] = scsgd.ServiceLoadMetrics
+	}
+	if scsgd.ServicePlacementPolicies != nil {
+		objectMap["ServicePlacementPolicies"] = scsgd.ServicePlacementPolicies
+	}
+	if scsgd.Flags != nil {
+		objectMap["Flags"] = scsgd.Flags
+	}
+	if scsgd.ServiceGroupMemberDescription != nil {
+		objectMap["ServiceGroupMemberDescription"] = scsgd.ServiceGroupMemberDescription
+	}
+	objectMap["ServiceKind"] = scsgd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessCreateServiceGroupDescription is the BasicCreateServiceGroupDescription implementation for StatefulCreateServiceGroupDescription.
@@ -5237,12 +5602,58 @@ type StatefulServiceDescription struct {
 // MarshalJSON is the custom marshaler for StatefulServiceDescription.
 func (ssd StatefulServiceDescription) MarshalJSON() ([]byte, error) {
 	ssd.ServiceKind = ServiceKindBasicServiceDescriptionServiceKindStateful
-	type Alias StatefulServiceDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(ssd),
-	})
+	objectMap := make(map[string]interface{})
+	if ssd.TargetReplicaSetSize != nil {
+		objectMap["TargetReplicaSetSize"] = ssd.TargetReplicaSetSize
+	}
+	if ssd.MinReplicaSetSize != nil {
+		objectMap["MinReplicaSetSize"] = ssd.MinReplicaSetSize
+	}
+	if ssd.HasPersistedState != nil {
+		objectMap["HasPersistedState"] = ssd.HasPersistedState
+	}
+	if ssd.ReplicaRestartWaitDurationSeconds != nil {
+		objectMap["ReplicaRestartWaitDurationSeconds"] = ssd.ReplicaRestartWaitDurationSeconds
+	}
+	if ssd.QuorumLossWaitDurationSeconds != nil {
+		objectMap["QuorumLossWaitDurationSeconds"] = ssd.QuorumLossWaitDurationSeconds
+	}
+	if ssd.StandByReplicaKeepDurationSeconds != nil {
+		objectMap["StandByReplicaKeepDurationSeconds"] = ssd.StandByReplicaKeepDurationSeconds
+	}
+	objectMap["DefaultMoveCost"] = ssd.DefaultMoveCost
+	if ssd.IsDefaultMoveCostSpecified != nil {
+		objectMap["IsDefaultMoveCostSpecified"] = ssd.IsDefaultMoveCostSpecified
+	}
+	if ssd.ApplicationName != nil {
+		objectMap["ApplicationName"] = ssd.ApplicationName
+	}
+	if ssd.ServiceName != nil {
+		objectMap["ServiceName"] = ssd.ServiceName
+	}
+	if ssd.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = ssd.ServiceTypeName
+	}
+	if ssd.PartitionDescription != nil {
+		objectMap["PartitionDescription"] = ssd.PartitionDescription
+	}
+	if ssd.PlacementConstraints != nil {
+		objectMap["PlacementConstraints"] = ssd.PlacementConstraints
+	}
+	if ssd.CorrelationScheme != nil {
+		objectMap["CorrelationScheme"] = ssd.CorrelationScheme
+	}
+	if ssd.ServiceLoadMetrics != nil {
+		objectMap["ServiceLoadMetrics"] = ssd.ServiceLoadMetrics
+	}
+	if ssd.ServicePlacementPolicies != nil {
+		objectMap["ServicePlacementPolicies"] = ssd.ServicePlacementPolicies
+	}
+	if ssd.Flags != nil {
+		objectMap["Flags"] = ssd.Flags
+	}
+	objectMap["ServiceKind"] = ssd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessServiceDescription is the BasicServiceDescription implementation for StatefulServiceDescription.
@@ -5293,12 +5704,61 @@ type StatefulServiceGroupDescription struct {
 // MarshalJSON is the custom marshaler for StatefulServiceGroupDescription.
 func (ssgd StatefulServiceGroupDescription) MarshalJSON() ([]byte, error) {
 	ssgd.ServiceKind = ServiceKindBasicServiceGroupDescriptionServiceKindStateful
-	type Alias StatefulServiceGroupDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(ssgd),
-	})
+	objectMap := make(map[string]interface{})
+	if ssgd.TargetReplicaSetSize != nil {
+		objectMap["TargetReplicaSetSize"] = ssgd.TargetReplicaSetSize
+	}
+	if ssgd.MinReplicaSetSize != nil {
+		objectMap["MinReplicaSetSize"] = ssgd.MinReplicaSetSize
+	}
+	if ssgd.HasPersistedState != nil {
+		objectMap["HasPersistedState"] = ssgd.HasPersistedState
+	}
+	if ssgd.ReplicaRestartWaitDurationSeconds != nil {
+		objectMap["ReplicaRestartWaitDurationSeconds"] = ssgd.ReplicaRestartWaitDurationSeconds
+	}
+	if ssgd.QuorumLossWaitDurationSeconds != nil {
+		objectMap["QuorumLossWaitDurationSeconds"] = ssgd.QuorumLossWaitDurationSeconds
+	}
+	if ssgd.StandByReplicaKeepDurationSeconds != nil {
+		objectMap["StandByReplicaKeepDurationSeconds"] = ssgd.StandByReplicaKeepDurationSeconds
+	}
+	objectMap["DefaultMoveCost"] = ssgd.DefaultMoveCost
+	if ssgd.IsDefaultMoveCostSpecified != nil {
+		objectMap["IsDefaultMoveCostSpecified"] = ssgd.IsDefaultMoveCostSpecified
+	}
+	if ssgd.ApplicationName != nil {
+		objectMap["ApplicationName"] = ssgd.ApplicationName
+	}
+	if ssgd.ServiceName != nil {
+		objectMap["ServiceName"] = ssgd.ServiceName
+	}
+	if ssgd.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = ssgd.ServiceTypeName
+	}
+	if ssgd.PartitionDescription != nil {
+		objectMap["PartitionDescription"] = ssgd.PartitionDescription
+	}
+	if ssgd.PlacementConstraints != nil {
+		objectMap["PlacementConstraints"] = ssgd.PlacementConstraints
+	}
+	if ssgd.CorrelationScheme != nil {
+		objectMap["CorrelationScheme"] = ssgd.CorrelationScheme
+	}
+	if ssgd.ServiceLoadMetrics != nil {
+		objectMap["ServiceLoadMetrics"] = ssgd.ServiceLoadMetrics
+	}
+	if ssgd.ServicePlacementPolicies != nil {
+		objectMap["ServicePlacementPolicies"] = ssgd.ServicePlacementPolicies
+	}
+	if ssgd.Flags != nil {
+		objectMap["Flags"] = ssgd.Flags
+	}
+	if ssgd.ServiceGroupMemberDescription != nil {
+		objectMap["ServiceGroupMemberDescription"] = ssgd.ServiceGroupMemberDescription
+	}
+	objectMap["ServiceKind"] = ssgd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessServiceGroupDescription is the BasicServiceGroupDescription implementation for StatefulServiceGroupDescription.
@@ -5336,12 +5796,27 @@ type StatefulUpdateServiceDescription struct {
 // MarshalJSON is the custom marshaler for StatefulUpdateServiceDescription.
 func (susd StatefulUpdateServiceDescription) MarshalJSON() ([]byte, error) {
 	susd.ServiceKind = ServiceKindBasicUpdateServiceDescriptionServiceKindStateful
-	type Alias StatefulUpdateServiceDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(susd),
-	})
+	objectMap := make(map[string]interface{})
+	if susd.TargetReplicaSetSize != nil {
+		objectMap["TargetReplicaSetSize"] = susd.TargetReplicaSetSize
+	}
+	if susd.MinReplicaSetSize != nil {
+		objectMap["MinReplicaSetSize"] = susd.MinReplicaSetSize
+	}
+	if susd.ReplicaRestartWaitDurationInMilliseconds != nil {
+		objectMap["ReplicaRestartWaitDurationInMilliseconds"] = susd.ReplicaRestartWaitDurationInMilliseconds
+	}
+	if susd.QuorumLossWaitDurationInMilliseconds != nil {
+		objectMap["QuorumLossWaitDurationInMilliseconds"] = susd.QuorumLossWaitDurationInMilliseconds
+	}
+	if susd.StandByReplicaKeepDurationInMilliseconds != nil {
+		objectMap["StandByReplicaKeepDurationInMilliseconds"] = susd.StandByReplicaKeepDurationInMilliseconds
+	}
+	if susd.Flags != nil {
+		objectMap["Flags"] = susd.Flags
+	}
+	objectMap["ServiceKind"] = susd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessUpdateServiceDescription is the BasicUpdateServiceDescription implementation for StatefulUpdateServiceDescription.
@@ -5379,12 +5854,27 @@ type StatefulUpdateServiceGroupDescription struct {
 // MarshalJSON is the custom marshaler for StatefulUpdateServiceGroupDescription.
 func (susgd StatefulUpdateServiceGroupDescription) MarshalJSON() ([]byte, error) {
 	susgd.ServiceKind = ServiceKindBasicUpdateServiceGroupDescriptionServiceKindStateful
-	type Alias StatefulUpdateServiceGroupDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(susgd),
-	})
+	objectMap := make(map[string]interface{})
+	if susgd.TargetReplicaSetSize != nil {
+		objectMap["TargetReplicaSetSize"] = susgd.TargetReplicaSetSize
+	}
+	if susgd.MinReplicaSetSize != nil {
+		objectMap["MinReplicaSetSize"] = susgd.MinReplicaSetSize
+	}
+	if susgd.ReplicaRestartWaitDurationInMilliseconds != nil {
+		objectMap["ReplicaRestartWaitDurationInMilliseconds"] = susgd.ReplicaRestartWaitDurationInMilliseconds
+	}
+	if susgd.QuorumLossWaitDurationInMilliseconds != nil {
+		objectMap["QuorumLossWaitDurationInMilliseconds"] = susgd.QuorumLossWaitDurationInMilliseconds
+	}
+	if susgd.StandByReplicaKeepDurationInMilliseconds != nil {
+		objectMap["StandByReplicaKeepDurationInMilliseconds"] = susgd.StandByReplicaKeepDurationInMilliseconds
+	}
+	if susgd.Flags != nil {
+		objectMap["Flags"] = susgd.Flags
+	}
+	objectMap["ServiceKind"] = susgd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessUpdateServiceGroupDescription is the BasicUpdateServiceGroupDescription implementation for StatefulUpdateServiceGroupDescription.
@@ -5426,12 +5916,39 @@ type StatelessCreateServiceDescription struct {
 // MarshalJSON is the custom marshaler for StatelessCreateServiceDescription.
 func (scsd StatelessCreateServiceDescription) MarshalJSON() ([]byte, error) {
 	scsd.ServiceKind = ServiceKindStateless1
-	type Alias StatelessCreateServiceDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(scsd),
-	})
+	objectMap := make(map[string]interface{})
+	if scsd.InstanceCount != nil {
+		objectMap["InstanceCount"] = scsd.InstanceCount
+	}
+	if scsd.ApplicationName != nil {
+		objectMap["ApplicationName"] = scsd.ApplicationName
+	}
+	if scsd.ServiceName != nil {
+		objectMap["ServiceName"] = scsd.ServiceName
+	}
+	if scsd.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = scsd.ServiceTypeName
+	}
+	if scsd.PartitionDescription != nil {
+		objectMap["PartitionDescription"] = scsd.PartitionDescription
+	}
+	if scsd.PlacementConstraints != nil {
+		objectMap["PlacementConstraints"] = scsd.PlacementConstraints
+	}
+	if scsd.CorrelationScheme != nil {
+		objectMap["CorrelationScheme"] = scsd.CorrelationScheme
+	}
+	if scsd.ServiceLoadMetrics != nil {
+		objectMap["ServiceLoadMetrics"] = scsd.ServiceLoadMetrics
+	}
+	if scsd.ServicePlacementPolicies != nil {
+		objectMap["ServicePlacementPolicies"] = scsd.ServicePlacementPolicies
+	}
+	if scsd.Flags != nil {
+		objectMap["Flags"] = scsd.Flags
+	}
+	objectMap["ServiceKind"] = scsd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessCreateServiceDescription is the BasicCreateServiceDescription implementation for StatelessCreateServiceDescription.
@@ -5474,12 +5991,42 @@ type StatelessCreateServiceGroupDescription struct {
 // MarshalJSON is the custom marshaler for StatelessCreateServiceGroupDescription.
 func (scsgd StatelessCreateServiceGroupDescription) MarshalJSON() ([]byte, error) {
 	scsgd.ServiceKind = ServiceKindBasicCreateServiceGroupDescriptionServiceKindStateless
-	type Alias StatelessCreateServiceGroupDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(scsgd),
-	})
+	objectMap := make(map[string]interface{})
+	if scsgd.InstanceCount != nil {
+		objectMap["InstanceCount"] = scsgd.InstanceCount
+	}
+	if scsgd.ApplicationName != nil {
+		objectMap["ApplicationName"] = scsgd.ApplicationName
+	}
+	if scsgd.ServiceName != nil {
+		objectMap["ServiceName"] = scsgd.ServiceName
+	}
+	if scsgd.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = scsgd.ServiceTypeName
+	}
+	if scsgd.PartitionDescription != nil {
+		objectMap["PartitionDescription"] = scsgd.PartitionDescription
+	}
+	if scsgd.PlacementConstraints != nil {
+		objectMap["PlacementConstraints"] = scsgd.PlacementConstraints
+	}
+	if scsgd.CorrelationScheme != nil {
+		objectMap["CorrelationScheme"] = scsgd.CorrelationScheme
+	}
+	if scsgd.ServiceLoadMetrics != nil {
+		objectMap["ServiceLoadMetrics"] = scsgd.ServiceLoadMetrics
+	}
+	if scsgd.ServicePlacementPolicies != nil {
+		objectMap["ServicePlacementPolicies"] = scsgd.ServicePlacementPolicies
+	}
+	if scsgd.Flags != nil {
+		objectMap["Flags"] = scsgd.Flags
+	}
+	if scsgd.ServiceGroupMemberDescription != nil {
+		objectMap["ServiceGroupMemberDescription"] = scsgd.ServiceGroupMemberDescription
+	}
+	objectMap["ServiceKind"] = scsgd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessCreateServiceGroupDescription is the BasicCreateServiceGroupDescription implementation for StatelessCreateServiceGroupDescription.
@@ -5521,12 +6068,39 @@ type StatelessServiceDescription struct {
 // MarshalJSON is the custom marshaler for StatelessServiceDescription.
 func (ssd StatelessServiceDescription) MarshalJSON() ([]byte, error) {
 	ssd.ServiceKind = ServiceKindBasicServiceDescriptionServiceKindStateless
-	type Alias StatelessServiceDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(ssd),
-	})
+	objectMap := make(map[string]interface{})
+	if ssd.InstanceCount != nil {
+		objectMap["InstanceCount"] = ssd.InstanceCount
+	}
+	if ssd.ApplicationName != nil {
+		objectMap["ApplicationName"] = ssd.ApplicationName
+	}
+	if ssd.ServiceName != nil {
+		objectMap["ServiceName"] = ssd.ServiceName
+	}
+	if ssd.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = ssd.ServiceTypeName
+	}
+	if ssd.PartitionDescription != nil {
+		objectMap["PartitionDescription"] = ssd.PartitionDescription
+	}
+	if ssd.PlacementConstraints != nil {
+		objectMap["PlacementConstraints"] = ssd.PlacementConstraints
+	}
+	if ssd.CorrelationScheme != nil {
+		objectMap["CorrelationScheme"] = ssd.CorrelationScheme
+	}
+	if ssd.ServiceLoadMetrics != nil {
+		objectMap["ServiceLoadMetrics"] = ssd.ServiceLoadMetrics
+	}
+	if ssd.ServicePlacementPolicies != nil {
+		objectMap["ServicePlacementPolicies"] = ssd.ServicePlacementPolicies
+	}
+	if ssd.Flags != nil {
+		objectMap["Flags"] = ssd.Flags
+	}
+	objectMap["ServiceKind"] = ssd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessServiceDescription is the BasicServiceDescription implementation for StatelessServiceDescription.
@@ -5569,12 +6143,42 @@ type StatelessServiceGroupDescription struct {
 // MarshalJSON is the custom marshaler for StatelessServiceGroupDescription.
 func (ssgd StatelessServiceGroupDescription) MarshalJSON() ([]byte, error) {
 	ssgd.ServiceKind = ServiceKindBasicServiceGroupDescriptionServiceKindStateless
-	type Alias StatelessServiceGroupDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(ssgd),
-	})
+	objectMap := make(map[string]interface{})
+	if ssgd.InstanceCount != nil {
+		objectMap["InstanceCount"] = ssgd.InstanceCount
+	}
+	if ssgd.ApplicationName != nil {
+		objectMap["ApplicationName"] = ssgd.ApplicationName
+	}
+	if ssgd.ServiceName != nil {
+		objectMap["ServiceName"] = ssgd.ServiceName
+	}
+	if ssgd.ServiceTypeName != nil {
+		objectMap["ServiceTypeName"] = ssgd.ServiceTypeName
+	}
+	if ssgd.PartitionDescription != nil {
+		objectMap["PartitionDescription"] = ssgd.PartitionDescription
+	}
+	if ssgd.PlacementConstraints != nil {
+		objectMap["PlacementConstraints"] = ssgd.PlacementConstraints
+	}
+	if ssgd.CorrelationScheme != nil {
+		objectMap["CorrelationScheme"] = ssgd.CorrelationScheme
+	}
+	if ssgd.ServiceLoadMetrics != nil {
+		objectMap["ServiceLoadMetrics"] = ssgd.ServiceLoadMetrics
+	}
+	if ssgd.ServicePlacementPolicies != nil {
+		objectMap["ServicePlacementPolicies"] = ssgd.ServicePlacementPolicies
+	}
+	if ssgd.Flags != nil {
+		objectMap["Flags"] = ssgd.Flags
+	}
+	if ssgd.ServiceGroupMemberDescription != nil {
+		objectMap["ServiceGroupMemberDescription"] = ssgd.ServiceGroupMemberDescription
+	}
+	objectMap["ServiceKind"] = ssgd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessServiceGroupDescription is the BasicServiceGroupDescription implementation for StatelessServiceGroupDescription.
@@ -5608,12 +6212,15 @@ type StatelessUpdateServiceDescription struct {
 // MarshalJSON is the custom marshaler for StatelessUpdateServiceDescription.
 func (susd StatelessUpdateServiceDescription) MarshalJSON() ([]byte, error) {
 	susd.ServiceKind = ServiceKindBasicUpdateServiceDescriptionServiceKindStateless
-	type Alias StatelessUpdateServiceDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(susd),
-	})
+	objectMap := make(map[string]interface{})
+	if susd.InstanceCount != nil {
+		objectMap["InstanceCount"] = susd.InstanceCount
+	}
+	if susd.Flags != nil {
+		objectMap["Flags"] = susd.Flags
+	}
+	objectMap["ServiceKind"] = susd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessUpdateServiceDescription is the BasicUpdateServiceDescription implementation for StatelessUpdateServiceDescription.
@@ -5647,12 +6254,15 @@ type StatelessUpdateServiceGroupDescription struct {
 // MarshalJSON is the custom marshaler for StatelessUpdateServiceGroupDescription.
 func (susgd StatelessUpdateServiceGroupDescription) MarshalJSON() ([]byte, error) {
 	susgd.ServiceKind = ServiceKindBasicUpdateServiceGroupDescriptionServiceKindStateless
-	type Alias StatelessUpdateServiceGroupDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(susgd),
-	})
+	objectMap := make(map[string]interface{})
+	if susgd.InstanceCount != nil {
+		objectMap["InstanceCount"] = susgd.InstanceCount
+	}
+	if susgd.Flags != nil {
+		objectMap["Flags"] = susgd.Flags
+	}
+	objectMap["ServiceKind"] = susgd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessUpdateServiceGroupDescription is the BasicUpdateServiceGroupDescription implementation for StatelessUpdateServiceGroupDescription.
@@ -5694,12 +6304,16 @@ type SystemApplicationHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for SystemApplicationHealthEvaluation.
 func (sahe SystemApplicationHealthEvaluation) MarshalJSON() ([]byte, error) {
 	sahe.Kind = KindSystemApplication
-	type Alias SystemApplicationHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(sahe),
-	})
+	objectMap := make(map[string]interface{})
+	if sahe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = sahe.UnhealthyEvaluations
+	}
+	if sahe.Description != nil {
+		objectMap["Description"] = sahe.Description
+	}
+	objectMap["AggregatedHealthState"] = sahe.AggregatedHealthState
+	objectMap["Kind"] = sahe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for SystemApplicationHealthEvaluation.
@@ -5829,15 +6443,17 @@ func (ue *UnhealthyEvaluation) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["HealthEvaluation"]
-	if v != nil {
-		healthEvaluation, err := unmarshalBasicHealthEvaluation(*m["HealthEvaluation"])
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "HealthEvaluation":
+			if v != nil {
+				healthEvaluation, err := unmarshalBasicHealthEvaluation(*v)
+				if err != nil {
+					return err
+				}
+				ue.HealthEvaluation = healthEvaluation
+			}
 		}
-		ue.HealthEvaluation = healthEvaluation
 	}
 
 	return nil
@@ -5956,12 +6572,12 @@ func unmarshalBasicUpdateServiceDescriptionArray(body []byte) ([]BasicUpdateServ
 // MarshalJSON is the custom marshaler for UpdateServiceDescription.
 func (usd UpdateServiceDescription) MarshalJSON() ([]byte, error) {
 	usd.ServiceKind = ServiceKindBasicUpdateServiceDescriptionServiceKindUpdateServiceDescription
-	type Alias UpdateServiceDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(usd),
-	})
+	objectMap := make(map[string]interface{})
+	if usd.Flags != nil {
+		objectMap["Flags"] = usd.Flags
+	}
+	objectMap["ServiceKind"] = usd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessUpdateServiceDescription is the BasicUpdateServiceDescription implementation for UpdateServiceDescription.
@@ -6042,12 +6658,12 @@ func unmarshalBasicUpdateServiceGroupDescriptionArray(body []byte) ([]BasicUpdat
 // MarshalJSON is the custom marshaler for UpdateServiceGroupDescription.
 func (usgd UpdateServiceGroupDescription) MarshalJSON() ([]byte, error) {
 	usgd.ServiceKind = ServiceKindBasicUpdateServiceGroupDescriptionServiceKindUpdateServiceGroupDescription
-	type Alias UpdateServiceGroupDescription
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(usgd),
-	})
+	objectMap := make(map[string]interface{})
+	if usgd.Flags != nil {
+		objectMap["Flags"] = usgd.Flags
+	}
+	objectMap["ServiceKind"] = usgd.ServiceKind
+	return json.Marshal(objectMap)
 }
 
 // AsStatelessUpdateServiceGroupDescription is the BasicUpdateServiceGroupDescription implementation for UpdateServiceGroupDescription.
@@ -6088,12 +6704,31 @@ type UpgradeDomainDeltaNodesCheckHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for UpgradeDomainDeltaNodesCheckHealthEvaluation.
 func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) MarshalJSON() ([]byte, error) {
 	uddnche.Kind = KindUpgradeDomainDeltaNodesCheck
-	type Alias UpgradeDomainDeltaNodesCheckHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(uddnche),
-	})
+	objectMap := make(map[string]interface{})
+	if uddnche.UpgradeDomainName != nil {
+		objectMap["UpgradeDomainName"] = uddnche.UpgradeDomainName
+	}
+	if uddnche.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = uddnche.UnhealthyEvaluations
+	}
+	if uddnche.BaselineErrorCount != nil {
+		objectMap["BaselineErrorCount"] = uddnche.BaselineErrorCount
+	}
+	if uddnche.BaselineTotalCount != nil {
+		objectMap["BaselineTotalCount"] = uddnche.BaselineTotalCount
+	}
+	if uddnche.TotalCount != nil {
+		objectMap["TotalCount"] = uddnche.TotalCount
+	}
+	if uddnche.MaxPercentUpgradeDomainDeltaUnhealthyNodes != nil {
+		objectMap["MaxPercentUpgradeDomainDeltaUnhealthyNodes"] = uddnche.MaxPercentUpgradeDomainDeltaUnhealthyNodes
+	}
+	if uddnche.Description != nil {
+		objectMap["Description"] = uddnche.Description
+	}
+	objectMap["AggregatedHealthState"] = uddnche.AggregatedHealthState
+	objectMap["Kind"] = uddnche.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeltaNodesCheckHealthEvaluation.
@@ -6211,7 +6846,8 @@ func (uddnche UpgradeDomainDeltaNodesCheckHealthEvaluation) AsBasicHealthEvaluat
 	return &uddnche, true
 }
 
-// UpgradeDomainDeployedApplicationsHealthEvaluation the evaluation of the upgrade domain deployed applications health
+// UpgradeDomainDeployedApplicationsHealthEvaluation the evaluation of the upgrade domain deployed applications
+// health
 type UpgradeDomainDeployedApplicationsHealthEvaluation struct {
 	Description *string `json:"Description,omitempty"`
 	// AggregatedHealthState - Possible values include: 'Invalid', 'Ok', 'Warning', 'Error', 'Unknown'
@@ -6227,12 +6863,25 @@ type UpgradeDomainDeployedApplicationsHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for UpgradeDomainDeployedApplicationsHealthEvaluation.
 func (uddahe UpgradeDomainDeployedApplicationsHealthEvaluation) MarshalJSON() ([]byte, error) {
 	uddahe.Kind = KindUpgradeDomainDeployedApplications
-	type Alias UpgradeDomainDeployedApplicationsHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(uddahe),
-	})
+	objectMap := make(map[string]interface{})
+	if uddahe.UpgradeDomainName != nil {
+		objectMap["UpgradeDomainName"] = uddahe.UpgradeDomainName
+	}
+	if uddahe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = uddahe.UnhealthyEvaluations
+	}
+	if uddahe.TotalCount != nil {
+		objectMap["TotalCount"] = uddahe.TotalCount
+	}
+	if uddahe.MaxPercentUnhealthyDeployedApplications != nil {
+		objectMap["MaxPercentUnhealthyDeployedApplications"] = uddahe.MaxPercentUnhealthyDeployedApplications
+	}
+	if uddahe.Description != nil {
+		objectMap["Description"] = uddahe.Description
+	}
+	objectMap["AggregatedHealthState"] = uddahe.AggregatedHealthState
+	objectMap["Kind"] = uddahe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainDeployedApplicationsHealthEvaluation.
@@ -6366,12 +7015,25 @@ type UpgradeDomainNodesHealthEvaluation struct {
 // MarshalJSON is the custom marshaler for UpgradeDomainNodesHealthEvaluation.
 func (udnhe UpgradeDomainNodesHealthEvaluation) MarshalJSON() ([]byte, error) {
 	udnhe.Kind = KindUpgradeDomainNodes
-	type Alias UpgradeDomainNodesHealthEvaluation
-	return json.Marshal(&struct {
-		Alias
-	}{
-		Alias: (Alias)(udnhe),
-	})
+	objectMap := make(map[string]interface{})
+	if udnhe.UpgradeDomainName != nil {
+		objectMap["UpgradeDomainName"] = udnhe.UpgradeDomainName
+	}
+	if udnhe.UnhealthyEvaluations != nil {
+		objectMap["UnhealthyEvaluations"] = udnhe.UnhealthyEvaluations
+	}
+	if udnhe.TotalCount != nil {
+		objectMap["TotalCount"] = udnhe.TotalCount
+	}
+	if udnhe.MaxPercentUnhealthyNodes != nil {
+		objectMap["MaxPercentUnhealthyNodes"] = udnhe.MaxPercentUnhealthyNodes
+	}
+	if udnhe.Description != nil {
+		objectMap["Description"] = udnhe.Description
+	}
+	objectMap["AggregatedHealthState"] = udnhe.AggregatedHealthState
+	objectMap["Kind"] = udnhe.Kind
+	return json.Marshal(objectMap)
 }
 
 // AsEventHealthEvaluation is the BasicHealthEvaluation implementation for UpgradeDomainNodesHealthEvaluation.

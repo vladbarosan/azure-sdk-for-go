@@ -95,7 +95,7 @@ type Appliance struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// ManagedBy - ID of the resource that manages this resource.
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// Sku - The SKU of the resource.
@@ -110,6 +110,45 @@ type Appliance struct {
 	Kind *string `json:"kind,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for Appliance.
+func (a Appliance) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if a.ApplianceProperties != nil {
+		objectMap["properties"] = a.ApplianceProperties
+	}
+	if a.Plan != nil {
+		objectMap["plan"] = a.Plan
+	}
+	if a.Kind != nil {
+		objectMap["kind"] = a.Kind
+	}
+	if a.ManagedBy != nil {
+		objectMap["managedBy"] = a.ManagedBy
+	}
+	if a.Sku != nil {
+		objectMap["sku"] = a.Sku
+	}
+	if a.Identity != nil {
+		objectMap["identity"] = a.Identity
+	}
+	if a.ID != nil {
+		objectMap["id"] = a.ID
+	}
+	if a.Name != nil {
+		objectMap["name"] = a.Name
+	}
+	if a.Type != nil {
+		objectMap["type"] = a.Type
+	}
+	if a.Location != nil {
+		objectMap["location"] = a.Location
+	}
+	if a.Tags != nil {
+		objectMap["tags"] = a.Tags
+	}
+	return json.Marshal(objectMap)
+}
+
 // UnmarshalJSON is the custom unmarshaler for Appliance struct.
 func (a *Appliance) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -117,116 +156,108 @@ func (a *Appliance) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ApplianceProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var applianceProperties ApplianceProperties
+				err = json.Unmarshal(*v, &applianceProperties)
+				if err != nil {
+					return err
+				}
+				a.ApplianceProperties = &applianceProperties
+			}
+		case "plan":
+			if v != nil {
+				var plan Plan
+				err = json.Unmarshal(*v, &plan)
+				if err != nil {
+					return err
+				}
+				a.Plan = &plan
+			}
+		case "kind":
+			if v != nil {
+				var kind string
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				a.Kind = &kind
+			}
+		case "managedBy":
+			if v != nil {
+				var managedBy string
+				err = json.Unmarshal(*v, &managedBy)
+				if err != nil {
+					return err
+				}
+				a.ManagedBy = &managedBy
+			}
+		case "sku":
+			if v != nil {
+				var sku Sku
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				a.Sku = &sku
+			}
+		case "identity":
+			if v != nil {
+				var identity Identity
+				err = json.Unmarshal(*v, &identity)
+				if err != nil {
+					return err
+				}
+				a.Identity = &identity
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				a.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				a.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				a.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				a.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				a.Tags = tags
+			}
 		}
-		a.ApplianceProperties = &properties
-	}
-
-	v = m["plan"]
-	if v != nil {
-		var plan Plan
-		err = json.Unmarshal(*m["plan"], &plan)
-		if err != nil {
-			return err
-		}
-		a.Plan = &plan
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind string
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		a.Kind = &kind
-	}
-
-	v = m["managedBy"]
-	if v != nil {
-		var managedBy string
-		err = json.Unmarshal(*m["managedBy"], &managedBy)
-		if err != nil {
-			return err
-		}
-		a.ManagedBy = &managedBy
-	}
-
-	v = m["sku"]
-	if v != nil {
-		var sku Sku
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
-		}
-		a.Sku = &sku
-	}
-
-	v = m["identity"]
-	if v != nil {
-		var identity Identity
-		err = json.Unmarshal(*m["identity"], &identity)
-		if err != nil {
-			return err
-		}
-		a.Identity = &identity
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		a.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		a.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		a.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		a.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		a.Tags = &tags
 	}
 
 	return nil
@@ -254,7 +285,7 @@ type ApplianceDefinition struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// ManagedBy - ID of the resource that manages this resource.
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// Sku - The SKU of the resource.
@@ -265,6 +296,39 @@ type ApplianceDefinition struct {
 	*ApplianceDefinitionProperties `json:"properties,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for ApplianceDefinition.
+func (ad ApplianceDefinition) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ad.ApplianceDefinitionProperties != nil {
+		objectMap["properties"] = ad.ApplianceDefinitionProperties
+	}
+	if ad.ManagedBy != nil {
+		objectMap["managedBy"] = ad.ManagedBy
+	}
+	if ad.Sku != nil {
+		objectMap["sku"] = ad.Sku
+	}
+	if ad.Identity != nil {
+		objectMap["identity"] = ad.Identity
+	}
+	if ad.ID != nil {
+		objectMap["id"] = ad.ID
+	}
+	if ad.Name != nil {
+		objectMap["name"] = ad.Name
+	}
+	if ad.Type != nil {
+		objectMap["type"] = ad.Type
+	}
+	if ad.Location != nil {
+		objectMap["location"] = ad.Location
+	}
+	if ad.Tags != nil {
+		objectMap["tags"] = ad.Tags
+	}
+	return json.Marshal(objectMap)
+}
+
 // UnmarshalJSON is the custom unmarshaler for ApplianceDefinition struct.
 func (ad *ApplianceDefinition) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -272,96 +336,90 @@ func (ad *ApplianceDefinition) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ApplianceDefinitionProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var applianceDefinitionProperties ApplianceDefinitionProperties
+				err = json.Unmarshal(*v, &applianceDefinitionProperties)
+				if err != nil {
+					return err
+				}
+				ad.ApplianceDefinitionProperties = &applianceDefinitionProperties
+			}
+		case "managedBy":
+			if v != nil {
+				var managedBy string
+				err = json.Unmarshal(*v, &managedBy)
+				if err != nil {
+					return err
+				}
+				ad.ManagedBy = &managedBy
+			}
+		case "sku":
+			if v != nil {
+				var sku Sku
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				ad.Sku = &sku
+			}
+		case "identity":
+			if v != nil {
+				var identity Identity
+				err = json.Unmarshal(*v, &identity)
+				if err != nil {
+					return err
+				}
+				ad.Identity = &identity
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				ad.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				ad.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ad.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				ad.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				ad.Tags = tags
+			}
 		}
-		ad.ApplianceDefinitionProperties = &properties
-	}
-
-	v = m["managedBy"]
-	if v != nil {
-		var managedBy string
-		err = json.Unmarshal(*m["managedBy"], &managedBy)
-		if err != nil {
-			return err
-		}
-		ad.ManagedBy = &managedBy
-	}
-
-	v = m["sku"]
-	if v != nil {
-		var sku Sku
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
-		}
-		ad.Sku = &sku
-	}
-
-	v = m["identity"]
-	if v != nil {
-		var identity Identity
-		err = json.Unmarshal(*m["identity"], &identity)
-		if err != nil {
-			return err
-		}
-		ad.Identity = &identity
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		ad.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		ad.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		ad.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		ad.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		ad.Tags = &tags
 	}
 
 	return nil
@@ -517,8 +575,8 @@ func (future ApplianceDefinitionsCreateOrUpdateByIDFuture) Result(client Applian
 	return
 }
 
-// ApplianceDefinitionsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// ApplianceDefinitionsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type ApplianceDefinitionsCreateOrUpdateFuture struct {
 	azure.Future
 	req *http.Request
@@ -726,7 +784,7 @@ type AppliancePatchable struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// ManagedBy - ID of the resource that manages this resource.
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// Sku - The SKU of the resource.
@@ -741,6 +799,45 @@ type AppliancePatchable struct {
 	Kind *string `json:"kind,omitempty"`
 }
 
+// MarshalJSON is the custom marshaler for AppliancePatchable.
+func (ap AppliancePatchable) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ap.AppliancePropertiesPatchable != nil {
+		objectMap["properties"] = ap.AppliancePropertiesPatchable
+	}
+	if ap.Plan != nil {
+		objectMap["plan"] = ap.Plan
+	}
+	if ap.Kind != nil {
+		objectMap["kind"] = ap.Kind
+	}
+	if ap.ManagedBy != nil {
+		objectMap["managedBy"] = ap.ManagedBy
+	}
+	if ap.Sku != nil {
+		objectMap["sku"] = ap.Sku
+	}
+	if ap.Identity != nil {
+		objectMap["identity"] = ap.Identity
+	}
+	if ap.ID != nil {
+		objectMap["id"] = ap.ID
+	}
+	if ap.Name != nil {
+		objectMap["name"] = ap.Name
+	}
+	if ap.Type != nil {
+		objectMap["type"] = ap.Type
+	}
+	if ap.Location != nil {
+		objectMap["location"] = ap.Location
+	}
+	if ap.Tags != nil {
+		objectMap["tags"] = ap.Tags
+	}
+	return json.Marshal(objectMap)
+}
+
 // UnmarshalJSON is the custom unmarshaler for AppliancePatchable struct.
 func (ap *AppliancePatchable) UnmarshalJSON(body []byte) error {
 	var m map[string]*json.RawMessage
@@ -748,116 +845,108 @@ func (ap *AppliancePatchable) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties AppliancePropertiesPatchable
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var appliancePropertiesPatchable AppliancePropertiesPatchable
+				err = json.Unmarshal(*v, &appliancePropertiesPatchable)
+				if err != nil {
+					return err
+				}
+				ap.AppliancePropertiesPatchable = &appliancePropertiesPatchable
+			}
+		case "plan":
+			if v != nil {
+				var plan PlanPatchable
+				err = json.Unmarshal(*v, &plan)
+				if err != nil {
+					return err
+				}
+				ap.Plan = &plan
+			}
+		case "kind":
+			if v != nil {
+				var kind string
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				ap.Kind = &kind
+			}
+		case "managedBy":
+			if v != nil {
+				var managedBy string
+				err = json.Unmarshal(*v, &managedBy)
+				if err != nil {
+					return err
+				}
+				ap.ManagedBy = &managedBy
+			}
+		case "sku":
+			if v != nil {
+				var sku Sku
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				ap.Sku = &sku
+			}
+		case "identity":
+			if v != nil {
+				var identity Identity
+				err = json.Unmarshal(*v, &identity)
+				if err != nil {
+					return err
+				}
+				ap.Identity = &identity
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				ap.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				ap.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ap.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				ap.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				ap.Tags = tags
+			}
 		}
-		ap.AppliancePropertiesPatchable = &properties
-	}
-
-	v = m["plan"]
-	if v != nil {
-		var plan PlanPatchable
-		err = json.Unmarshal(*m["plan"], &plan)
-		if err != nil {
-			return err
-		}
-		ap.Plan = &plan
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind string
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		ap.Kind = &kind
-	}
-
-	v = m["managedBy"]
-	if v != nil {
-		var managedBy string
-		err = json.Unmarshal(*m["managedBy"], &managedBy)
-		if err != nil {
-			return err
-		}
-		ap.ManagedBy = &managedBy
-	}
-
-	v = m["sku"]
-	if v != nil {
-		var sku Sku
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
-		}
-		ap.Sku = &sku
-	}
-
-	v = m["identity"]
-	if v != nil {
-		var identity Identity
-		err = json.Unmarshal(*m["identity"], &identity)
-		if err != nil {
-			return err
-		}
-		ap.Identity = &identity
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		ap.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		ap.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		ap.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		ap.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		ap.Tags = &tags
 	}
 
 	return nil
@@ -870,9 +959,9 @@ type ApplianceProperties struct {
 	// ApplianceDefinitionID - The fully qualified path of appliance definition Id.
 	ApplianceDefinitionID *string `json:"applianceDefinitionId,omitempty"`
 	// Parameters - Name and value pairs that define the appliance parameters. It can be a JObject or a well formed JSON string.
-	Parameters *map[string]interface{} `json:"parameters,omitempty"`
+	Parameters interface{} `json:"parameters,omitempty"`
 	// Outputs - Name and value pairs that define the appliance outputs.
-	Outputs *map[string]interface{} `json:"outputs,omitempty"`
+	Outputs interface{} `json:"outputs,omitempty"`
 	// ProvisioningState - The appliance provisioning state. Possible values include: 'Accepted', 'Running', 'Ready', 'Creating', 'Created', 'Deleting', 'Deleted', 'Canceled', 'Failed', 'Succeeded', 'Updating'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// UIDefinitionURI - The blob URI where the UI definition file is located.
@@ -886,9 +975,9 @@ type AppliancePropertiesPatchable struct {
 	// ApplianceDefinitionID - The fully qualified path of appliance definition Id.
 	ApplianceDefinitionID *string `json:"applianceDefinitionId,omitempty"`
 	// Parameters - Name and value pairs that define the appliance parameters. It can be a JObject or a well formed JSON string.
-	Parameters *map[string]interface{} `json:"parameters,omitempty"`
+	Parameters interface{} `json:"parameters,omitempty"`
 	// Outputs - Name and value pairs that define the appliance outputs.
-	Outputs *map[string]interface{} `json:"outputs,omitempty"`
+	Outputs interface{} `json:"outputs,omitempty"`
 	// ProvisioningState - The appliance provisioning state. Possible values include: 'Accepted', 'Running', 'Ready', 'Creating', 'Created', 'Deleting', 'Deleted', 'Canceled', 'Failed', 'Succeeded', 'Updating'
 	ProvisioningState ProvisioningState `json:"provisioningState,omitempty"`
 	// UIDefinitionURI - The blob URI where the UI definition file is located.
@@ -935,7 +1024,8 @@ func (future AppliancesCreateOrUpdateByIDFuture) Result(client AppliancesClient)
 	return
 }
 
-// AppliancesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// AppliancesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type AppliancesCreateOrUpdateFuture struct {
 	azure.Future
 	req *http.Request
@@ -1050,13 +1140,43 @@ type GenericResource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// ManagedBy - ID of the resource that manages this resource.
 	ManagedBy *string `json:"managedBy,omitempty"`
 	// Sku - The SKU of the resource.
 	Sku *Sku `json:"sku,omitempty"`
 	// Identity - The identity of the resource.
 	Identity *Identity `json:"identity,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for GenericResource.
+func (gr GenericResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if gr.ManagedBy != nil {
+		objectMap["managedBy"] = gr.ManagedBy
+	}
+	if gr.Sku != nil {
+		objectMap["sku"] = gr.Sku
+	}
+	if gr.Identity != nil {
+		objectMap["identity"] = gr.Identity
+	}
+	if gr.ID != nil {
+		objectMap["id"] = gr.ID
+	}
+	if gr.Name != nil {
+		objectMap["name"] = gr.Name
+	}
+	if gr.Type != nil {
+		objectMap["type"] = gr.Type
+	}
+	if gr.Location != nil {
+		objectMap["location"] = gr.Location
+	}
+	if gr.Tags != nil {
+		objectMap["tags"] = gr.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // Identity identity for the resource.
@@ -1108,7 +1228,28 @@ type Resource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // Sku SKU for the resource.

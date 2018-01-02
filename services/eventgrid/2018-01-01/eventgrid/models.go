@@ -30,7 +30,7 @@ type Event struct {
 	// Subject - A resource path relative to the topic path.
 	Subject *string `json:"subject,omitempty"`
 	// Data - Event data specific to the event type.
-	Data *map[string]interface{} `json:"data,omitempty"`
+	Data interface{} `json:"data,omitempty"`
 	// EventType - The type of the event that occurred.
 	EventType *string `json:"eventType,omitempty"`
 	// EventTime - The time (in UTC) the event was generated.

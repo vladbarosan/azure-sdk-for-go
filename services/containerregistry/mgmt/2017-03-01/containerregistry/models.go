@@ -225,11 +225,38 @@ type Registry struct {
 	// Location - The location of the resource. This cannot be changed after the resource is created.
 	Location *string `json:"location,omitempty"`
 	// Tags - The tags of the resource.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Sku - The SKU of the container registry.
 	Sku *Sku `json:"sku,omitempty"`
 	// RegistryProperties - The properties of the container registry.
 	*RegistryProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Registry.
+func (r Registry) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.Sku != nil {
+		objectMap["sku"] = r.Sku
+	}
+	if r.RegistryProperties != nil {
+		objectMap["properties"] = r.RegistryProperties
+	}
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for Registry struct.
@@ -239,76 +266,72 @@ func (r *Registry) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["sku"]
-	if v != nil {
-		var sku Sku
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "sku":
+			if v != nil {
+				var sku Sku
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				r.Sku = &sku
+			}
+		case "properties":
+			if v != nil {
+				var registryProperties RegistryProperties
+				err = json.Unmarshal(*v, &registryProperties)
+				if err != nil {
+					return err
+				}
+				r.RegistryProperties = &registryProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				r.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				r.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				r.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				r.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				r.Tags = tags
+			}
 		}
-		r.Sku = &sku
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties RegistryProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		r.RegistryProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		r.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		r.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		r.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		r.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		r.Tags = &tags
 	}
 
 	return nil
@@ -317,13 +340,31 @@ func (r *Registry) UnmarshalJSON(body []byte) error {
 // RegistryCreateParameters the parameters for creating a container registry.
 type RegistryCreateParameters struct {
 	// Tags - The tags for the container registry.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Location - The location of the container registry. This cannot be changed after the resource is created.
 	Location *string `json:"location,omitempty"`
 	// Sku - The SKU of the container registry.
 	Sku *Sku `json:"sku,omitempty"`
 	// RegistryPropertiesCreateParameters - The properties that the container registry will be created with.
 	*RegistryPropertiesCreateParameters `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for RegistryCreateParameters.
+func (rcp RegistryCreateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if rcp.Tags != nil {
+		objectMap["tags"] = rcp.Tags
+	}
+	if rcp.Location != nil {
+		objectMap["location"] = rcp.Location
+	}
+	if rcp.Sku != nil {
+		objectMap["sku"] = rcp.Sku
+	}
+	if rcp.RegistryPropertiesCreateParameters != nil {
+		objectMap["properties"] = rcp.RegistryPropertiesCreateParameters
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for RegistryCreateParameters struct.
@@ -333,46 +374,45 @@ func (rcp *RegistryCreateParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				rcp.Tags = tags
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				rcp.Location = &location
+			}
+		case "sku":
+			if v != nil {
+				var sku Sku
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				rcp.Sku = &sku
+			}
+		case "properties":
+			if v != nil {
+				var registryPropertiesCreateParameters RegistryPropertiesCreateParameters
+				err = json.Unmarshal(*v, &registryPropertiesCreateParameters)
+				if err != nil {
+					return err
+				}
+				rcp.RegistryPropertiesCreateParameters = &registryPropertiesCreateParameters
+			}
 		}
-		rcp.Tags = &tags
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		rcp.Location = &location
-	}
-
-	v = m["sku"]
-	if v != nil {
-		var sku Sku
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
-		}
-		rcp.Sku = &sku
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties RegistryPropertiesCreateParameters
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		rcp.RegistryPropertiesCreateParameters = &properties
 	}
 
 	return nil
@@ -549,9 +589,21 @@ type RegistryPropertiesUpdateParameters struct {
 // RegistryUpdateParameters the parameters for updating a container registry.
 type RegistryUpdateParameters struct {
 	// Tags - The tags for the container registry.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// RegistryPropertiesUpdateParameters - The properties that the container registry will be updated with.
 	*RegistryPropertiesUpdateParameters `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for RegistryUpdateParameters.
+func (rup RegistryUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if rup.Tags != nil {
+		objectMap["tags"] = rup.Tags
+	}
+	if rup.RegistryPropertiesUpdateParameters != nil {
+		objectMap["properties"] = rup.RegistryPropertiesUpdateParameters
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for RegistryUpdateParameters struct.
@@ -561,26 +613,27 @@ func (rup *RegistryUpdateParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				rup.Tags = tags
+			}
+		case "properties":
+			if v != nil {
+				var registryPropertiesUpdateParameters RegistryPropertiesUpdateParameters
+				err = json.Unmarshal(*v, &registryPropertiesUpdateParameters)
+				if err != nil {
+					return err
+				}
+				rup.RegistryPropertiesUpdateParameters = &registryPropertiesUpdateParameters
+			}
 		}
-		rup.Tags = &tags
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties RegistryPropertiesUpdateParameters
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		rup.RegistryPropertiesUpdateParameters = &properties
 	}
 
 	return nil
@@ -597,7 +650,28 @@ type Resource struct {
 	// Location - The location of the resource. This cannot be changed after the resource is created.
 	Location *string `json:"location,omitempty"`
 	// Tags - The tags of the resource.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // Sku the SKU of a container registry.

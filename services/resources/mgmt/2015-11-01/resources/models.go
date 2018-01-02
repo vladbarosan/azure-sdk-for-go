@@ -18,6 +18,7 @@ package resources
 // Changes may cause incorrect behavior and will be lost if the code is regenerated.
 
 import (
+	"encoding/json"
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/date"
@@ -202,7 +203,7 @@ type DeploymentOperationProperties struct {
 	// StatusCode - Gets or sets operation status code.
 	StatusCode *string `json:"statusCode,omitempty"`
 	// StatusMessage - Gets or sets operation status message.
-	StatusMessage *map[string]interface{} `json:"statusMessage,omitempty"`
+	StatusMessage interface{} `json:"statusMessage,omitempty"`
 	// TargetResource - Gets or sets the target resource.
 	TargetResource *TargetResource `json:"targetResource,omitempty"`
 }
@@ -312,11 +313,11 @@ func (page DeploymentOperationsListResultPage) Values() []DeploymentOperation {
 // DeploymentProperties deployment properties.
 type DeploymentProperties struct {
 	// Template - Gets or sets the template content. Use only one of Template or TemplateLink.
-	Template *map[string]interface{} `json:"template,omitempty"`
+	Template interface{} `json:"template,omitempty"`
 	// TemplateLink - Gets or sets the URI referencing the template. Use only one of Template or TemplateLink.
 	TemplateLink *TemplateLink `json:"templateLink,omitempty"`
 	// Parameters - Deployment parameters. Use only one of Parameters or ParametersLink.
-	Parameters *map[string]interface{} `json:"parameters,omitempty"`
+	Parameters interface{} `json:"parameters,omitempty"`
 	// ParametersLink - Gets or sets the URI referencing the parameters. Use only one of Parameters or ParametersLink.
 	ParametersLink *ParametersLink `json:"parametersLink,omitempty"`
 	// Mode - Gets or sets the deployment mode. Possible values include: 'Incremental', 'Complete'
@@ -332,17 +333,17 @@ type DeploymentPropertiesExtended struct {
 	// Timestamp - Gets or sets the timestamp of the template deployment.
 	Timestamp *date.Time `json:"timestamp,omitempty"`
 	// Outputs - Gets or sets key/value pairs that represent deploymentoutput.
-	Outputs *map[string]interface{} `json:"outputs,omitempty"`
+	Outputs interface{} `json:"outputs,omitempty"`
 	// Providers - Gets the list of resource providers needed for the deployment.
 	Providers *[]Provider `json:"providers,omitempty"`
 	// Dependencies - Gets the list of deployment dependencies.
 	Dependencies *[]Dependency `json:"dependencies,omitempty"`
 	// Template - Gets or sets the template content. Use only one of Template or TemplateLink.
-	Template *map[string]interface{} `json:"template,omitempty"`
+	Template interface{} `json:"template,omitempty"`
 	// TemplateLink - Gets or sets the URI referencing the template. Use only one of Template or TemplateLink.
 	TemplateLink *TemplateLink `json:"templateLink,omitempty"`
 	// Parameters - Deployment parameters. Use only one of Parameters or ParametersLink.
-	Parameters *map[string]interface{} `json:"parameters,omitempty"`
+	Parameters interface{} `json:"parameters,omitempty"`
 	// ParametersLink - Gets or sets the URI referencing the parameters. Use only one of Parameters or ParametersLink.
 	ParametersLink *ParametersLink `json:"parametersLink,omitempty"`
 	// Mode - Gets or sets the deployment mode. Possible values include: 'Incremental', 'Complete'
@@ -433,11 +434,36 @@ type GenericResource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// Plan - Gets or sets the plan of the resource.
 	Plan *Plan `json:"plan,omitempty"`
 	// Properties - Gets or sets the resource properties.
-	Properties *map[string]interface{} `json:"properties,omitempty"`
+	Properties interface{} `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for GenericResource.
+func (gr GenericResource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if gr.Plan != nil {
+		objectMap["plan"] = gr.Plan
+	}
+	objectMap["properties"] = gr.Properties
+	if gr.ID != nil {
+		objectMap["id"] = gr.ID
+	}
+	if gr.Name != nil {
+		objectMap["name"] = gr.Name
+	}
+	if gr.Type != nil {
+		objectMap["type"] = gr.Type
+	}
+	if gr.Location != nil {
+		objectMap["location"] = gr.Location
+	}
+	if gr.Tags != nil {
+		objectMap["tags"] = gr.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // GenericResourceFilter resource filter.
@@ -461,7 +487,28 @@ type Group struct {
 	// Location - Gets or sets the location of the resource group. It cannot be changed after the resource group has been created. Has to be one of the supported Azure Locations, such as West US, East US, West Europe, East Asia, etc.
 	Location *string `json:"location,omitempty"`
 	// Tags - Gets or sets the tags attached to the resource group.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Group.
+func (g Group) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if g.ID != nil {
+		objectMap["id"] = g.ID
+	}
+	if g.Name != nil {
+		objectMap["name"] = g.Name
+	}
+	if g.Properties != nil {
+		objectMap["properties"] = g.Properties
+	}
+	if g.Location != nil {
+		objectMap["location"] = g.Location
+	}
+	if g.Tags != nil {
+		objectMap["tags"] = g.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // GroupFilter resource group filter.
@@ -900,7 +947,7 @@ type PolicyDefinitionProperties struct {
 	// DisplayName - Gets or sets the policy definition display name.
 	DisplayName *string `json:"displayName,omitempty"`
 	// PolicyRule - The policy rule json.
-	PolicyRule *map[string]interface{} `json:"policyRule,omitempty"`
+	PolicyRule interface{} `json:"policyRule,omitempty"`
 }
 
 // Provider resource provider information.
@@ -1152,7 +1199,25 @@ type ProviderResourceType struct {
 	// APIVersions - Gets or sets the api version.
 	APIVersions *[]string `json:"apiVersions,omitempty"`
 	// Properties - Gets or sets the properties.
-	Properties *map[string]*string `json:"properties,omitempty"`
+	Properties map[string]*string `json:"properties"`
+}
+
+// MarshalJSON is the custom marshaler for ProviderResourceType.
+func (prt ProviderResourceType) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if prt.ResourceType != nil {
+		objectMap["resourceType"] = prt.ResourceType
+	}
+	if prt.Locations != nil {
+		objectMap["locations"] = prt.Locations
+	}
+	if prt.APIVersions != nil {
+		objectMap["apiVersions"] = prt.APIVersions
+	}
+	if prt.Properties != nil {
+		objectMap["properties"] = prt.Properties
+	}
+	return json.Marshal(objectMap)
 }
 
 // Resource ...
@@ -1166,10 +1231,32 @@ type Resource struct {
 	// Location - Resource location
 	Location *string `json:"location,omitempty"`
 	// Tags - Resource tags
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 }
 
-// ResourcesMoveResourcesFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
+}
+
+// ResourcesMoveResourcesFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type ResourcesMoveResourcesFuture struct {
 	azure.Future
 	req *http.Request

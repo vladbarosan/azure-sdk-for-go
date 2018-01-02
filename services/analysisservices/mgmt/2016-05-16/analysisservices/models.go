@@ -153,7 +153,31 @@ type Resource struct {
 	// Sku - The SKU of the Analysis Services resource.
 	Sku *ResourceSku `json:"sku,omitempty"`
 	// Tags - Key-value pairs of additional resource provisioning properties.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Sku != nil {
+		objectMap["sku"] = r.Sku
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // ResourceSku represents the SKU name and Azure pricing tier for Analysis Services resource.
@@ -178,9 +202,36 @@ type Server struct {
 	// Sku - The SKU of the Analysis Services resource.
 	Sku *ResourceSku `json:"sku,omitempty"`
 	// Tags - Key-value pairs of additional resource provisioning properties.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// ServerProperties - Properties of the provision operation request.
 	*ServerProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Server.
+func (s Server) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if s.ServerProperties != nil {
+		objectMap["properties"] = s.ServerProperties
+	}
+	if s.ID != nil {
+		objectMap["id"] = s.ID
+	}
+	if s.Name != nil {
+		objectMap["name"] = s.Name
+	}
+	if s.Type != nil {
+		objectMap["type"] = s.Type
+	}
+	if s.Location != nil {
+		objectMap["location"] = s.Location
+	}
+	if s.Sku != nil {
+		objectMap["sku"] = s.Sku
+	}
+	if s.Tags != nil {
+		objectMap["tags"] = s.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for Server struct.
@@ -190,76 +241,72 @@ func (s *Server) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ServerProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var serverProperties ServerProperties
+				err = json.Unmarshal(*v, &serverProperties)
+				if err != nil {
+					return err
+				}
+				s.ServerProperties = &serverProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				s.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				s.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				s.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				s.Location = &location
+			}
+		case "sku":
+			if v != nil {
+				var sku ResourceSku
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				s.Sku = &sku
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				s.Tags = tags
+			}
 		}
-		s.ServerProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		s.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		s.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		s.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		s.Location = &location
-	}
-
-	v = m["sku"]
-	if v != nil {
-		var sku ResourceSku
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
-		}
-		s.Sku = &sku
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		s.Tags = &tags
 	}
 
 	return nil
@@ -460,9 +507,24 @@ type ServerUpdateParameters struct {
 	// Sku - The SKU of the Analysis Services resource.
 	Sku *ResourceSku `json:"sku,omitempty"`
 	// Tags - Key-value pairs of additional provisioning properties.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// ServerMutableProperties - Properties of the provision operation request.
 	*ServerMutableProperties `json:"properties,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for ServerUpdateParameters.
+func (sup ServerUpdateParameters) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if sup.Sku != nil {
+		objectMap["sku"] = sup.Sku
+	}
+	if sup.Tags != nil {
+		objectMap["tags"] = sup.Tags
+	}
+	if sup.ServerMutableProperties != nil {
+		objectMap["properties"] = sup.ServerMutableProperties
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for ServerUpdateParameters struct.
@@ -472,36 +534,36 @@ func (sup *ServerUpdateParameters) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["sku"]
-	if v != nil {
-		var sku ResourceSku
-		err = json.Unmarshal(*m["sku"], &sku)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "sku":
+			if v != nil {
+				var sku ResourceSku
+				err = json.Unmarshal(*v, &sku)
+				if err != nil {
+					return err
+				}
+				sup.Sku = &sku
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				sup.Tags = tags
+			}
+		case "properties":
+			if v != nil {
+				var serverMutableProperties ServerMutableProperties
+				err = json.Unmarshal(*v, &serverMutableProperties)
+				if err != nil {
+					return err
+				}
+				sup.ServerMutableProperties = &serverMutableProperties
+			}
 		}
-		sup.Sku = &sku
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		sup.Tags = &tags
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties ServerMutableProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		sup.ServerMutableProperties = &properties
 	}
 
 	return nil

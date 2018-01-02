@@ -672,56 +672,54 @@ func (acr *AccessControlRecord) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties AccessControlRecordProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var accessControlRecordProperties AccessControlRecordProperties
+				err = json.Unmarshal(*v, &accessControlRecordProperties)
+				if err != nil {
+					return err
+				}
+				acr.AccessControlRecordProperties = &accessControlRecordProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				acr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				acr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				acr.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				acr.Kind = kind
+			}
 		}
-		acr.AccessControlRecordProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		acr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		acr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		acr.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		acr.Kind = kind
 	}
 
 	return nil
@@ -742,8 +740,8 @@ type AccessControlRecordProperties struct {
 	VolumeCount *int32 `json:"volumeCount,omitempty"`
 }
 
-// AccessControlRecordsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// AccessControlRecordsCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type AccessControlRecordsCreateOrUpdateFuture struct {
 	azure.Future
 	req *http.Request
@@ -837,56 +835,54 @@ func (a *Alert) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties AlertProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var alertProperties AlertProperties
+				err = json.Unmarshal(*v, &alertProperties)
+				if err != nil {
+					return err
+				}
+				a.AlertProperties = &alertProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				a.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				a.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				a.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				a.Kind = kind
+			}
 		}
-		a.AlertProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		a.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		a.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		a.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		a.Kind = kind
 	}
 
 	return nil
@@ -1059,7 +1055,49 @@ type AlertProperties struct {
 	// ErrorDetails - The details of the error for which the alert was raised
 	ErrorDetails *AlertErrorDetails `json:"errorDetails,omitempty"`
 	// DetailedInformation - More details about the alert
-	DetailedInformation *map[string]*string `json:"detailedInformation,omitempty"`
+	DetailedInformation map[string]*string `json:"detailedInformation"`
+}
+
+// MarshalJSON is the custom marshaler for AlertProperties.
+func (ap AlertProperties) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if ap.Title != nil {
+		objectMap["title"] = ap.Title
+	}
+	objectMap["scope"] = ap.Scope
+	if ap.AlertType != nil {
+		objectMap["alertType"] = ap.AlertType
+	}
+	if ap.AppearedAtTime != nil {
+		objectMap["appearedAtTime"] = ap.AppearedAtTime
+	}
+	if ap.AppearedAtSourceTime != nil {
+		objectMap["appearedAtSourceTime"] = ap.AppearedAtSourceTime
+	}
+	if ap.ClearedAtTime != nil {
+		objectMap["clearedAtTime"] = ap.ClearedAtTime
+	}
+	if ap.ClearedAtSourceTime != nil {
+		objectMap["clearedAtSourceTime"] = ap.ClearedAtSourceTime
+	}
+	if ap.Source != nil {
+		objectMap["source"] = ap.Source
+	}
+	if ap.Recommendation != nil {
+		objectMap["recommendation"] = ap.Recommendation
+	}
+	if ap.ResolutionReason != nil {
+		objectMap["resolutionReason"] = ap.ResolutionReason
+	}
+	objectMap["severity"] = ap.Severity
+	objectMap["status"] = ap.Status
+	if ap.ErrorDetails != nil {
+		objectMap["errorDetails"] = ap.ErrorDetails
+	}
+	if ap.DetailedInformation != nil {
+		objectMap["detailedInformation"] = ap.DetailedInformation
+	}
+	return json.Marshal(objectMap)
 }
 
 // AlertSettings the alert settings.
@@ -1084,56 +1122,54 @@ func (as *AlertSettings) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties AlertNotificationProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var alertNotificationProperties AlertNotificationProperties
+				err = json.Unmarshal(*v, &alertNotificationProperties)
+				if err != nil {
+					return err
+				}
+				as.AlertNotificationProperties = &alertNotificationProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				as.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				as.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				as.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				as.Kind = kind
+			}
 		}
-		as.AlertNotificationProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		as.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		as.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		as.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		as.Kind = kind
 	}
 
 	return nil
@@ -1168,12 +1204,12 @@ type AvailableProviderOperation struct {
 	// Origin - The intended executor of the operation; governs the display of the operation in the RBAC UX and the audit logs UX. Default value is "user,system"
 	Origin *string `json:"origin,omitempty"`
 	// Properties - Reserved for future use.
-	Properties *map[string]interface{} `json:"properties,omitempty"`
+	Properties interface{} `json:"properties,omitempty"`
 }
 
-// AvailableProviderOperationDisplay contains the localized display information for this particular operation/action.
-// These value will be used by several clients for (a) custom role definitions for RBAC, (b) complex query filters for
-// the event service and (c) audit history/records for management operations.
+// AvailableProviderOperationDisplay contains the localized display information for this particular
+// operation/action. These value will be used by several clients for (a) custom role definitions for RBAC, (b)
+// complex query filters for the event service and (c) audit history/records for management operations.
 type AvailableProviderOperationDisplay struct {
 	// Provider - The localized friendly form of the resource provider name - it is expected to also include the publisher/company responsible. It should use Title Casing and begin with 'Microsoft' for 1st party services.
 	Provider *string `json:"provider,omitempty"`
@@ -1194,7 +1230,8 @@ type AvailableProviderOperationList struct {
 	NextLink *string `json:"nextLink,omitempty"`
 }
 
-// AvailableProviderOperationListIterator provides access to a complete listing of AvailableProviderOperation values.
+// AvailableProviderOperationListIterator provides access to a complete listing of AvailableProviderOperation
+// values.
 type AvailableProviderOperationListIterator struct {
 	i    int
 	page AvailableProviderOperationListPage
@@ -1308,56 +1345,54 @@ func (b *Backup) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties BackupProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var backupProperties BackupProperties
+				err = json.Unmarshal(*v, &backupProperties)
+				if err != nil {
+					return err
+				}
+				b.BackupProperties = &backupProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				b.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				b.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				b.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				b.Kind = kind
+			}
 		}
-		b.BackupProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		b.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		b.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		b.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		b.Kind = kind
 	}
 
 	return nil
@@ -1493,7 +1528,8 @@ func (page BackupListPage) Values() []Backup {
 	return *page.bl.Value
 }
 
-// BackupPoliciesBackupNowFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// BackupPoliciesBackupNowFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type BackupPoliciesBackupNowFuture struct {
 	azure.Future
 	req *http.Request
@@ -1609,56 +1645,54 @@ func (bp *BackupPolicy) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties BackupPolicyProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var backupPolicyProperties BackupPolicyProperties
+				err = json.Unmarshal(*v, &backupPolicyProperties)
+				if err != nil {
+					return err
+				}
+				bp.BackupPolicyProperties = &backupPolicyProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				bp.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				bp.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				bp.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				bp.Kind = kind
+			}
 		}
-		bp.BackupPolicyProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		bp.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		bp.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		bp.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		bp.Kind = kind
 	}
 
 	return nil
@@ -1729,56 +1763,54 @@ func (bs *BackupSchedule) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties BackupScheduleProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var backupScheduleProperties BackupScheduleProperties
+				err = json.Unmarshal(*v, &backupScheduleProperties)
+				if err != nil {
+					return err
+				}
+				bs.BackupScheduleProperties = &backupScheduleProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				bs.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				bs.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				bs.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				bs.Kind = kind
+			}
 		}
-		bs.BackupScheduleProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		bs.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		bs.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		bs.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		bs.Kind = kind
 	}
 
 	return nil
@@ -1839,7 +1871,8 @@ func (future BackupSchedulesCreateOrUpdateFuture) Result(client BackupSchedulesC
 	return
 }
 
-// BackupSchedulesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// BackupSchedulesDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type BackupSchedulesDeleteFuture struct {
 	azure.Future
 	req *http.Request
@@ -2005,56 +2038,54 @@ func (bs *BandwidthSetting) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties BandwidthRateSettingProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var bandwidthRateSettingProperties BandwidthRateSettingProperties
+				err = json.Unmarshal(*v, &bandwidthRateSettingProperties)
+				if err != nil {
+					return err
+				}
+				bs.BandwidthRateSettingProperties = &bandwidthRateSettingProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				bs.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				bs.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				bs.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				bs.Kind = kind
+			}
 		}
-		bs.BandwidthRateSettingProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		bs.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		bs.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		bs.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		bs.Kind = kind
 	}
 
 	return nil
@@ -2099,7 +2130,8 @@ func (future BandwidthSettingsCreateOrUpdateFuture) Result(client BandwidthSetti
 	return
 }
 
-// BandwidthSettingsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// BandwidthSettingsDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type BandwidthSettingsDeleteFuture struct {
 	azure.Future
 	req *http.Request
@@ -2221,56 +2253,54 @@ func (cac *CloudApplianceConfiguration) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties CloudApplianceConfigurationProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var cloudApplianceConfigurationProperties CloudApplianceConfigurationProperties
+				err = json.Unmarshal(*v, &cloudApplianceConfigurationProperties)
+				if err != nil {
+					return err
+				}
+				cac.CloudApplianceConfigurationProperties = &cloudApplianceConfigurationProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				cac.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				cac.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				cac.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				cac.Kind = kind
+			}
 		}
-		cac.CloudApplianceConfigurationProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		cac.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		cac.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		cac.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		cac.Kind = kind
 	}
 
 	return nil
@@ -2309,7 +2339,8 @@ type CloudApplianceSettings struct {
 	ChannelIntegrityKey *AsymmetricEncryptedSecret `json:"channelIntegrityKey,omitempty"`
 }
 
-// CloudAppliancesProvisionFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// CloudAppliancesProvisionFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type CloudAppliancesProvisionFuture struct {
 	azure.Future
 	req *http.Request
@@ -2361,56 +2392,54 @@ func (cdr *ConfigureDeviceRequest) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ConfigureDeviceRequestProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var configureDeviceRequestProperties ConfigureDeviceRequestProperties
+				err = json.Unmarshal(*v, &configureDeviceRequestProperties)
+				if err != nil {
+					return err
+				}
+				cdr.ConfigureDeviceRequestProperties = &configureDeviceRequestProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				cdr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				cdr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				cdr.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				cdr.Kind = kind
+			}
 		}
-		cdr.ConfigureDeviceRequestProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		cdr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		cdr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		cdr.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		cdr.Kind = kind
 	}
 
 	return nil
@@ -2451,56 +2480,54 @@ func (cpscr *ControllerPowerStateChangeRequest) UnmarshalJSON(body []byte) error
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ControllerPowerStateChangeRequestProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var controllerPowerStateChangeRequestProperties ControllerPowerStateChangeRequestProperties
+				err = json.Unmarshal(*v, &controllerPowerStateChangeRequestProperties)
+				if err != nil {
+					return err
+				}
+				cpscr.ControllerPowerStateChangeRequestProperties = &controllerPowerStateChangeRequestProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				cpscr.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				cpscr.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				cpscr.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				cpscr.Kind = kind
+			}
 		}
-		cpscr.ControllerPowerStateChangeRequestProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		cpscr.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		cpscr.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		cpscr.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		cpscr.Kind = kind
 	}
 
 	return nil
@@ -2518,8 +2545,8 @@ type ControllerPowerStateChangeRequestProperties struct {
 	Controller1State ControllerStatus `json:"controller1State,omitempty"`
 }
 
-// DataStatistics the additional details related to the data related statistics of a job. Currently applicable only for
-// Backup, Clone and Restore jobs.
+// DataStatistics the additional details related to the data related statistics of a job. Currently applicable only
+// for Backup, Clone and Restore jobs.
 type DataStatistics struct {
 	// TotalData - The total bytes of data to be processed, as part of the job.
 	TotalData *int64 `json:"totalData,omitempty"`
@@ -2553,56 +2580,54 @@ func (d *Device) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties DeviceProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var deviceProperties DeviceProperties
+				err = json.Unmarshal(*v, &deviceProperties)
+				if err != nil {
+					return err
+				}
+				d.DeviceProperties = &deviceProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				d.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				d.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				d.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				d.Kind = kind
+			}
 		}
-		d.DeviceProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		d.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		d.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		d.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		d.Kind = kind
 	}
 
 	return nil
@@ -2636,16 +2661,18 @@ func (dp *DevicePatch) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties DevicePatchProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var devicePatchProperties DevicePatchProperties
+				err = json.Unmarshal(*v, &devicePatchProperties)
+				if err != nil {
+					return err
+				}
+				dp.DevicePatchProperties = &devicePatchProperties
+			}
 		}
-		dp.DevicePatchProperties = &properties
 	}
 
 	return nil
@@ -2882,8 +2909,8 @@ func (future DeviceSettingsCreateOrUpdateTimeSettingsFuture) Result(client Devic
 	return
 }
 
-// DeviceSettingsSyncRemotemanagementCertificateFuture an abstraction for monitoring and retrieving the results of a
-// long-running operation.
+// DeviceSettingsSyncRemotemanagementCertificateFuture an abstraction for monitoring and retrieving the results of
+// a long-running operation.
 type DeviceSettingsSyncRemotemanagementCertificateFuture struct {
 	azure.Future
 	req *http.Request
@@ -2914,8 +2941,8 @@ func (future DeviceSettingsSyncRemotemanagementCertificateFuture) Result(client 
 	return
 }
 
-// DeviceSettingsUpdateNetworkSettingsFuture an abstraction for monitoring and retrieving the results of a long-running
-// operation.
+// DeviceSettingsUpdateNetworkSettingsFuture an abstraction for monitoring and retrieving the results of a
+// long-running operation.
 type DeviceSettingsUpdateNetworkSettingsFuture struct {
 	azure.Future
 	req *http.Request
@@ -3009,7 +3036,8 @@ func (future DevicesFailoverFuture) Result(client DevicesClient) (ar autorest.Re
 	return
 }
 
-// DevicesInstallUpdatesFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DevicesInstallUpdatesFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DevicesInstallUpdatesFuture struct {
 	azure.Future
 	req *http.Request
@@ -3040,7 +3068,8 @@ func (future DevicesInstallUpdatesFuture) Result(client DevicesClient) (ar autor
 	return
 }
 
-// DevicesScanForUpdatesFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// DevicesScanForUpdatesFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type DevicesScanForUpdatesFuture struct {
 	azure.Future
 	req *http.Request
@@ -3113,56 +3142,54 @@ func (es *EncryptionSettings) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties EncryptionSettingsProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var encryptionSettingsProperties EncryptionSettingsProperties
+				err = json.Unmarshal(*v, &encryptionSettingsProperties)
+				if err != nil {
+					return err
+				}
+				es.EncryptionSettingsProperties = &encryptionSettingsProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				es.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				es.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				es.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				es.Kind = kind
+			}
 		}
-		es.EncryptionSettingsProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		es.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		es.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		es.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		es.Kind = kind
 	}
 
 	return nil
@@ -3176,8 +3203,8 @@ type EncryptionSettingsProperties struct {
 	KeyRolloverStatus KeyRolloverStatus `json:"keyRolloverStatus,omitempty"`
 }
 
-// FailoverRequest the request object for triggering a failover of volume containers, from a source device to a target
-// device.
+// FailoverRequest the request object for triggering a failover of volume containers, from a source device to a
+// target device.
 type FailoverRequest struct {
 	// TargetDeviceID - The ARM path ID of the device which will act as the failover target.
 	TargetDeviceID *string `json:"targetDeviceId,omitempty"`
@@ -3234,7 +3261,8 @@ type FailoverTarget struct {
 	EligibilityResult *TargetEligibilityResult `json:"eligibilityResult,omitempty"`
 }
 
-// FailoverTargetsList the list of all devices in a resource and their eligibility status as a failover target device.
+// FailoverTargetsList the list of all devices in a resource and their eligibility status as a failover target
+// device.
 type FailoverTargetsList struct {
 	autorest.Response `json:"-"`
 	// Value - The list of all the failover targets.
@@ -3295,56 +3323,54 @@ func (hcg *HardwareComponentGroup) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties HardwareComponentGroupProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var hardwareComponentGroupProperties HardwareComponentGroupProperties
+				err = json.Unmarshal(*v, &hardwareComponentGroupProperties)
+				if err != nil {
+					return err
+				}
+				hcg.HardwareComponentGroupProperties = &hardwareComponentGroupProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				hcg.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				hcg.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				hcg.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				hcg.Kind = kind
+			}
 		}
-		hcg.HardwareComponentGroupProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		hcg.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		hcg.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		hcg.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		hcg.Kind = kind
 	}
 
 	return nil
@@ -3367,8 +3393,8 @@ type HardwareComponentGroupProperties struct {
 	Components *[]HardwareComponent `json:"components,omitempty"`
 }
 
-// HardwareComponentGroupsChangeControllerPowerStateFuture an abstraction for monitoring and retrieving the results of
-// a long-running operation.
+// HardwareComponentGroupsChangeControllerPowerStateFuture an abstraction for monitoring and retrieving the results
+// of a long-running operation.
 type HardwareComponentGroupsChangeControllerPowerStateFuture struct {
 	azure.Future
 	req *http.Request
@@ -3431,106 +3457,99 @@ func (j *Job) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["status"]
-	if v != nil {
-		var status JobStatus
-		err = json.Unmarshal(*m["status"], &status)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "status":
+			if v != nil {
+				var status JobStatus
+				err = json.Unmarshal(*v, &status)
+				if err != nil {
+					return err
+				}
+				j.Status = status
+			}
+		case "startTime":
+			if v != nil {
+				var startTime date.Time
+				err = json.Unmarshal(*v, &startTime)
+				if err != nil {
+					return err
+				}
+				j.StartTime = &startTime
+			}
+		case "endTime":
+			if v != nil {
+				var endTime date.Time
+				err = json.Unmarshal(*v, &endTime)
+				if err != nil {
+					return err
+				}
+				j.EndTime = &endTime
+			}
+		case "percentComplete":
+			if v != nil {
+				var percentComplete int32
+				err = json.Unmarshal(*v, &percentComplete)
+				if err != nil {
+					return err
+				}
+				j.PercentComplete = &percentComplete
+			}
+		case "error":
+			if v != nil {
+				var errorVar JobErrorDetails
+				err = json.Unmarshal(*v, &errorVar)
+				if err != nil {
+					return err
+				}
+				j.Error = &errorVar
+			}
+		case "properties":
+			if v != nil {
+				var jobProperties JobProperties
+				err = json.Unmarshal(*v, &jobProperties)
+				if err != nil {
+					return err
+				}
+				j.JobProperties = &jobProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				j.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				j.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				j.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				j.Kind = kind
+			}
 		}
-		j.Status = status
-	}
-
-	v = m["startTime"]
-	if v != nil {
-		var startTime date.Time
-		err = json.Unmarshal(*m["startTime"], &startTime)
-		if err != nil {
-			return err
-		}
-		j.StartTime = &startTime
-	}
-
-	v = m["endTime"]
-	if v != nil {
-		var endTime date.Time
-		err = json.Unmarshal(*m["endTime"], &endTime)
-		if err != nil {
-			return err
-		}
-		j.EndTime = &endTime
-	}
-
-	v = m["percentComplete"]
-	if v != nil {
-		var percentComplete int32
-		err = json.Unmarshal(*m["percentComplete"], &percentComplete)
-		if err != nil {
-			return err
-		}
-		j.PercentComplete = &percentComplete
-	}
-
-	v = m["error"]
-	if v != nil {
-		var errorVar JobErrorDetails
-		err = json.Unmarshal(*m["error"], &errorVar)
-		if err != nil {
-			return err
-		}
-		j.Error = &errorVar
-	}
-
-	v = m["properties"]
-	if v != nil {
-		var properties JobProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
-		}
-		j.JobProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		j.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		j.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		j.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		j.Kind = kind
 	}
 
 	return nil
@@ -3761,11 +3780,38 @@ type Manager struct {
 	// Location - The geo location of the resource.
 	Location *string `json:"location,omitempty"`
 	// Tags - The tags attached to the resource.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
 	// ManagerProperties - The properties of the StorSimple Manager.
 	*ManagerProperties `json:"properties,omitempty"`
 	// Etag - The etag of the manager.
 	Etag *string `json:"etag,omitempty"`
+}
+
+// MarshalJSON is the custom marshaler for Manager.
+func (mVar Manager) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mVar.ManagerProperties != nil {
+		objectMap["properties"] = mVar.ManagerProperties
+	}
+	if mVar.Etag != nil {
+		objectMap["etag"] = mVar.Etag
+	}
+	if mVar.ID != nil {
+		objectMap["id"] = mVar.ID
+	}
+	if mVar.Name != nil {
+		objectMap["name"] = mVar.Name
+	}
+	if mVar.Type != nil {
+		objectMap["type"] = mVar.Type
+	}
+	if mVar.Location != nil {
+		objectMap["location"] = mVar.Location
+	}
+	if mVar.Tags != nil {
+		objectMap["tags"] = mVar.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // UnmarshalJSON is the custom unmarshaler for Manager struct.
@@ -3775,76 +3821,72 @@ func (mVar *Manager) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ManagerProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var managerProperties ManagerProperties
+				err = json.Unmarshal(*v, &managerProperties)
+				if err != nil {
+					return err
+				}
+				mVar.ManagerProperties = &managerProperties
+			}
+		case "etag":
+			if v != nil {
+				var etag string
+				err = json.Unmarshal(*v, &etag)
+				if err != nil {
+					return err
+				}
+				mVar.Etag = &etag
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				mVar.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				mVar.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				mVar.Type = &typeVar
+			}
+		case "location":
+			if v != nil {
+				var location string
+				err = json.Unmarshal(*v, &location)
+				if err != nil {
+					return err
+				}
+				mVar.Location = &location
+			}
+		case "tags":
+			if v != nil {
+				var tags map[string]*string
+				err = json.Unmarshal(*v, &tags)
+				if err != nil {
+					return err
+				}
+				mVar.Tags = tags
+			}
 		}
-		mVar.ManagerProperties = &properties
-	}
-
-	v = m["etag"]
-	if v != nil {
-		var etag string
-		err = json.Unmarshal(*m["etag"], &etag)
-		if err != nil {
-			return err
-		}
-		mVar.Etag = &etag
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		mVar.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		mVar.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		mVar.Type = &typeVar
-	}
-
-	v = m["location"]
-	if v != nil {
-		var location string
-		err = json.Unmarshal(*m["location"], &location)
-		if err != nil {
-			return err
-		}
-		mVar.Location = &location
-	}
-
-	v = m["tags"]
-	if v != nil {
-		var tags map[string]*string
-		err = json.Unmarshal(*m["tags"], &tags)
-		if err != nil {
-			return err
-		}
-		mVar.Tags = &tags
 	}
 
 	return nil
@@ -3874,66 +3916,63 @@ func (mei *ManagerExtendedInfo) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties ManagerExtendedInfoProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var managerExtendedInfoProperties ManagerExtendedInfoProperties
+				err = json.Unmarshal(*v, &managerExtendedInfoProperties)
+				if err != nil {
+					return err
+				}
+				mei.ManagerExtendedInfoProperties = &managerExtendedInfoProperties
+			}
+		case "etag":
+			if v != nil {
+				var etag string
+				err = json.Unmarshal(*v, &etag)
+				if err != nil {
+					return err
+				}
+				mei.Etag = &etag
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				mei.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				mei.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				mei.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				mei.Kind = kind
+			}
 		}
-		mei.ManagerExtendedInfoProperties = &properties
-	}
-
-	v = m["etag"]
-	if v != nil {
-		var etag string
-		err = json.Unmarshal(*m["etag"], &etag)
-		if err != nil {
-			return err
-		}
-		mei.Etag = &etag
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		mei.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		mei.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		mei.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		mei.Kind = kind
 	}
 
 	return nil
@@ -3971,7 +4010,16 @@ type ManagerList struct {
 // ManagerPatch the StorSimple Manager patch.
 type ManagerPatch struct {
 	// Tags - The tags attached to the Manager.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for ManagerPatch.
+func (mp ManagerPatch) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if mp.Tags != nil {
+		objectMap["tags"] = mp.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // ManagerProperties the properties of the StorSimple Manager.
@@ -4166,56 +4214,54 @@ func (ns *NetworkSettings) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties NetworkSettingsProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var networkSettingsProperties NetworkSettingsProperties
+				err = json.Unmarshal(*v, &networkSettingsProperties)
+				if err != nil {
+					return err
+				}
+				ns.NetworkSettingsProperties = &networkSettingsProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				ns.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				ns.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ns.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				ns.Kind = kind
+			}
 		}
-		ns.NetworkSettingsProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		ns.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		ns.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		ns.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		ns.Kind = kind
 	}
 
 	return nil
@@ -4234,16 +4280,18 @@ func (nsp *NetworkSettingsPatch) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties NetworkSettingsPatchProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var networkSettingsPatchProperties NetworkSettingsPatchProperties
+				err = json.Unmarshal(*v, &networkSettingsPatchProperties)
+				if err != nil {
+					return err
+				}
+				nsp.NetworkSettingsPatchProperties = &networkSettingsPatchProperties
+			}
 		}
-		nsp.NetworkSettingsPatchProperties = &properties
 	}
 
 	return nil
@@ -4327,7 +4375,28 @@ type Resource struct {
 	// Location - The geo location of the resource.
 	Location *string `json:"location,omitempty"`
 	// Tags - The tags attached to the resource.
-	Tags *map[string]*string `json:"tags,omitempty"`
+	Tags map[string]*string `json:"tags"`
+}
+
+// MarshalJSON is the custom marshaler for Resource.
+func (r Resource) MarshalJSON() ([]byte, error) {
+	objectMap := make(map[string]interface{})
+	if r.ID != nil {
+		objectMap["id"] = r.ID
+	}
+	if r.Name != nil {
+		objectMap["name"] = r.Name
+	}
+	if r.Type != nil {
+		objectMap["type"] = r.Type
+	}
+	if r.Location != nil {
+		objectMap["location"] = r.Location
+	}
+	if r.Tags != nil {
+		objectMap["tags"] = r.Tags
+	}
+	return json.Marshal(objectMap)
 }
 
 // ScheduleRecurrence the schedule recurrence.
@@ -4368,56 +4437,54 @@ func (ss *SecuritySettings) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties SecuritySettingsProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var securitySettingsProperties SecuritySettingsProperties
+				err = json.Unmarshal(*v, &securitySettingsProperties)
+				if err != nil {
+					return err
+				}
+				ss.SecuritySettingsProperties = &securitySettingsProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				ss.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				ss.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ss.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				ss.Kind = kind
+			}
 		}
-		ss.SecuritySettingsProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		ss.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		ss.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		ss.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		ss.Kind = kind
 	}
 
 	return nil
@@ -4436,16 +4503,18 @@ func (ssp *SecuritySettingsPatch) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties SecuritySettingsPatchProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var securitySettingsPatchProperties SecuritySettingsPatchProperties
+				err = json.Unmarshal(*v, &securitySettingsPatchProperties)
+				if err != nil {
+					return err
+				}
+				ssp.SecuritySettingsPatchProperties = &securitySettingsPatchProperties
+			}
 		}
-		ssp.SecuritySettingsPatchProperties = &properties
 	}
 
 	return nil
@@ -4501,56 +4570,54 @@ func (sac *StorageAccountCredential) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties StorageAccountCredentialProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var storageAccountCredentialProperties StorageAccountCredentialProperties
+				err = json.Unmarshal(*v, &storageAccountCredentialProperties)
+				if err != nil {
+					return err
+				}
+				sac.StorageAccountCredentialProperties = &storageAccountCredentialProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				sac.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				sac.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				sac.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				sac.Kind = kind
+			}
 		}
-		sac.StorageAccountCredentialProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		sac.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		sac.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		sac.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		sac.Kind = kind
 	}
 
 	return nil
@@ -4650,8 +4717,8 @@ type SymmetricEncryptedSecret struct {
 	EncryptionAlgorithm EncryptionAlgorithm `json:"encryptionAlgorithm,omitempty"`
 }
 
-// TargetEligibilityErrorMessage the error/warning message due to which the device is ineligible as a failover target
-// device.
+// TargetEligibilityErrorMessage the error/warning message due to which the device is ineligible as a failover
+// target device.
 type TargetEligibilityErrorMessage struct {
 	// Message - The localized error message stating the reason why the device is not eligible as a target device.
 	Message *string `json:"message,omitempty"`
@@ -4701,56 +4768,54 @@ func (ts *TimeSettings) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties TimeSettingsProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var timeSettingsProperties TimeSettingsProperties
+				err = json.Unmarshal(*v, &timeSettingsProperties)
+				if err != nil {
+					return err
+				}
+				ts.TimeSettingsProperties = &timeSettingsProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				ts.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				ts.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				ts.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				ts.Kind = kind
+			}
 		}
-		ts.TimeSettingsProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		ts.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		ts.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		ts.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		ts.Kind = kind
 	}
 
 	return nil
@@ -4788,56 +4853,54 @@ func (u *Updates) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties UpdatesProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var updatesProperties UpdatesProperties
+				err = json.Unmarshal(*v, &updatesProperties)
+				if err != nil {
+					return err
+				}
+				u.UpdatesProperties = &updatesProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				u.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				u.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				u.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				u.Kind = kind
+			}
 		}
-		u.UpdatesProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		u.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		u.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		u.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		u.Kind = kind
 	}
 
 	return nil
@@ -4891,56 +4954,54 @@ func (vVar *Volume) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties VolumeProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var volumeProperties VolumeProperties
+				err = json.Unmarshal(*v, &volumeProperties)
+				if err != nil {
+					return err
+				}
+				vVar.VolumeProperties = &volumeProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				vVar.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				vVar.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				vVar.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				vVar.Kind = kind
+			}
 		}
-		vVar.VolumeProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		vVar.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		vVar.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		vVar.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		vVar.Kind = kind
 	}
 
 	return nil
@@ -4968,63 +5029,61 @@ func (vc *VolumeContainer) UnmarshalJSON(body []byte) error {
 	if err != nil {
 		return err
 	}
-	var v *json.RawMessage
-
-	v = m["properties"]
-	if v != nil {
-		var properties VolumeContainerProperties
-		err = json.Unmarshal(*m["properties"], &properties)
-		if err != nil {
-			return err
+	for k, v := range m {
+		switch k {
+		case "properties":
+			if v != nil {
+				var volumeContainerProperties VolumeContainerProperties
+				err = json.Unmarshal(*v, &volumeContainerProperties)
+				if err != nil {
+					return err
+				}
+				vc.VolumeContainerProperties = &volumeContainerProperties
+			}
+		case "id":
+			if v != nil {
+				var ID string
+				err = json.Unmarshal(*v, &ID)
+				if err != nil {
+					return err
+				}
+				vc.ID = &ID
+			}
+		case "name":
+			if v != nil {
+				var name string
+				err = json.Unmarshal(*v, &name)
+				if err != nil {
+					return err
+				}
+				vc.Name = &name
+			}
+		case "type":
+			if v != nil {
+				var typeVar string
+				err = json.Unmarshal(*v, &typeVar)
+				if err != nil {
+					return err
+				}
+				vc.Type = &typeVar
+			}
+		case "kind":
+			if v != nil {
+				var kind Kind
+				err = json.Unmarshal(*v, &kind)
+				if err != nil {
+					return err
+				}
+				vc.Kind = kind
+			}
 		}
-		vc.VolumeContainerProperties = &properties
-	}
-
-	v = m["id"]
-	if v != nil {
-		var ID string
-		err = json.Unmarshal(*m["id"], &ID)
-		if err != nil {
-			return err
-		}
-		vc.ID = &ID
-	}
-
-	v = m["name"]
-	if v != nil {
-		var name string
-		err = json.Unmarshal(*m["name"], &name)
-		if err != nil {
-			return err
-		}
-		vc.Name = &name
-	}
-
-	v = m["type"]
-	if v != nil {
-		var typeVar string
-		err = json.Unmarshal(*m["type"], &typeVar)
-		if err != nil {
-			return err
-		}
-		vc.Type = &typeVar
-	}
-
-	v = m["kind"]
-	if v != nil {
-		var kind Kind
-		err = json.Unmarshal(*m["kind"], &kind)
-		if err != nil {
-			return err
-		}
-		vc.Kind = kind
 	}
 
 	return nil
 }
 
-// VolumeContainerFailoverMetadata the metadata of the volume container, that is being considered as part of a failover
-// set.
+// VolumeContainerFailoverMetadata the metadata of the volume container, that is being considered as part of a
+// failover set.
 type VolumeContainerFailoverMetadata struct {
 	// VolumeContainerID - The path ID of the volume container.
 	VolumeContainerID *string `json:"volumeContainerId,omitempty"`
@@ -5091,7 +5150,8 @@ func (future VolumeContainersCreateOrUpdateFuture) Result(client VolumeContainer
 	return
 }
 
-// VolumeContainersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// VolumeContainersDeleteFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type VolumeContainersDeleteFuture struct {
 	azure.Future
 	req *http.Request
@@ -5169,7 +5229,8 @@ type VolumeProperties struct {
 	BackupPolicyIds *[]string `json:"backupPolicyIds,omitempty"`
 }
 
-// VolumesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running operation.
+// VolumesCreateOrUpdateFuture an abstraction for monitoring and retrieving the results of a long-running
+// operation.
 type VolumesCreateOrUpdateFuture struct {
 	azure.Future
 	req *http.Request

@@ -22,6 +22,7 @@ import (
 	"github.com/Azure/go-autorest/autorest"
 	"github.com/Azure/go-autorest/autorest/azure"
 	"github.com/Azure/go-autorest/autorest/validation"
+	"github.com/satori/go.uuid"
 	"io"
 	"net/http"
 )
@@ -361,7 +362,7 @@ func (client ListClient) DeleteResponder(resp *http.Response) (result autorest.R
 // related to the face will also be deleted.
 //
 // faceListID is faceListId of an existing face list. persistedFaceID is persistedFaceId of an existing face.
-func (client ListClient) DeleteFace(ctx context.Context, faceListID string, persistedFaceID string) (result autorest.Response, err error) {
+func (client ListClient) DeleteFace(ctx context.Context, faceListID string, persistedFaceID uuid.UUID) (result autorest.Response, err error) {
 	if err := validation.Validate([]validation.Validation{
 		{TargetValue: faceListID,
 			Constraints: []validation.Constraint{{Target: "faceListID", Name: validation.MaxLength, Rule: 64, Chain: nil},
@@ -391,7 +392,7 @@ func (client ListClient) DeleteFace(ctx context.Context, faceListID string, pers
 }
 
 // DeleteFacePreparer prepares the DeleteFace request.
-func (client ListClient) DeleteFacePreparer(ctx context.Context, faceListID string, persistedFaceID string) (*http.Request, error) {
+func (client ListClient) DeleteFacePreparer(ctx context.Context, faceListID string, persistedFaceID uuid.UUID) (*http.Request, error) {
 	urlParameters := map[string]interface{}{
 		"AzureRegion": client.AzureRegion,
 	}
